@@ -9447,7 +9447,7 @@ LOAD c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/f
                 0x00000400                _cfm
                 0x00000410                . = ALIGN (0x4)
 
-.text           0x00000410     0xde04
+.text           0x00000410     0xddfc
                 0x00000410                . = ALIGN (0x4)
  *(.text)
  .text          0x00000410       0x54 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
@@ -10349,254 +10349,254 @@ LOAD c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/f
                 0x00009a10        0xc ./Generated_Code/XF1.o
                 0x00009a10                XF1_Init
  *fill*         0x00009a1c        0x4 
- .text.Driving  0x00009a20     0x1070 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
+ .text.Driving  0x00009a20     0x1068 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
                 0x00009a20                Driving
  .text.MotorCurrentComputationForDesiredTorque
-                0x0000aa90       0x4c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
-                0x0000aa90                MotorCurrentComputationForDesiredTorque
- .text.setBias  0x0000aadc        0xc C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
-                0x0000aadc                setBias
+                0x0000aa88       0x4c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
+                0x0000aa88                MotorCurrentComputationForDesiredTorque
+ .text.setBias  0x0000aad4        0xc C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
+                0x0000aad4                setBias
  .text.setMotorCurrent
-                0x0000aae8       0x3c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
-                0x0000aae8                setMotorCurrent
+                0x0000aae0       0x3c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
+                0x0000aae0                setMotorCurrent
  .text.HeadingDirectionComputation
-                0x0000ab24       0xd4 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
-                0x0000ab24                HeadingDirectionComputation
+                0x0000ab1c       0xd4 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
+                0x0000ab1c                HeadingDirectionComputation
  .text.SegmentTargetComputation
-                0x0000abf8      0xfb0 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
-                0x0000abf8                SegmentTargetComputation
+                0x0000abf0      0xfb0 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
+                0x0000abf0                SegmentTargetComputation
  .text.TrackingControl
-                0x0000bba8      0xb58 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
-                0x0000bba8                TrackingControl
+                0x0000bba0      0xb58 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+                0x0000bba0                TrackingControl
  .text.VelocityEstimation
-                0x0000c700       0xa4 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                0x0000c700                VelocityEstimation
- *fill*         0x0000c7a4        0x4 
+                0x0000c6f8       0xa4 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                0x0000c6f8                VelocityEstimation
+ *fill*         0x0000c79c        0x4 
  .text.VelocityCalculation
-                0x0000c7a8      0x458 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                0x0000c7a8                VelocityCalculation
- .text.ReadIMU  0x0000cc00       0x48 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                0x0000cc00                ReadIMU
+                0x0000c7a0      0x458 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                0x0000c7a0                VelocityCalculation
+ .text.ReadIMU  0x0000cbf8       0x48 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                0x0000cbf8                ReadIMU
  .text.ReadEncoder
-                0x0000cc48       0x2c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                0x0000cc48                ReadEncoder
+                0x0000cc40       0x2c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                0x0000cc40                ReadEncoder
  .text.ReadDistance
-                0x0000cc74       0x64 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                0x0000cc74                ReadDistance
+                0x0000cc6c       0x64 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                0x0000cc6c                ReadDistance
  .text.setBiasRaw
-                0x0000ccd8       0x28 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                0x0000ccd8                setBiasRaw
+                0x0000ccd0       0x28 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                0x0000ccd0                setBiasRaw
  .text._degrees_value_normalize
-                0x0000cd00       0x70 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+                0x0000ccf8       0x70 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
  .text._sin__get_by_deg_0_90
-                0x0000cd70       0x8c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
- .text.sin_lut  0x0000cdfc      0x110 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
-                0x0000cdfc                sin_lut
- .text.cos_lut  0x0000cf0c       0x30 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
-                0x0000cf0c                cos_lut
- *fill*         0x0000cf3c        0x4 
- .text.exp      0x0000cf40      0x108 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_exp.o)
-                0x0000cf40                exp
- .text.sqrt     0x0000d048       0xbc c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_sqrt.o)
-                0x0000d048                sqrt
- .text.sqrtf    0x0000d104       0xb8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-wf_sqrt.o)
-                0x0000d104                sqrtf
- *fill*         0x0000d1bc        0x4 
+                0x0000cd68       0x8c C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+ .text.sin_lut  0x0000cdf4      0x110 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+                0x0000cdf4                sin_lut
+ .text.cos_lut  0x0000cf04       0x30 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+                0x0000cf04                cos_lut
+ *fill*         0x0000cf34        0x4 
+ .text.exp      0x0000cf38      0x108 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_exp.o)
+                0x0000cf38                exp
+ .text.sqrt     0x0000d040       0xbc c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_sqrt.o)
+                0x0000d040                sqrt
+ .text.sqrtf    0x0000d0fc       0xb8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-wf_sqrt.o)
+                0x0000d0fc                sqrtf
+ *fill*         0x0000d1b4        0x4 
  .text.__ieee754_exp
-                0x0000d1c0      0x328 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
-                0x0000d1c0                __ieee754_exp
+                0x0000d1b8      0x328 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
+                0x0000d1b8                __ieee754_exp
  .text.__ieee754_sqrt
-                0x0000d4e8      0x198 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_sqrt.o)
-                0x0000d4e8                __ieee754_sqrt
+                0x0000d4e0      0x198 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_sqrt.o)
+                0x0000d4e0                __ieee754_sqrt
  .text.__ieee754_sqrtf
-                0x0000d680       0xa4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-ef_sqrt.o)
-                0x0000d680                __ieee754_sqrtf
- .text.finite   0x0000d724       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-s_finite.o)
-                0x0000d724                finite
+                0x0000d678       0xa4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-ef_sqrt.o)
+                0x0000d678                __ieee754_sqrtf
+ .text.finite   0x0000d71c       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-s_finite.o)
+                0x0000d71c                finite
  .text.__fpclassifyd
-                0x0000d734       0x54 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-s_fpclassify.o)
-                0x0000d734                __fpclassifyd
- .text.matherr  0x0000d788        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-s_matherr.o)
-                0x0000d788                matherr
+                0x0000d72c       0x54 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-s_fpclassify.o)
+                0x0000d72c                __fpclassifyd
+ .text.matherr  0x0000d780        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-s_matherr.o)
+                0x0000d780                matherr
  .text.__fpclassifyf
-                0x0000d78c       0x38 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-sf_fpclassify.o)
-                0x0000d78c                __fpclassifyf
- .text.atoi     0x0000d7c4        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-atoi.o)
-                0x0000d7c4                atoi
- .text.__errno  0x0000d7cc        0xc c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-errno.o)
-                0x0000d7cc                __errno
- .text.exit     0x0000d7d8       0x28 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
-                0x0000d7d8                exit
+                0x0000d784       0x38 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-sf_fpclassify.o)
+                0x0000d784                __fpclassifyf
+ .text.atoi     0x0000d7bc        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-atoi.o)
+                0x0000d7bc                atoi
+ .text.__errno  0x0000d7c4        0xc c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-errno.o)
+                0x0000d7c4                __errno
+ .text.exit     0x0000d7d0       0x28 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+                0x0000d7d0                exit
  .text.__libc_init_array
-                0x0000d800       0x4c c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
-                0x0000d800                __libc_init_array
- .text.memcpy   0x0000d84c       0x12 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memcpy-stub.o)
-                0x0000d84c                memcpy
- .text.memset   0x0000d85e       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
-                0x0000d85e                memset
- .text.strchr   0x0000d86e       0x1a c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strchr.o)
-                0x0000d86e                strchr
- .text.strlen   0x0000d888       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strlen.o)
-                0x0000d888                strlen
- .text.strncmp  0x0000d898       0x2e c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strncmp.o)
-                0x0000d898                strncmp
- .text.strncpy  0x0000d8c6       0x24 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strncpy.o)
-                0x0000d8c6                strncpy
- *fill*         0x0000d8ea        0x2 
+                0x0000d7f8       0x4c c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+                0x0000d7f8                __libc_init_array
+ .text.memcpy   0x0000d844       0x12 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memcpy-stub.o)
+                0x0000d844                memcpy
+ .text.memset   0x0000d856       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+                0x0000d856                memset
+ .text.strchr   0x0000d866       0x1a c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strchr.o)
+                0x0000d866                strchr
+ .text.strlen   0x0000d880       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strlen.o)
+                0x0000d880                strlen
+ .text.strncmp  0x0000d890       0x2e c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strncmp.o)
+                0x0000d890                strncmp
+ .text.strncpy  0x0000d8be       0x24 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strncpy.o)
+                0x0000d8be                strncpy
+ *fill*         0x0000d8e2        0x2 
  .text._strtol_r
-                0x0000d8ec      0x104 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strtol.o)
-                0x0000d8ec                _strtol_r
- .text.strtol   0x0000d9f0       0x1c c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strtol.o)
-                0x0000d9f0                strtol
- .text._exit    0x0000da0c        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
-                0x0000da0c                _exit
+                0x0000d8e4      0x104 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strtol.o)
+                0x0000d8e4                _strtol_r
+ .text.strtol   0x0000d9e8       0x1c c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-strtol.o)
+                0x0000d9e8                strtol
+ .text._exit    0x0000da04        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+                0x0000da04                _exit
  *(.rodata)
- .rodata        0x0000da10      0x1bc ./Sources/Exploring_Com.o
- .rodata        0x0000dbcc        0x4 ./Sources/Logging.o
- .rodata        0x0000dbd0      0x1e4 ./Generated_Code/CLS_BLE.o
- .rodata        0x0000ddb4       0x1c ./Generated_Code/UTIL1.o
+ .rodata        0x0000da08      0x1bc ./Sources/Exploring_Com.o
+ .rodata        0x0000dbc4        0x4 ./Sources/Logging.o
+ .rodata        0x0000dbc8      0x1e4 ./Generated_Code/CLS_BLE.o
+ .rodata        0x0000ddac       0x1c ./Generated_Code/UTIL1.o
  *(.rodata*)
  .rodata.ClockGenModeMatrix
-                0x0000ddd0       0x80 ./Static_Code/System/CPU_Init.o
+                0x0000ddc8       0x80 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_ClockConfigDescriptors
-                0x0000de50       0x1c ./Static_Code/System/CPU_Init.o
+                0x0000de48       0x1c ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultFEI
-                0x0000de6c        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de64        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultFBI
-                0x0000de74        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de6c        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultBLPI
-                0x0000de7c        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de74        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultFEE
-                0x0000de84        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de7c        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultFBE
-                0x0000de8c        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de84        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultBLPE
-                0x0000de94        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de8c        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultPBE
-                0x0000de9c        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de94        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_DefaultPEE
-                0x0000dea4        0x8 ./Static_Code/System/CPU_Init.o
+                0x0000de9c        0x8 ./Static_Code/System/CPU_Init.o
  .rodata.CPU_ClockGenModeRegs
-                0x0000deac       0x20 ./Static_Code/System/CPU_Init.o
+                0x0000dea4       0x20 ./Static_Code/System/CPU_Init.o
  .rodata.CmdParserTable
-                0x0000decc        0x8 ./Sources/Exploring_Com.o
+                0x0000dec4        0x8 ./Sources/Exploring_Com.o
  .rodata.ChannelToPin
-                0x0000ded4        0x8 ./Generated_Code/AdcLdd2.o
+                0x0000decc        0x8 ./Generated_Code/AdcLdd2.o
  .rodata.ChannelToPin
-                0x0000dedc        0x8 ./Generated_Code/AdcLdd3.o
+                0x0000ded4        0x8 ./Generated_Code/AdcLdd3.o
  .rodata.CLS_BLE_stdio
-                0x0000dee4       0x10 ./Generated_Code/CLS_BLE.o
-                0x0000dee4                CLS_BLE_stdio
- .rodata.K4eye  0x0000def4       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
-                0x0000def4                K4eye
+                0x0000dedc       0x10 ./Generated_Code/CLS_BLE.o
+                0x0000dedc                CLS_BLE_stdio
+ .rodata.K4eye  0x0000deec       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+                0x0000deec                K4eye
  .rodata.K4eyeCurve
-                0x0000df04       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
-                0x0000df04                K4eyeCurve
- .rodata.Mbar   0x0000df14       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
-                0x0000df14                Mbar
+                0x0000defc       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+                0x0000defc                K4eyeCurve
+ .rodata.Mbar   0x0000df0c       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+                0x0000df0c                Mbar
  .rodata.BbarInv
-                0x0000df24       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
-                0x0000df24                BbarInv
+                0x0000df1c       0x10 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+                0x0000df1c                BbarInv
  .rodata.sin_lut_table
-                0x0000df34      0x174 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
-                0x0000df34                sin_lut_table
+                0x0000df2c      0x174 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+                0x0000df2c                sin_lut_table
  .rodata.str1.4
-                0x0000e0a8        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_exp.o)
+                0x0000e0a0        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_exp.o)
  .rodata.str1.4
-                0x0000e0ac        0x5 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_sqrt.o)
+                0x0000e0a4        0x5 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-w_sqrt.o)
                                   0x8 (size before relaxing)
- *fill*         0x0000e0b1        0x3 
+ *fill*         0x0000e0a9        0x3 
  .rodata.str1.4
-                0x0000e0b4        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-wf_sqrt.o)
- *fill*         0x0000e0bc        0x4 
- .rodata.halF   0x0000e0c0       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
- .rodata.ln2LO  0x0000e0d0       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
- .rodata.ln2HI  0x0000e0e0       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
+                0x0000e0ac        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-wf_sqrt.o)
+ *fill*         0x0000e0b4        0x4 
+ .rodata.halF   0x0000e0b8       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
+ .rodata.ln2LO  0x0000e0c8       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
+ .rodata.ln2HI  0x0000e0d8       0x10 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a(lib_a-e_exp.o)
  .rodata.str1.1
-                0x0000e0f0        0x2 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
- *fill*         0x0000e0f2        0x2 
+                0x0000e0e8        0x2 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ *fill*         0x0000e0ea        0x2 
  .rodata._global_impure_ptr
-                0x0000e0f4        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
-                0x0000e0f4                _global_impure_ptr
+                0x0000e0ec        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+                0x0000e0ec                _global_impure_ptr
  .rodata._ctype_
-                0x0000e0f8      0x101 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-ctype_.o)
-                0x0000e0f8                _ctype_
+                0x0000e0f0      0x101 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-ctype_.o)
+                0x0000e0f0                _ctype_
  *(.glue_7)
  .glue_7        0x00000000        0x0 linker stubs
  *(.glue_7t)
  .glue_7t       0x00000000        0x0 linker stubs
  *(.eh_frame)
- *fill*         0x0000e1f9        0x3 
- .eh_frame      0x0000e1fc        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ *fill*         0x0000e1f1        0x3 
+ .eh_frame      0x0000e1f4        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
  *(.init)
- .init          0x0000e1fc        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
-                0x0000e1fc                _init
- .init          0x0000e200        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+ .init          0x0000e1f4        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+                0x0000e1f4                _init
+ .init          0x0000e1f8        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
  *(.fini)
- .fini          0x0000e208        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
-                0x0000e208                _fini
- .fini          0x0000e20c        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
-                0x0000e214                . = ALIGN (0x4)
-                0x0000e214                _etext = .
+ .fini          0x0000e200        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+                0x0000e200                _fini
+ .fini          0x0000e204        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+                0x0000e20c                . = ALIGN (0x4)
+                0x0000e20c                _etext = .
 
-.vfp11_veneer   0x0000e214        0x0
+.vfp11_veneer   0x0000e20c        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0000e214        0x0
+.v4_bx          0x0000e20c        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0000e214        0x0
+.iplt           0x0000e20c        0x0
  .iplt          0x00000000        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0000e214        0x8
-                0x0000e214                __exidx_start = .
+.ARM            0x0000e20c        0x8
+                0x0000e20c                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0000e214        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
-                0x0000e21c                __exidx_end = .
+ .ARM.exidx     0x0000e20c        0x8 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+                0x0000e214                __exidx_end = .
 
-.rel.dyn        0x0000e21c        0x0
+.rel.dyn        0x0000e214        0x0
  .rel.iplt      0x00000000        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
 
-.ctors          0x0000e21c        0x0
-                0x0000e21c                __CTOR_LIST__ = .
+.ctors          0x0000e214        0x0
+                0x0000e214                __CTOR_LIST__ = .
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x0000e21c                __CTOR_END__ = .
+                0x0000e214                __CTOR_END__ = .
 
-.dtors          0x0000e21c        0x0
-                0x0000e21c                __DTOR_LIST__ = .
+.dtors          0x0000e214        0x0
+                0x0000e214                __DTOR_LIST__ = .
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x0000e21c                __DTOR_END__ = .
+                0x0000e214                __DTOR_END__ = .
 
-.preinit_array  0x0000e21c        0x0
-                0x0000e21c                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x0000e214        0x0
+                0x0000e214                PROVIDE (__preinit_array_start, .)
  *(.preinit_array*)
-                0x0000e21c                PROVIDE (__preinit_array_end, .)
+                0x0000e214                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0000e21c        0x4
-                0x0000e21c                PROVIDE (__init_array_start, .)
+.init_array     0x0000e214        0x4
+                0x0000e214                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array*)
- .init_array    0x0000e21c        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
-                0x0000e220                PROVIDE (__init_array_end, .)
+ .init_array    0x0000e214        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+                0x0000e218                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0000e220        0x4
-                0x0000e220                PROVIDE (__fini_array_start, .)
+.fini_array     0x0000e218        0x4
+                0x0000e218                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0000e220        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
-                0x0000e224                PROVIDE (__fini_array_end, .)
-                0x0000e224                ___ROM_AT = .
+ .fini_array    0x0000e218        0x4 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+                0x0000e21c                PROVIDE (__fini_array_end, .)
+                0x0000e21c                ___ROM_AT = .
 
-.data           0x20000000       0xf0 load address 0x0000e224
+.data           0x20000000       0xf0 load address 0x0000e21c
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                _sdata = .
  *(.data)
@@ -10643,16 +10643,16 @@ LOAD c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/f
                 0x200000f0                . = ALIGN (0x4)
                 0x200000f0                _edata = .
                 0x000000f0                ___data_size = (_edata - _sdata)
-                0x0000e314                ___m_data_1FFF0000_ROMStart = (___ROM_AT + SIZEOF (.data))
+                0x0000e30c                ___m_data_1FFF0000_ROMStart = (___ROM_AT + SIZEOF (.data))
 
-.jcr            0x200000f0        0x0 load address 0x0000e314
+.jcr            0x200000f0        0x0 load address 0x0000e30c
  .jcr           0x200000f0        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
 
-.igot.plt       0x200000f0        0x0 load address 0x0000e314
+.igot.plt       0x200000f0        0x0 load address 0x0000e30c
  .igot.plt      0x00000000        0x0 c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
 
 .m_data_1FFF0000
-                0x1fff0000        0x0 load address 0x0000e314
+                0x1fff0000        0x0 load address 0x0000e30c
                 0x1fff0000                . = ALIGN (0x4)
                 0x1fff0000                ___m_data_1FFF0000_RAMStart = .
  *(.m_data_1FFF0000)
@@ -10661,7 +10661,7 @@ LOAD c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/f
                 0x00000000                ___m_data_1FFF0000_ROMSize = (___m_data_1FFF0000_RAMEnd - ___m_data_1FFF0000_RAMStart)
                 0x1fff0000                . = ALIGN (0x4)
 
-.bss            0x200000f0    0x23588 load address 0x0000e318
+.bss            0x200000f0    0x23588 load address 0x0000e310
                 0x200000f0                __START_BSS = .
                 0x200000f0                PROVIDE (__bss_start__, __START_BSS)
  *(.bss)
@@ -11090,25 +11090,25 @@ LOAD c:/freescale/kds_v3/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/f
                 0x20023678                . = ALIGN (0x4)
                 0x20023678                __END_BSS = .
                 0x20023678                PROVIDE (__bss_end__, __END_BSS)
-                0x0000e314                _romp_at = ((___ROM_AT + SIZEOF (.data)) + SIZEOF (.m_data_1FFF0000))
+                0x0000e30c                _romp_at = ((___ROM_AT + SIZEOF (.data)) + SIZEOF (.m_data_1FFF0000))
 
-.romp           0x20023678       0x24 load address 0x0000e314
-                0x0000e314                __S_romp = _romp_at
-                0x20023678        0x4 LONG 0xe224 ___ROM_AT
+.romp           0x20023678       0x24 load address 0x0000e30c
+                0x0000e30c                __S_romp = _romp_at
+                0x20023678        0x4 LONG 0xe21c ___ROM_AT
                 0x2002367c        0x4 LONG 0x20000000 _sdata
                 0x20023680        0x4 LONG 0xf0 ___data_size
-                0x20023684        0x4 LONG 0xe314 ___m_data_1FFF0000_ROMStart
+                0x20023684        0x4 LONG 0xe30c ___m_data_1FFF0000_ROMStart
                 0x20023688        0x4 LONG 0x1fff0000 ___m_data_1FFF0000_RAMStart
                 0x2002368c        0x4 LONG 0x0 ___m_data_1FFF0000_ROMSize
                 0x20023690        0x4 LONG 0x0
                 0x20023694        0x4 LONG 0x0
                 0x20023698        0x4 LONG 0x0
                 0x00100000                text_end = (ORIGIN (m_text) + 0xffbf0)
-                0x0000e338                data_init_end = ((___m_data_1FFF0000_ROMStart + SIZEOF (.m_data_1FFF0000)) + SIZEOF (.romp))
+                0x0000e330                data_init_end = ((___m_data_1FFF0000_ROMStart + SIZEOF (.m_data_1FFF0000)) + SIZEOF (.romp))
                 0x00000001                ASSERT ((data_init_end <= text_end), region m_text overflowed with text and data)
 
 ._user_heap_stack
-                0x2002369c      0x400 load address 0x0000e338
+                0x2002369c      0x400 load address 0x0000e330
                 0x2002369c                . = ALIGN (0x4)
                 0x2002369c                PROVIDE (end, .)
                 0x2002369c                PROVIDE (_end, .)
@@ -12191,7 +12191,7 @@ OUTPUT(MCCAR_V_tests.elf elf32-littlearm)
  .debug_macro   0x0003f213       0x16 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
  .debug_macro   0x0003f229       0x5b C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
 
-.debug_line     0x00000000    0x220cc
+.debug_line     0x00000000    0x22234
  .debug_line    0x00000000      0xde7 ./Static_Code/System/CPU_Init.o
  .debug_line    0x00000de7     0x1391 ./Static_Code/System/Vectors.o
  .debug_line    0x00002178      0x571 ./Sources/ADC.o
@@ -12278,194 +12278,194 @@ OUTPUT(MCCAR_V_tests.elf elf32-littlearm)
  .debug_line    0x0001e816      0xefc ./Generated_Code/UTIL1.o
  .debug_line    0x0001f712      0x424 ./Generated_Code/WAIT1.o
  .debug_line    0x0001fb36      0x629 ./Generated_Code/XF1.o
- .debug_line    0x0002015f      0x9d0 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
- .debug_line    0x00020b2f      0x611 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
- .debug_line    0x00021140      0x6b6 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
- .debug_line    0x000217f6      0x6fa C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
- .debug_line    0x00021ef0      0x1dc C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+ .debug_line    0x0002015f      0xa2a C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
+ .debug_line    0x00020b89      0x66b C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
+ .debug_line    0x000211f4      0x710 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+ .debug_line    0x00021904      0x754 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+ .debug_line    0x00022058      0x1dc C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
 
-.debug_str      0x00000000    0xeebe2
+.debug_str      0x00000000    0xeebdc
  .debug_str     0x00000000    0x84be1 ./Static_Code/System/CPU_Init.o
                               0x84e2e (size before relaxing)
  .debug_str     0x00084be1      0x97c ./Static_Code/System/Vectors.o
                               0x8524a (size before relaxing)
- .debug_str     0x0008555d     0x1266 ./Sources/ADC.o
-                              0x69fc6 (size before relaxing)
- .debug_str     0x000867c3     0x5335 ./Sources/Application.o
-                              0x89f32 (size before relaxing)
- .debug_str     0x0008baf8       0x56 ./Sources/Encoder.o
-                              0x69ea1 (size before relaxing)
- .debug_str     0x0008bb4e      0x285 ./Sources/Event.o
+ .debug_str     0x0008555d     0x1260 ./Sources/ADC.o
+                              0x69fc0 (size before relaxing)
+ .debug_str     0x000867bd     0x5335 ./Sources/Application.o
+                              0x89f2c (size before relaxing)
+ .debug_str     0x0008baf2       0x56 ./Sources/Encoder.o
+                              0x69e9b (size before relaxing)
+ .debug_str     0x0008bb48      0x285 ./Sources/Event.o
                               0x6499c (size before relaxing)
- .debug_str     0x0008bdd3    0x5c20a ./Sources/Events.o
-                              0xe5214 (size before relaxing)
- .debug_str     0x000e7fdd       0xcf ./Sources/Exploration_Drive.o
-                              0x6c1fb (size before relaxing)
- .debug_str     0x000e80ac      0x1d2 ./Sources/Exploring_Com.o
-                              0x6c38f (size before relaxing)
- .debug_str     0x000e827e      0x168 ./Sources/FSM.o
-                              0x76b0b (size before relaxing)
- .debug_str     0x000e83e6      0x190 ./Sources/IMU.o
-                              0x70413 (size before relaxing)
- .debug_str     0x000e8576      0x2e8 ./Sources/Logging.o
-                              0x6e1bc (size before relaxing)
- .debug_str     0x000e885e      0x13f ./Sources/Motor.o
+ .debug_str     0x0008bdcd    0x5c20a ./Sources/Events.o
+                              0xe520e (size before relaxing)
+ .debug_str     0x000e7fd7       0xcf ./Sources/Exploration_Drive.o
+                              0x6c1f5 (size before relaxing)
+ .debug_str     0x000e80a6      0x1d2 ./Sources/Exploring_Com.o
+                              0x6c389 (size before relaxing)
+ .debug_str     0x000e8278      0x168 ./Sources/FSM.o
+                              0x76b05 (size before relaxing)
+ .debug_str     0x000e83e0      0x190 ./Sources/IMU.o
+                              0x7040d (size before relaxing)
+ .debug_str     0x000e8570      0x2e8 ./Sources/Logging.o
+                              0x6e1b6 (size before relaxing)
+ .debug_str     0x000e8858      0x13f ./Sources/Motor.o
                               0x67add (size before relaxing)
- .debug_str     0x000e899d       0x40 ./Sources/PID.o
-                              0x6a5aa (size before relaxing)
- .debug_str     0x000e89dd       0x17 ./Sources/main.o
-                              0xe4f29 (size before relaxing)
- .debug_str     0x000e89f4       0xeb ./Project_Settings/Startup_Code/startup.o
+ .debug_str     0x000e8997       0x40 ./Sources/PID.o
+                              0x6a5a4 (size before relaxing)
+ .debug_str     0x000e89d7       0x17 ./Sources/main.o
+                              0xe4f23 (size before relaxing)
+ .debug_str     0x000e89ee       0xeb ./Project_Settings/Startup_Code/startup.o
                               0x5b942 (size before relaxing)
- .debug_str     0x000e8adf      0x141 ./Generated_Code/ADC_0.o
+ .debug_str     0x000e8ad9      0x141 ./Generated_Code/ADC_0.o
                               0x67a90 (size before relaxing)
- .debug_str     0x000e8c20       0x8d ./Generated_Code/ADC_1.o
+ .debug_str     0x000e8c1a       0x8d ./Generated_Code/ADC_1.o
                               0x67a22 (size before relaxing)
- .debug_str     0x000e8cad      0x2c9 ./Generated_Code/AS_BLE.o
+ .debug_str     0x000e8ca7      0x2c9 ./Generated_Code/AS_BLE.o
                               0x62b95 (size before relaxing)
- .debug_str     0x000e8f76      0x15d ./Generated_Code/AS_PRG.o
+ .debug_str     0x000e8f70      0x15d ./Generated_Code/AS_PRG.o
                               0x62b95 (size before relaxing)
- .debug_str     0x000e90d3      0x329 ./Generated_Code/ASerialLdd1.o
+ .debug_str     0x000e90cd      0x329 ./Generated_Code/ASerialLdd1.o
                               0x71d21 (size before relaxing)
- .debug_str     0x000e93fc       0xf4 ./Generated_Code/ASerialLdd2.o
+ .debug_str     0x000e93f6       0xf4 ./Generated_Code/ASerialLdd2.o
                               0x71d21 (size before relaxing)
- .debug_str     0x000e94f0      0x329 ./Generated_Code/AdcLdd2.o
+ .debug_str     0x000e94ea      0x329 ./Generated_Code/AdcLdd2.o
                               0x67dc7 (size before relaxing)
- .debug_str     0x000e9819      0x26d ./Generated_Code/AdcLdd3.o
+ .debug_str     0x000e9813      0x26d ./Generated_Code/AdcLdd3.o
                               0x67d62 (size before relaxing)
- .debug_str     0x000e9a86       0xe2 ./Generated_Code/BitIoLdd1.o
+ .debug_str     0x000e9a80       0xe2 ./Generated_Code/BitIoLdd1.o
                               0x63746 (size before relaxing)
- .debug_str     0x000e9b68       0xba ./Generated_Code/BitIoLdd10.o
+ .debug_str     0x000e9b62       0xba ./Generated_Code/BitIoLdd10.o
                               0x6378c (size before relaxing)
- .debug_str     0x000e9c22       0xba ./Generated_Code/BitIoLdd14.o
+ .debug_str     0x000e9c1c       0xba ./Generated_Code/BitIoLdd14.o
                               0x6378c (size before relaxing)
- .debug_str     0x000e9cdc       0xba ./Generated_Code/BitIoLdd15.o
+ .debug_str     0x000e9cd6       0xba ./Generated_Code/BitIoLdd15.o
                               0x6378c (size before relaxing)
- .debug_str     0x000e9d96       0x72 ./Generated_Code/BitIoLdd16.o
+ .debug_str     0x000e9d90       0x72 ./Generated_Code/BitIoLdd16.o
                               0x636bc (size before relaxing)
- .debug_str     0x000e9e08       0x72 ./Generated_Code/BitIoLdd17.o
+ .debug_str     0x000e9e02       0x72 ./Generated_Code/BitIoLdd17.o
                               0x636bc (size before relaxing)
- .debug_str     0x000e9e7a       0x72 ./Generated_Code/BitIoLdd18.o
+ .debug_str     0x000e9e74       0x72 ./Generated_Code/BitIoLdd18.o
                               0x636be (size before relaxing)
- .debug_str     0x000e9eec       0x72 ./Generated_Code/BitIoLdd19.o
+ .debug_str     0x000e9ee6       0x72 ./Generated_Code/BitIoLdd19.o
                               0x636bc (size before relaxing)
- .debug_str     0x000e9f5e       0xa0 ./Generated_Code/BitIoLdd2.o
+ .debug_str     0x000e9f58       0xa0 ./Generated_Code/BitIoLdd2.o
                               0x63746 (size before relaxing)
- .debug_str     0x000e9ffe       0x72 ./Generated_Code/BitIoLdd20.o
+ .debug_str     0x000e9ff8       0x72 ./Generated_Code/BitIoLdd20.o
                               0x636bc (size before relaxing)
- .debug_str     0x000ea070       0xba ./Generated_Code/BitIoLdd21.o
+ .debug_str     0x000ea06a       0xba ./Generated_Code/BitIoLdd21.o
                               0x6378c (size before relaxing)
- .debug_str     0x000ea12a       0xba ./Generated_Code/BitIoLdd22.o
+ .debug_str     0x000ea124       0xba ./Generated_Code/BitIoLdd22.o
                               0x6378c (size before relaxing)
- .debug_str     0x000ea1e4       0xba ./Generated_Code/BitIoLdd23.o
+ .debug_str     0x000ea1de       0xba ./Generated_Code/BitIoLdd23.o
                               0x6378c (size before relaxing)
- .debug_str     0x000ea29e       0xba ./Generated_Code/BitIoLdd24.o
+ .debug_str     0x000ea298       0xba ./Generated_Code/BitIoLdd24.o
                               0x6378e (size before relaxing)
- .debug_str     0x000ea358       0x72 ./Generated_Code/BitIoLdd25.o
+ .debug_str     0x000ea352       0x72 ./Generated_Code/BitIoLdd25.o
                               0x636c2 (size before relaxing)
- .debug_str     0x000ea3ca       0x72 ./Generated_Code/BitIoLdd26.o
+ .debug_str     0x000ea3c4       0x72 ./Generated_Code/BitIoLdd26.o
                               0x636bc (size before relaxing)
- .debug_str     0x000ea43c       0xa8 ./Generated_Code/BitIoLdd27.o
+ .debug_str     0x000ea436       0xa8 ./Generated_Code/BitIoLdd27.o
                               0x63758 (size before relaxing)
- .debug_str     0x000ea4e4       0x72 ./Generated_Code/BitIoLdd28.o
+ .debug_str     0x000ea4de       0x72 ./Generated_Code/BitIoLdd28.o
                               0x636bc (size before relaxing)
- .debug_str     0x000ea556       0xa8 ./Generated_Code/BitIoLdd29.o
+ .debug_str     0x000ea550       0xa8 ./Generated_Code/BitIoLdd29.o
                               0x63758 (size before relaxing)
- .debug_str     0x000ea5fe       0xa0 ./Generated_Code/BitIoLdd3.o
+ .debug_str     0x000ea5f8       0xa0 ./Generated_Code/BitIoLdd3.o
                               0x63746 (size before relaxing)
- .debug_str     0x000ea69e       0x72 ./Generated_Code/BitIoLdd30.o
+ .debug_str     0x000ea698       0x72 ./Generated_Code/BitIoLdd30.o
                               0x636bc (size before relaxing)
- .debug_str     0x000ea710       0xa8 ./Generated_Code/BitIoLdd31.o
+ .debug_str     0x000ea70a       0xa8 ./Generated_Code/BitIoLdd31.o
                               0x6375e (size before relaxing)
- .debug_str     0x000ea7b8       0xa8 ./Generated_Code/BitIoLdd32.o
+ .debug_str     0x000ea7b2       0xa8 ./Generated_Code/BitIoLdd32.o
                               0x6375a (size before relaxing)
- .debug_str     0x000ea860       0xa8 ./Generated_Code/BitIoLdd33.o
+ .debug_str     0x000ea85a       0xa8 ./Generated_Code/BitIoLdd33.o
                               0x6375a (size before relaxing)
- .debug_str     0x000ea908       0xa8 ./Generated_Code/BitIoLdd34.o
+ .debug_str     0x000ea902       0xa8 ./Generated_Code/BitIoLdd34.o
                               0x6375a (size before relaxing)
- .debug_str     0x000ea9b0       0xa8 ./Generated_Code/BitIoLdd35.o
+ .debug_str     0x000ea9aa       0xa8 ./Generated_Code/BitIoLdd35.o
                               0x6375a (size before relaxing)
- .debug_str     0x000eaa58       0xba ./Generated_Code/BitIoLdd36.o
+ .debug_str     0x000eaa52       0xba ./Generated_Code/BitIoLdd36.o
                               0x63792 (size before relaxing)
- .debug_str     0x000eab12       0xa8 ./Generated_Code/BitIoLdd37.o
+ .debug_str     0x000eab0c       0xa8 ./Generated_Code/BitIoLdd37.o
                               0x6375a (size before relaxing)
- .debug_str     0x000eabba       0xa8 ./Generated_Code/BitIoLdd38.o
+ .debug_str     0x000eabb4       0xa8 ./Generated_Code/BitIoLdd38.o
                               0x6375a (size before relaxing)
- .debug_str     0x000eac62       0xa8 ./Generated_Code/BitIoLdd39.o
+ .debug_str     0x000eac5c       0xa8 ./Generated_Code/BitIoLdd39.o
                               0x6375a (size before relaxing)
- .debug_str     0x000ead0a       0xa0 ./Generated_Code/BitIoLdd4.o
+ .debug_str     0x000ead04       0xa0 ./Generated_Code/BitIoLdd4.o
                               0x63746 (size before relaxing)
- .debug_str     0x000eadaa       0xa8 ./Generated_Code/BitIoLdd40.o
+ .debug_str     0x000eada4       0xa8 ./Generated_Code/BitIoLdd40.o
                               0x6375e (size before relaxing)
- .debug_str     0x000eae52       0xa8 ./Generated_Code/BitIoLdd41.o
+ .debug_str     0x000eae4c       0xa8 ./Generated_Code/BitIoLdd41.o
                               0x6375a (size before relaxing)
- .debug_str     0x000eaefa       0xa0 ./Generated_Code/BitIoLdd5.o
+ .debug_str     0x000eaef4       0xa0 ./Generated_Code/BitIoLdd5.o
                               0x63744 (size before relaxing)
- .debug_str     0x000eaf9a       0xa0 ./Generated_Code/BitIoLdd6.o
+ .debug_str     0x000eaf94       0xa0 ./Generated_Code/BitIoLdd6.o
                               0x63744 (size before relaxing)
- .debug_str     0x000eb03a       0xb1 ./Generated_Code/BitIoLdd7.o
+ .debug_str     0x000eb034       0xb1 ./Generated_Code/BitIoLdd7.o
                               0x63776 (size before relaxing)
- .debug_str     0x000eb0eb       0xb1 ./Generated_Code/BitIoLdd8.o
+ .debug_str     0x000eb0e5       0xb1 ./Generated_Code/BitIoLdd8.o
                               0x63776 (size before relaxing)
- .debug_str     0x000eb19c      0x2c8 ./Generated_Code/CI2C1.o
+ .debug_str     0x000eb196      0x2c8 ./Generated_Code/CI2C1.o
                               0x6a1b5 (size before relaxing)
- .debug_str     0x000eb464      0x854 ./Generated_Code/CLS_BLE.o
+ .debug_str     0x000eb45e      0x854 ./Generated_Code/CLS_BLE.o
                               0x66986 (size before relaxing)
- .debug_str     0x000ebcb8       0x2c ./Generated_Code/CS1.o
+ .debug_str     0x000ebcb2       0x2c ./Generated_Code/CS1.o
                               0x63063 (size before relaxing)
- .debug_str     0x000ebce4       0x34 ./Generated_Code/Cpu.o
+ .debug_str     0x000ebcde       0x34 ./Generated_Code/Cpu.o
                               0x839d9 (size before relaxing)
- .debug_str     0x000ebd18       0xac ./Generated_Code/DacLdd1.o
+ .debug_str     0x000ebd12       0xac ./Generated_Code/DacLdd1.o
                               0x645d0 (size before relaxing)
- .debug_str     0x000ebdc4       0x4e ./Generated_Code/DacLdd2.o
+ .debug_str     0x000ebdbe       0x4e ./Generated_Code/DacLdd2.o
                               0x645d0 (size before relaxing)
- .debug_str     0x000ebe12       0x3a ./Generated_Code/Distance_INT.o
+ .debug_str     0x000ebe0c       0x3a ./Generated_Code/Distance_INT.o
                               0x838b6 (size before relaxing)
- .debug_str     0x000ebe4c       0xff ./Generated_Code/FreeCntrLdd1.o
+ .debug_str     0x000ebe46       0xff ./Generated_Code/FreeCntrLdd1.o
                               0x6bdb7 (size before relaxing)
- .debug_str     0x000ebf4b      0x2be ./Generated_Code/GI2C1.o
+ .debug_str     0x000ebf45      0x2be ./Generated_Code/GI2C1.o
                               0x63909 (size before relaxing)
- .debug_str     0x000ec209       0x65 ./Generated_Code/LED_BLUE_F_L.o
+ .debug_str     0x000ec203       0x65 ./Generated_Code/LED_BLUE_F_L.o
                               0x64050 (size before relaxing)
- .debug_str     0x000ec26e       0x5f ./Generated_Code/LED_BLUE_F_R.o
+ .debug_str     0x000ec268       0x5f ./Generated_Code/LED_BLUE_F_R.o
                               0x64050 (size before relaxing)
- .debug_str     0x000ec2cd       0x63 ./Generated_Code/LED_GREEN_F_L.o
+ .debug_str     0x000ec2c7       0x63 ./Generated_Code/LED_GREEN_F_L.o
                               0x64064 (size before relaxing)
- .debug_str     0x000ec330       0x63 ./Generated_Code/LED_GREEN_F_R.o
+ .debug_str     0x000ec32a       0x63 ./Generated_Code/LED_GREEN_F_R.o
                               0x64062 (size before relaxing)
- .debug_str     0x000ec393       0x5b ./Generated_Code/LED_RED_F_L.o
+ .debug_str     0x000ec38d       0x5b ./Generated_Code/LED_RED_F_L.o
                               0x6403c (size before relaxing)
- .debug_str     0x000ec3ee       0x5b ./Generated_Code/LED_RED_F_R.o
+ .debug_str     0x000ec3e8       0x5b ./Generated_Code/LED_RED_F_R.o
                               0x6403a (size before relaxing)
- .debug_str     0x000ec449       0x32 ./Generated_Code/MCUC1.o
+ .debug_str     0x000ec443       0x32 ./Generated_Code/MCUC1.o
                               0x62df9 (size before relaxing)
- .debug_str     0x000ec47b      0x15f ./Generated_Code/PE_LDD.o
+ .debug_str     0x000ec475      0x15f ./Generated_Code/PE_LDD.o
                               0x83a38 (size before relaxing)
- .debug_str     0x000ec5da      0x19a ./Generated_Code/SM1.o
+ .debug_str     0x000ec5d4      0x19a ./Generated_Code/SM1.o
                               0x83b9f (size before relaxing)
- .debug_str     0x000ec774      0x222 ./Generated_Code/SMasterLdd1.o
+ .debug_str     0x000ec76e      0x222 ./Generated_Code/SMasterLdd1.o
                               0x68790 (size before relaxing)
- .debug_str     0x000ec996      0x169 ./Generated_Code/TU3.o
+ .debug_str     0x000ec990      0x169 ./Generated_Code/TU3.o
                               0x6bf17 (size before relaxing)
- .debug_str     0x000ecaff       0x87 ./Generated_Code/TU5.o
+ .debug_str     0x000ecaf9       0x87 ./Generated_Code/TU5.o
                               0x6bca3 (size before relaxing)
- .debug_str     0x000ecb86       0xbe ./Generated_Code/TimerIntLdd1.o
+ .debug_str     0x000ecb80       0xbe ./Generated_Code/TimerIntLdd1.o
                               0x6bd72 (size before relaxing)
- .debug_str     0x000ecc44      0x849 ./Generated_Code/UTIL1.o
+ .debug_str     0x000ecc3e      0x849 ./Generated_Code/UTIL1.o
                               0x6585e (size before relaxing)
- .debug_str     0x000ed48d       0x9c ./Generated_Code/WAIT1.o
+ .debug_str     0x000ed487       0x9c ./Generated_Code/WAIT1.o
                               0x632c3 (size before relaxing)
- .debug_str     0x000ed529      0x39f ./Generated_Code/XF1.o
+ .debug_str     0x000ed523      0x39f ./Generated_Code/XF1.o
                               0x636c4 (size before relaxing)
- .debug_str     0x000ed8c8      0xeca C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
-                              0x6f73d (size before relaxing)
- .debug_str     0x000ee792       0x6f C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
-                              0x687ea (size before relaxing)
- .debug_str     0x000ee801      0x122 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
-                              0x6a385 (size before relaxing)
- .debug_str     0x000ee923      0x1b9 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
-                              0x6d5a0 (size before relaxing)
- .debug_str     0x000eeadc      0x106 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
+ .debug_str     0x000ed8c2      0xeca C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(Driving.o)
+                              0x6f737 (size before relaxing)
+ .debug_str     0x000ee78c       0x6f C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(SegmentTargetComputation.o)
+                              0x687e4 (size before relaxing)
+ .debug_str     0x000ee7fb      0x122 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(TrackingControl.o)
+                              0x6a37f (size before relaxing)
+ .debug_str     0x000ee91d      0x1b9 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(VelocityEstimation.o)
+                              0x6d59a (size before relaxing)
+ .debug_str     0x000eead6      0x106 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug\libMcCar_lib.a(dftrig.o)
                                0x30f2 (size before relaxing)
 
 .comment        0x00000000       0x70
