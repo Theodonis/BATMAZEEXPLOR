@@ -40,10 +40,10 @@ Idx Name          Size      VMA       LMA       File off  Algn  Flags
  13 .debug_aranges 00001eb8  00000000  00000000  00041192  2**0  CONTENTS, READONLY, DEBUGGING
  14 .debug_ranges 00001908  00000000  00000000  0004304a  2**0  CONTENTS, READONLY, DEBUGGING
  15 .debug_macro  0003f284  00000000  00000000  00044952  2**0  CONTENTS, READONLY, DEBUGGING
- 16 .debug_line   00022234  00000000  00000000  00083bd6  2**0  CONTENTS, READONLY, DEBUGGING
- 17 .debug_str    000eebdc  00000000  00000000  000a5e0a  2**0  CONTENTS, READONLY, DEBUGGING
- 18 .comment      00000070  00000000  00000000  001949e6  2**0  CONTENTS, READONLY
- 19 .debug_frame  00005bbc  00000000  00000000  00194a58  2**2  CONTENTS, READONLY, DEBUGGING
+ 16 .debug_line   00022232  00000000  00000000  00083bd6  2**0  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_str    000eebdc  00000000  00000000  000a5e08  2**0  CONTENTS, READONLY, DEBUGGING
+ 18 .comment      00000070  00000000  00000000  001949e4  2**0  CONTENTS, READONLY
+ 19 .debug_frame  00005bbc  00000000  00000000  00194a54  2**2  CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00000000 l    d  .interrupts	00000000 .interrupts
 00000400 l    d  .cfmprotect	00000000 .cfmprotect
@@ -8693,104 +8693,96 @@ C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MC
     3a70:	881a      	ldrh	r2, [r3, #0]
     3a72:	f640 13c3 	movw	r3, #2499	; 0x9c3
     3a76:	429a      	cmp	r2, r3
-    3a78:	f200 80a6 	bhi.w	3bc8 <saveData+0x17c>
+    3a78:	f200 80a7 	bhi.w	3bca <saveData+0x17e>
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:126
-		raw_dataFloat[0][ji] = v_r[0];
+		raw_dataFloat[0][ji] = 0;//v_r[0];
     3a7c:	4b55      	ldr	r3, [pc, #340]	; (3bd4 <saveData+0x188>)
     3a7e:	881b      	ldrh	r3, [r3, #0]
-    3a80:	69fa      	ldr	r2, [r7, #28]
-    3a82:	6812      	ldr	r2, [r2, #0]
-    3a84:	4954      	ldr	r1, [pc, #336]	; (3bd8 <saveData+0x18c>)
-    3a86:	009b      	lsls	r3, r3, #2
-    3a88:	440b      	add	r3, r1
+    3a80:	4a55      	ldr	r2, [pc, #340]	; (3bd8 <saveData+0x18c>)
+    3a82:	009b      	lsls	r3, r3, #2
+    3a84:	4413      	add	r3, r2
+    3a86:	f04f 0200 	mov.w	r2, #0
     3a8a:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:127
-		raw_dataFloat[1][ji] = v_r[1];
+		raw_dataFloat[1][ji] = 0;//v_r[1];
     3a8c:	4b51      	ldr	r3, [pc, #324]	; (3bd4 <saveData+0x188>)
     3a8e:	881b      	ldrh	r3, [r3, #0]
-    3a90:	69fa      	ldr	r2, [r7, #28]
-    3a92:	6852      	ldr	r2, [r2, #4]
-    3a94:	4950      	ldr	r1, [pc, #320]	; (3bd8 <saveData+0x18c>)
-    3a96:	f603 13c4 	addw	r3, r3, #2500	; 0x9c4
-    3a9a:	009b      	lsls	r3, r3, #2
-    3a9c:	440b      	add	r3, r1
+    3a90:	4a51      	ldr	r2, [pc, #324]	; (3bd8 <saveData+0x18c>)
+    3a92:	f603 13c4 	addw	r3, r3, #2500	; 0x9c4
+    3a96:	009b      	lsls	r3, r3, #2
+    3a98:	4413      	add	r3, r2
+    3a9a:	f04f 0200 	mov.w	r2, #0
     3a9e:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:128
-		raw_dataFloat[2][ji] = v_est[0];
+		raw_dataFloat[2][ji] = 0;//v_est[0];
     3aa0:	4b4c      	ldr	r3, [pc, #304]	; (3bd4 <saveData+0x188>)
     3aa2:	881b      	ldrh	r3, [r3, #0]
-    3aa4:	69ba      	ldr	r2, [r7, #24]
-    3aa6:	6812      	ldr	r2, [r2, #0]
-    3aa8:	494b      	ldr	r1, [pc, #300]	; (3bd8 <saveData+0x18c>)
-    3aaa:	f503 539c 	add.w	r3, r3, #4992	; 0x1380
-    3aae:	3308      	adds	r3, #8
-    3ab0:	009b      	lsls	r3, r3, #2
-    3ab2:	440b      	add	r3, r1
+    3aa4:	4a4c      	ldr	r2, [pc, #304]	; (3bd8 <saveData+0x18c>)
+    3aa6:	f503 539c 	add.w	r3, r3, #4992	; 0x1380
+    3aaa:	3308      	adds	r3, #8
+    3aac:	009b      	lsls	r3, r3, #2
+    3aae:	4413      	add	r3, r2
+    3ab0:	f04f 0200 	mov.w	r2, #0
     3ab4:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:129
-		raw_dataFloat[3][ji] = v_est[1];
+		raw_dataFloat[3][ji] = 0;//v_est[1];
     3ab6:	4b47      	ldr	r3, [pc, #284]	; (3bd4 <saveData+0x188>)
     3ab8:	881b      	ldrh	r3, [r3, #0]
-    3aba:	69ba      	ldr	r2, [r7, #24]
-    3abc:	6852      	ldr	r2, [r2, #4]
-    3abe:	4946      	ldr	r1, [pc, #280]	; (3bd8 <saveData+0x18c>)
-    3ac0:	f503 53ea 	add.w	r3, r3, #7488	; 0x1d40
-    3ac4:	330c      	adds	r3, #12
-    3ac6:	009b      	lsls	r3, r3, #2
-    3ac8:	440b      	add	r3, r1
+    3aba:	4a47      	ldr	r2, [pc, #284]	; (3bd8 <saveData+0x18c>)
+    3abc:	f503 53ea 	add.w	r3, r3, #7488	; 0x1d40
+    3ac0:	330c      	adds	r3, #12
+    3ac2:	009b      	lsls	r3, r3, #2
+    3ac4:	4413      	add	r3, r2
+    3ac6:	f04f 0200 	mov.w	r2, #0
     3aca:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:132
 //		raw_dataFloat[2][ji] = vc_logging[0];
 //		raw_dataFloat[3][ji] = vc_logging[1];
-		raw_dataFloat[4][ji] = q_r[0];
+		raw_dataFloat[4][ji] = 0;//q_r[0];
     3acc:	4b41      	ldr	r3, [pc, #260]	; (3bd4 <saveData+0x188>)
     3ace:	881b      	ldrh	r3, [r3, #0]
-    3ad0:	697a      	ldr	r2, [r7, #20]
-    3ad2:	6812      	ldr	r2, [r2, #0]
-    3ad4:	4940      	ldr	r1, [pc, #256]	; (3bd8 <saveData+0x18c>)
-    3ad6:	f503 531c 	add.w	r3, r3, #9984	; 0x2700
-    3ada:	3310      	adds	r3, #16
-    3adc:	009b      	lsls	r3, r3, #2
-    3ade:	440b      	add	r3, r1
+    3ad0:	4a41      	ldr	r2, [pc, #260]	; (3bd8 <saveData+0x18c>)
+    3ad2:	f503 531c 	add.w	r3, r3, #9984	; 0x2700
+    3ad6:	3310      	adds	r3, #16
+    3ad8:	009b      	lsls	r3, r3, #2
+    3ada:	4413      	add	r3, r2
+    3adc:	f04f 0200 	mov.w	r2, #0
     3ae0:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:133
-		raw_dataFloat[5][ji] = q_r[1];
+		raw_dataFloat[5][ji] = 0;//q_r[1];
     3ae2:	4b3c      	ldr	r3, [pc, #240]	; (3bd4 <saveData+0x188>)
     3ae4:	881b      	ldrh	r3, [r3, #0]
-    3ae6:	697a      	ldr	r2, [r7, #20]
-    3ae8:	6852      	ldr	r2, [r2, #4]
-    3aea:	493b      	ldr	r1, [pc, #236]	; (3bd8 <saveData+0x18c>)
-    3aec:	f503 5343 	add.w	r3, r3, #12480	; 0x30c0
-    3af0:	3314      	adds	r3, #20
-    3af2:	009b      	lsls	r3, r3, #2
-    3af4:	440b      	add	r3, r1
+    3ae6:	4a3c      	ldr	r2, [pc, #240]	; (3bd8 <saveData+0x18c>)
+    3ae8:	f503 5343 	add.w	r3, r3, #12480	; 0x30c0
+    3aec:	3314      	adds	r3, #20
+    3aee:	009b      	lsls	r3, r3, #2
+    3af0:	4413      	add	r3, r2
+    3af2:	f04f 0200 	mov.w	r2, #0
     3af6:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:134
-		raw_dataFloat[6][ji] = I_mot_ist[0];
+		raw_dataFloat[6][ji] = 0;//I_mot_ist[0];
     3af8:	4b36      	ldr	r3, [pc, #216]	; (3bd4 <saveData+0x188>)
     3afa:	881b      	ldrh	r3, [r3, #0]
-    3afc:	6bba      	ldr	r2, [r7, #56]	; 0x38
-    3afe:	6812      	ldr	r2, [r2, #0]
-    3b00:	4935      	ldr	r1, [pc, #212]	; (3bd8 <saveData+0x18c>)
-    3b02:	f503 536a 	add.w	r3, r3, #14976	; 0x3a80
-    3b06:	3318      	adds	r3, #24
-    3b08:	009b      	lsls	r3, r3, #2
-    3b0a:	440b      	add	r3, r1
+    3afc:	4a36      	ldr	r2, [pc, #216]	; (3bd8 <saveData+0x18c>)
+    3afe:	f503 536a 	add.w	r3, r3, #14976	; 0x3a80
+    3b02:	3318      	adds	r3, #24
+    3b04:	009b      	lsls	r3, r3, #2
+    3b06:	4413      	add	r3, r2
+    3b08:	f04f 0200 	mov.w	r2, #0
     3b0c:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:135
-		raw_dataFloat[7][ji] = I_mot_ist[1];
+		raw_dataFloat[7][ji] = 0;//I_mot_ist[1];
     3b0e:	4b31      	ldr	r3, [pc, #196]	; (3bd4 <saveData+0x188>)
     3b10:	881b      	ldrh	r3, [r3, #0]
-    3b12:	6bba      	ldr	r2, [r7, #56]	; 0x38
-    3b14:	6852      	ldr	r2, [r2, #4]
-    3b16:	4930      	ldr	r1, [pc, #192]	; (3bd8 <saveData+0x18c>)
-    3b18:	f503 4388 	add.w	r3, r3, #17408	; 0x4400
-    3b1c:	335c      	adds	r3, #92	; 0x5c
-    3b1e:	009b      	lsls	r3, r3, #2
-    3b20:	440b      	add	r3, r1
+    3b12:	4a31      	ldr	r2, [pc, #196]	; (3bd8 <saveData+0x18c>)
+    3b14:	f503 4388 	add.w	r3, r3, #17408	; 0x4400
+    3b18:	335c      	adds	r3, #92	; 0x5c
+    3b1a:	009b      	lsls	r3, r3, #2
+    3b1c:	4413      	add	r3, r2
+    3b1e:	f04f 0200 	mov.w	r2, #0
     3b22:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:136
-		raw_dataFloat[8][ji] = u_bat_test;
+		raw_dataFloat[8][ji] = 0;//u_bat_test;
     3b24:	4b2b      	ldr	r3, [pc, #172]	; (3bd4 <saveData+0x188>)
     3b26:	881b      	ldrh	r3, [r3, #0]
     3b28:	4a2b      	ldr	r2, [pc, #172]	; (3bd8 <saveData+0x18c>)
@@ -8798,104 +8790,102 @@ C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MC
     3b2e:	3320      	adds	r3, #32
     3b30:	009b      	lsls	r3, r3, #2
     3b32:	4413      	add	r3, r2
-    3b34:	687a      	ldr	r2, [r7, #4]
-    3b36:	601a      	str	r2, [r3, #0]
+    3b34:	f04f 0200 	mov.w	r2, #0
+    3b38:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:137
-		raw_dataFloat[8][ji] = q[1];
-    3b38:	4b26      	ldr	r3, [pc, #152]	; (3bd4 <saveData+0x188>)
-    3b3a:	881b      	ldrh	r3, [r3, #0]
-    3b3c:	6b3a      	ldr	r2, [r7, #48]	; 0x30
-    3b3e:	6852      	ldr	r2, [r2, #4]
-    3b40:	4925      	ldr	r1, [pc, #148]	; (3bd8 <saveData+0x18c>)
-    3b42:	f503 439c 	add.w	r3, r3, #19968	; 0x4e00
-    3b46:	3320      	adds	r3, #32
-    3b48:	009b      	lsls	r3, r3, #2
-    3b4a:	440b      	add	r3, r1
-    3b4c:	601a      	str	r2, [r3, #0]
+		raw_dataFloat[8][ji] = 0;//q[1];
+    3b3a:	4b26      	ldr	r3, [pc, #152]	; (3bd4 <saveData+0x188>)
+    3b3c:	881b      	ldrh	r3, [r3, #0]
+    3b3e:	4a26      	ldr	r2, [pc, #152]	; (3bd8 <saveData+0x18c>)
+    3b40:	f503 439c 	add.w	r3, r3, #19968	; 0x4e00
+    3b44:	3320      	adds	r3, #32
+    3b46:	009b      	lsls	r3, r3, #2
+    3b48:	4413      	add	r3, r2
+    3b4a:	f04f 0200 	mov.w	r2, #0
+    3b4e:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:138
-		raw_dataFloat[9][ji] = q[2];
-    3b4e:	4b21      	ldr	r3, [pc, #132]	; (3bd4 <saveData+0x188>)
-    3b50:	881b      	ldrh	r3, [r3, #0]
-    3b52:	6b3a      	ldr	r2, [r7, #48]	; 0x30
-    3b54:	6892      	ldr	r2, [r2, #8]
-    3b56:	4920      	ldr	r1, [pc, #128]	; (3bd8 <saveData+0x18c>)
-    3b58:	f503 43af 	add.w	r3, r3, #22400	; 0x5780
-    3b5c:	3364      	adds	r3, #100	; 0x64
-    3b5e:	009b      	lsls	r3, r3, #2
-    3b60:	440b      	add	r3, r1
-    3b62:	601a      	str	r2, [r3, #0]
-C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:147
+		raw_dataFloat[9][ji] = 0;//q[2];
+    3b50:	4b20      	ldr	r3, [pc, #128]	; (3bd4 <saveData+0x188>)
+    3b52:	881b      	ldrh	r3, [r3, #0]
+    3b54:	4a20      	ldr	r2, [pc, #128]	; (3bd8 <saveData+0x18c>)
+    3b56:	f503 43af 	add.w	r3, r3, #22400	; 0x5780
+    3b5a:	3364      	adds	r3, #100	; 0x64
+    3b5c:	009b      	lsls	r3, r3, #2
+    3b5e:	4413      	add	r3, r2
+    3b60:	f04f 0200 	mov.w	r2, #0
+    3b64:	601a      	str	r2, [r3, #0]
+C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:143
+//		raw_dataFloat[4][ji] = I_mot[0];
+//		raw_dataFloat[5][ji] = I_mot[1];
+
 		/* Walls */
-//		raw_dataFloat[10][ji] = distanceLP->Right;
-//		raw_dataFloat[11][ji] = distanceLP->Left;
+		raw_dataFloat[10][ji] = distanceLP->Right;
+    3b66:	4b1b      	ldr	r3, [pc, #108]	; (3bd4 <saveData+0x188>)
+    3b68:	881b      	ldrh	r3, [r3, #0]
+    3b6a:	6bfa      	ldr	r2, [r7, #60]	; 0x3c
+    3b6c:	6812      	ldr	r2, [r2, #0]
+    3b6e:	491a      	ldr	r1, [pc, #104]	; (3bd8 <saveData+0x18c>)
+    3b70:	f503 43c3 	add.w	r3, r3, #24960	; 0x6180
+    3b74:	3328      	adds	r3, #40	; 0x28
+    3b76:	009b      	lsls	r3, r3, #2
+    3b78:	440b      	add	r3, r1
+    3b7a:	601a      	str	r2, [r3, #0]
+C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:144
+		raw_dataFloat[11][ji] = distanceLP->Left;
+    3b7c:	4b15      	ldr	r3, [pc, #84]	; (3bd4 <saveData+0x188>)
+    3b7e:	881b      	ldrh	r3, [r3, #0]
+    3b80:	6bfa      	ldr	r2, [r7, #60]	; 0x3c
+    3b82:	6852      	ldr	r2, [r2, #4]
+    3b84:	4914      	ldr	r1, [pc, #80]	; (3bd8 <saveData+0x18c>)
+    3b86:	f503 43d6 	add.w	r3, r3, #27392	; 0x6b00
+    3b8a:	336c      	adds	r3, #108	; 0x6c
+    3b8c:	009b      	lsls	r3, r3, #2
+    3b8e:	440b      	add	r3, r1
+    3b90:	601a      	str	r2, [r3, #0]
+C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:149
 //		raw_dataFloat[12][ji] = *wallCenterDivergence;
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
-		raw_dataFloat[10][ji] = vc_logging[0];
-    3b64:	4b1b      	ldr	r3, [pc, #108]	; (3bd4 <saveData+0x188>)
-    3b66:	881b      	ldrh	r3, [r3, #0]
-    3b68:	6d3a      	ldr	r2, [r7, #80]	; 0x50
-    3b6a:	6812      	ldr	r2, [r2, #0]
-    3b6c:	491a      	ldr	r1, [pc, #104]	; (3bd8 <saveData+0x18c>)
-    3b6e:	f503 43c3 	add.w	r3, r3, #24960	; 0x6180
-    3b72:	3328      	adds	r3, #40	; 0x28
-    3b74:	009b      	lsls	r3, r3, #2
-    3b76:	440b      	add	r3, r1
-    3b78:	601a      	str	r2, [r3, #0]
-C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:148
-		raw_dataFloat[11][ji] = vc_logging[1];
-    3b7a:	4b16      	ldr	r3, [pc, #88]	; (3bd4 <saveData+0x188>)
-    3b7c:	881b      	ldrh	r3, [r3, #0]
-    3b7e:	6d3a      	ldr	r2, [r7, #80]	; 0x50
-    3b80:	6852      	ldr	r2, [r2, #4]
-    3b82:	4915      	ldr	r1, [pc, #84]	; (3bd8 <saveData+0x18c>)
-    3b84:	f503 43d6 	add.w	r3, r3, #27392	; 0x6b00
-    3b88:	336c      	adds	r3, #108	; 0x6c
-    3b8a:	009b      	lsls	r3, r3, #2
-    3b8c:	440b      	add	r3, r1
-    3b8e:	601a      	str	r2, [r3, #0]
-C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:149
-		raw_dataFloat[12][ji] = I_mot[0];
-    3b90:	4b10      	ldr	r3, [pc, #64]	; (3bd4 <saveData+0x188>)
-    3b92:	881b      	ldrh	r3, [r3, #0]
-    3b94:	6d7a      	ldr	r2, [r7, #84]	; 0x54
-    3b96:	6812      	ldr	r2, [r2, #0]
-    3b98:	490f      	ldr	r1, [pc, #60]	; (3bd8 <saveData+0x18c>)
-    3b9a:	f503 43ea 	add.w	r3, r3, #29952	; 0x7500
-    3b9e:	3330      	adds	r3, #48	; 0x30
-    3ba0:	009b      	lsls	r3, r3, #2
-    3ba2:	440b      	add	r3, r1
-    3ba4:	601a      	str	r2, [r3, #0]
+//		raw_dataFloat[10][ji] = vc_logging[0];
+//		raw_dataFloat[11][ji] = vc_logging[1];
+		raw_dataFloat[12][ji] =0;// I_mot[0];
+    3b92:	4b10      	ldr	r3, [pc, #64]	; (3bd4 <saveData+0x188>)
+    3b94:	881b      	ldrh	r3, [r3, #0]
+    3b96:	4a10      	ldr	r2, [pc, #64]	; (3bd8 <saveData+0x18c>)
+    3b98:	f503 43ea 	add.w	r3, r3, #29952	; 0x7500
+    3b9c:	3330      	adds	r3, #48	; 0x30
+    3b9e:	009b      	lsls	r3, r3, #2
+    3ba0:	4413      	add	r3, r2
+    3ba2:	f04f 0200 	mov.w	r2, #0
+    3ba6:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:150
-		raw_dataFloat[13][ji] = I_mot[1];
-    3ba6:	4b0b      	ldr	r3, [pc, #44]	; (3bd4 <saveData+0x188>)
-    3ba8:	881b      	ldrh	r3, [r3, #0]
-    3baa:	6d7a      	ldr	r2, [r7, #84]	; 0x54
-    3bac:	6852      	ldr	r2, [r2, #4]
-    3bae:	490a      	ldr	r1, [pc, #40]	; (3bd8 <saveData+0x18c>)
-    3bb0:	f503 43fd 	add.w	r3, r3, #32384	; 0x7e80
-    3bb4:	3374      	adds	r3, #116	; 0x74
-    3bb6:	009b      	lsls	r3, r3, #2
-    3bb8:	440b      	add	r3, r1
-    3bba:	601a      	str	r2, [r3, #0]
+		raw_dataFloat[13][ji] =0;// I_mot[1];
+    3ba8:	4b0a      	ldr	r3, [pc, #40]	; (3bd4 <saveData+0x188>)
+    3baa:	881b      	ldrh	r3, [r3, #0]
+    3bac:	4a0a      	ldr	r2, [pc, #40]	; (3bd8 <saveData+0x18c>)
+    3bae:	f503 43fd 	add.w	r3, r3, #32384	; 0x7e80
+    3bb2:	3374      	adds	r3, #116	; 0x74
+    3bb4:	009b      	lsls	r3, r3, #2
+    3bb6:	4413      	add	r3, r2
+    3bb8:	f04f 0200 	mov.w	r2, #0
+    3bbc:	601a      	str	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:154
 
 		//raw_dataFloat[15][ji] = v_r[0];
 
 		ji++;
-    3bbc:	4b05      	ldr	r3, [pc, #20]	; (3bd4 <saveData+0x188>)
-    3bbe:	881b      	ldrh	r3, [r3, #0]
-    3bc0:	3301      	adds	r3, #1
-    3bc2:	b29a      	uxth	r2, r3
-    3bc4:	4b03      	ldr	r3, [pc, #12]	; (3bd4 <saveData+0x188>)
-    3bc6:	801a      	strh	r2, [r3, #0]
+    3bbe:	4b05      	ldr	r3, [pc, #20]	; (3bd4 <saveData+0x188>)
+    3bc0:	881b      	ldrh	r3, [r3, #0]
+    3bc2:	3301      	adds	r3, #1
+    3bc4:	b29a      	uxth	r2, r3
+    3bc6:	4b03      	ldr	r3, [pc, #12]	; (3bd4 <saveData+0x188>)
+    3bc8:	801a      	strh	r2, [r3, #0]
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\git\BATMAZEEXPLOR\MCCAR_V_2_75\Debug/../Sources/Logging.c:156
 		}
 }
-    3bc8:	372c      	adds	r7, #44	; 0x2c
-    3bca:	46bd      	mov	sp, r7
-    3bcc:	f85d 7b04 	ldr.w	r7, [sp], #4
-    3bd0:	4770      	bx	lr
-    3bd2:	bf00      	nop
+    3bca:	372c      	adds	r7, #44	; 0x2c
+    3bcc:	46bd      	mov	sp, r7
+    3bce:	f85d 7b04 	ldr.w	r7, [sp], #4
+    3bd2:	4770      	bx	lr
     3bd4:	2000129c 	.word	0x2000129c
     3bd8:	200012a0 	.word	0x200012a0
 
