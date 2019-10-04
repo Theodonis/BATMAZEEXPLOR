@@ -123,31 +123,31 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 	float gyroXY[2], Distance_Bandpass_t *distanceBandpass, Wall_availability_state *wallState,
 	float vc_logging[2], float I_mot[2],float u_bat_test){
 	if(ji < LOGGING_LENGTH){
-		raw_dataFloat[0][ji] = v_r[0];
-		raw_dataFloat[1][ji] = v_r[1];
-		raw_dataFloat[2][ji] = v_est[0];
-		raw_dataFloat[3][ji] = v_est[1];
+		raw_dataFloat[0][ji] = 0;//v_r[0];
+		raw_dataFloat[1][ji] = 0;//v_r[1];
+		raw_dataFloat[2][ji] = 0;//v_est[0];
+		raw_dataFloat[3][ji] = 0;//v_est[1];
 //		raw_dataFloat[2][ji] = vc_logging[0];
 //		raw_dataFloat[3][ji] = vc_logging[1];
-		raw_dataFloat[4][ji] = q_r[0];
-		raw_dataFloat[5][ji] = q_r[1];
-		raw_dataFloat[6][ji] = I_mot_ist[0];
-		raw_dataFloat[7][ji] = I_mot_ist[1];
-		raw_dataFloat[8][ji] = u_bat_test;
-		raw_dataFloat[8][ji] = q[1];
-		raw_dataFloat[9][ji] = q[2];
+		raw_dataFloat[4][ji] = 0;//q_r[0];
+		raw_dataFloat[5][ji] = 0;//q_r[1];
+		raw_dataFloat[6][ji] = 0;//I_mot_ist[0];
+		raw_dataFloat[7][ji] = 0;//I_mot_ist[1];
+		raw_dataFloat[8][ji] = 0;//u_bat_test;
+		raw_dataFloat[8][ji] = 0;//q[1];
+		raw_dataFloat[9][ji] = 0;//q[2];
 //		raw_dataFloat[4][ji] = I_mot[0];
 //		raw_dataFloat[5][ji] = I_mot[1];
 
 		/* Walls */
-//		raw_dataFloat[10][ji] = distanceLP->Right;
-//		raw_dataFloat[11][ji] = distanceLP->Left;
+		raw_dataFloat[10][ji] = distanceLP->Right;
+		raw_dataFloat[11][ji] = distanceLP->Left;
 //		raw_dataFloat[12][ji] = *wallCenterDivergence;
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
-		raw_dataFloat[10][ji] = vc_logging[0];
-		raw_dataFloat[11][ji] = vc_logging[1];
-		raw_dataFloat[12][ji] = I_mot[0];
-		raw_dataFloat[13][ji] = I_mot[1];
+//		raw_dataFloat[10][ji] = vc_logging[0];
+//		raw_dataFloat[11][ji] = vc_logging[1];
+		raw_dataFloat[12][ji] =0;// I_mot[0];
+		raw_dataFloat[13][ji] =0;// I_mot[1];
 
 		//raw_dataFloat[15][ji] = v_r[0];
 
