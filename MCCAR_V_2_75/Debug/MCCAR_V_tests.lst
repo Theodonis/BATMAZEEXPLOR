@@ -39,11 +39,11 @@ Idx Name          Size      VMA       LMA       File off  Algn  Flags
  12 .debug_abbrev 0000792c  00000000  00000000  00039866  2**0  CONTENTS, READONLY, DEBUGGING
  13 .debug_aranges 00001eb8  00000000  00000000  00041192  2**0  CONTENTS, READONLY, DEBUGGING
  14 .debug_ranges 00001908  00000000  00000000  0004304a  2**0  CONTENTS, READONLY, DEBUGGING
- 15 .debug_macro  0003f284  00000000  00000000  00044952  2**0  CONTENTS, READONLY, DEBUGGING
- 16 .debug_line   00022232  00000000  00000000  00083bd6  2**0  CONTENTS, READONLY, DEBUGGING
- 17 .debug_str    000eebdc  00000000  00000000  000a5e08  2**0  CONTENTS, READONLY, DEBUGGING
- 18 .comment      00000070  00000000  00000000  001949e4  2**0  CONTENTS, READONLY
- 19 .debug_frame  00005bbc  00000000  00000000  00194a54  2**2  CONTENTS, READONLY, DEBUGGING
+ 15 .debug_macro  0003f431  00000000  00000000  00044952  2**0  CONTENTS, READONLY, DEBUGGING
+ 16 .debug_line   00022232  00000000  00000000  00083d83  2**0  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_str    000eec08  00000000  00000000  000a5fb5  2**0  CONTENTS, READONLY, DEBUGGING
+ 18 .comment      00000070  00000000  00000000  00194bbd  2**0  CONTENTS, READONLY
+ 19 .debug_frame  00005bbc  00000000  00000000  00194c30  2**2  CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00000000 l    d  .interrupts	00000000 .interrupts
 00000400 l    d  .cfmprotect	00000000 .cfmprotect
@@ -29551,7 +29551,7 @@ C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug/../src/Dri
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug/../src/DrivingControl/Driving.c:587
 
 	#if KDS_BUILD
-		if(saveDataCnt >= 10){
+		if(saveDataCnt >= 0){
     a93e:	4b47      	ldr	r3, [pc, #284]	; (aa5c <Driving+0x103c>)
     a940:	681b      	ldr	r3, [r3, #0]
     a942:	2b09      	cmp	r3, #9
@@ -29642,7 +29642,7 @@ C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug/../src/Dri
 	return false;
     a9dc:	2300      	movs	r3, #0
 C:\Users\Theo\Documents\Fachhochschule\Sem_9\BAT\3_Software\lib\Debug/../src/DrivingControl/Driving.c:607
-}
+} /*end of Driving(MazeSegmentsToBeDriven)*/
     a9de:	4618      	mov	r0, r3
     a9e0:	46bd      	mov	sp, r7
     a9e2:	e8bd 43b0 	ldmia.w	sp!, {r4, r5, r7, r8, r9, lr}
@@ -35632,11 +35632,11 @@ $d():
     da14:	75422020 	.word	0x75422020
     da18:	00646c69 	.word	0x00646c69
     da1c:	2074634f 	.word	0x2074634f
-    da20:	32203420 	.word	0x32203420
+    da20:	32203820 	.word	0x32203820
     da24:	00393130 	.word	0x00393130
     da28:	00000020 	.word	0x00000020
-    da2c:	323a3830 	.word	0x323a3830
-    da30:	31353a32 	.word	0x31353a32
+    da2c:	333a3031 	.word	0x333a3031
+    da30:	39303a30 	.word	0x39303a30
     da34:	00000000 	.word	0x00000000
     da38:	706c6568 	.word	0x706c6568
     da3c:	00000000 	.word	0x00000000
@@ -35801,8 +35801,8 @@ $d():
     dcb8:	32203420 	.word	0x32203420
     dcbc:	00393130 	.word	0x00393130
     dcc0:	00000020 	.word	0x00000020
-    dcc4:	323a3830 	.word	0x323a3830
-    dcc8:	35353a32 	.word	0x35353a32
+    dcc4:	353a3431 	.word	0x353a3431
+    dcc8:	32353a32 	.word	0x32353a32
     dccc:	00000000 	.word	0x00000000
     dcd0:	202a2a2a 	.word	0x202a2a2a
     dcd4:	6c696146 	.word	0x6c696146
