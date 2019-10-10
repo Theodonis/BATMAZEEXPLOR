@@ -210,41 +210,53 @@ void testJoystick()
 	}
 	if(JOY_LEFT_GetVal() == 0) {
 		//exploration
-		WAIT1_Waitms(1000);
+		/* comend out existing trys */
+//		WAIT1_Waitms(1000);
+//
+//		/* IMU */
+//		LED_GREEN_F_R_Off();
+//		LED_GREEN_F_L_Off();
+//		LED_BLUE_F_R_Off();
+//		LED_BLUE_F_L_Off();
+//		LED_RED_F_R_On();
+//		LED_RED_F_L_On();
+//		biasCalc();
+//		setBias();
+//		LED_RED_F_R_Off();
+//		LED_RED_F_L_Off();
+//
+//		I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();I_LED_MR_SetVal();
+//		/* Initial measurement, as first measurement seemed to be corrupted for some reason.*/
+//		WAIT1_Waitms(1000);
+//		calcADC_data(&adcData);
+//		calcIMU_data(&imuData);
+//		WAIT1_Waitms(1000);
+////		LED_GREEN_F_R_On();
+////		LED_GREEN_F_L_On();
+//		if(get_half_U_Bat()> 3.7){
+//		PID_Init();
+//		exploFinishFlag = FALSE;
+//		//initMotors();
+////		driveToTurn(0.05);
+////		stopp();
+//		Distance_INT_EnableEvent();
+//		}else{
+//			 BAT_LOW_ClrVal();
+//			set_VREF(0,0);
+//			deinitMotors();
+//		}
+		/* New Trys */
 
-		/* IMU */
 		LED_GREEN_F_R_Off();
 		LED_GREEN_F_L_Off();
-		LED_BLUE_F_R_Off();
+		LED_BLUE_F_L_On();
+		LED_BLUE_F_R_On();
+		reinit_Drving();
+		WAIT1_Waitms(1000);
+		LED_GREEN_F_R_On();
+		LED_GREEN_F_L_On();
 		LED_BLUE_F_L_Off();
-		LED_RED_F_R_On();
-		LED_RED_F_L_On();
-		biasCalc();
-		setBias();
-		LED_RED_F_R_Off();
-		LED_RED_F_L_Off();
-
-		I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();I_LED_MR_SetVal();
-		/* Initial measurement, as first measurement seemed to be corrupted for some reason.*/
-		WAIT1_Waitms(1000);
-		calcADC_data(&adcData);
-		calcIMU_data(&imuData);
-		WAIT1_Waitms(1000);
-//		LED_GREEN_F_R_On();
-//		LED_GREEN_F_L_On();
-		if(get_half_U_Bat()> 3.7){
-		PID_Init();
-		exploFinishFlag = FALSE;
-		//initMotors();
-//		driveToTurn(0.05);
-//		stopp();
-		Distance_INT_EnableEvent();
-		}else{
-			 BAT_LOW_ClrVal();
-			set_VREF(0,0);
-			deinitMotors();
-		}
-
+		LED_BLUE_F_R_Off();
 
 	} else {
 
@@ -462,7 +474,7 @@ void APP_Start(void) {
 								}
 									ms_Flag = FALSE;
 							}
-							else{
+							else{//call exploration-fsm here
 								calcADC_data(&adcData);
 								calcENC_data(&encData);
 								calcIMU_data(&imuData);
