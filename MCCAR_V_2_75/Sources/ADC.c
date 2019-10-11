@@ -8,6 +8,8 @@
 #include "PlatformConfiguration.h"
 #include <math.h>
 
+static raw_Values_t ADC_BIAS;
+
 /**
  *
  */
@@ -131,6 +133,22 @@ float get_half_U_Bat(){
 	ADC_0_Measure(TRUE);
 	ADC_0_GetValue16(values_ADC0_raw);
 	return (float)(2*values_ADC0_raw[3]*0.000050354004);
+}
+
+float set_dist_Bias(){
+	uint16_t values_ADC0_raw[5];
+	uint16_t values_ADC1_raw[5];
+	ADC_0_Measure(TRUE);
+	ADC_0_GetValue16(values_ADC0_raw);
+	ADC_1_Measure(TRUE);
+	ADC_1_GetValue16(values_ADC1_raw);
+
+	ADC_BIAS.raw_Right= values_ADC1_raw[2];
+	ADC_BIAS.raw_45Right = values_ADC0_raw[1];
+	ADC_BIAS.raw_MiddleR = values_ADC1_raw[1];
+	ADC_BIAS.raw_MiddleL = values_ADC0_raw[2];
+	ADC_BIAS.raw_45Left = values_ADC0_raw[0];
+	ADC_BIAS.raw_Left = values_ADC1_raw[0];
 }
 
 

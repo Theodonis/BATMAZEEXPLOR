@@ -34,21 +34,23 @@
 #define FAR_FIT_COEF_4 	0
 #define FAR_FIT_COEF_5 	0
 
+typedef struct{
+	uint16_t raw_Right;	/* Input	: */
+	uint16_t raw_45Right;	/* Input	:  */
+	uint16_t raw_MiddleL;	/* Output	: */
+	uint16_t raw_MiddleR;	/* Output	: */
+	uint16_t raw_45Left;	/* Output	: */
+	uint16_t raw_Left;	/* Output	: */
+	uint16_t raw_Right_old;	/* Input	: */
+	uint16_t raw_Left_old;	/* Output	: */
+	uint16_t raw_DRV1_IPROI;	/* Input	:  */
+	uint16_t raw_DRV2_IPROI;	/* Output	: */
+	uint16_t raw_HALF_U_BAT;	/* Output	: */
+	uint16_t raw_I_TOT;	/* Output	: */
+}raw_Values_t;
+
 typedef struct ADC_data_{
-	struct{
-		uint16_t raw_Right;	/* Input	: */
-		uint16_t raw_45Right;	/* Input	:  */
-		uint16_t raw_MiddleL;	/* Output	: */
-		uint16_t raw_MiddleR;	/* Output	: */
-		uint16_t raw_45Left;	/* Output	: */
-		uint16_t raw_Left;	/* Output	: */
-		uint16_t raw_Right_old;	/* Input	: */
-		uint16_t raw_Left_old;	/* Output	: */
-		uint16_t raw_DRV1_IPROI;	/* Input	:  */
-		uint16_t raw_DRV2_IPROI;	/* Output	: */
-		uint16_t raw_HALF_U_BAT;	/* Output	: */
-		uint16_t raw_I_TOT;	/* Output	: */
-	}raw_Values;
+	raw_Values_t raw_Values;
 	//
 	struct{
 		float v_Right;	/* Input	: */
