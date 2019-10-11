@@ -79,6 +79,7 @@
 #include "I_Motor_R.h"
 #include "Exploring_Com.h"
 #include "Exploration_Drive.h"
+#include "Explore.h"
 
  PID_data_t pidData_R, pidData_L, pidData_UC;
  ADC_data_t adcData;
@@ -89,6 +90,7 @@
 static bool ms_Flag;
 static bool exploFinishFlag = TRUE;
 static char dataBuffer[400] = "$6;#;1;-180;#;2;6;0,0;0,0;0,0;0,0;0,0;0,0;#;3;3;1,1;1,1;1,1;#;4;-90;#;5;2;0,0;0,0;#;6;180;$255;";
+static bool segmentEnd = FALSE;
 
 uint16_t encCounter = 0;
 
@@ -252,6 +254,7 @@ void testJoystick()
 		LED_BLUE_F_L_On();
 		LED_BLUE_F_R_On();
 		reinit_Drving();
+		//reinit_Explore();
 		WAIT1_Waitms(1000);
 		LED_GREEN_F_R_On();
 		LED_GREEN_F_L_On();
@@ -261,12 +264,13 @@ void testJoystick()
 		exploFinishFlag = FALSE;
 
 		if(get_half_U_Bat()> 3.7){
-			Distance_INT_EnableEvent();
-			initMotors();
 			MazeSegmentsToBeDriven.segments[0].SingleSegment = 1;
 			MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
 			MazeSegmentsToBeDriven.numberOfSegments = 1;
 
+
+			Distance_INT_EnableEvent();
+			initMotors();
 		}else{
 			BAT_LOW_ClrVal();
 			set_VREF(0,0);
@@ -493,7 +497,7 @@ void APP_Start(void) {
 //								calcADC_data(&adcData);
 //								calcENC_data(&encData);
 //								calcIMU_data(&imuData);
-								if(Driving(MazeSegmentsToBeDriven)){
+								if(Driving(MazeSegmentsToBeDriven)||segmentEnd){
 									Distance_INT_DisableEvent();
 									set_VREF(0,0);
 									deinitMotors();
@@ -503,7 +507,14 @@ void APP_Start(void) {
 									LED_RED_F_L_Off();
 									ms_Flag = FALSE;
 									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
+								}else{
+									calcADC_data(&adcData);
+									if(segEndDetection(&adcData,&segmentEnd)){
+										;
+									}
 								}
+
+
 								ms_Flag = FALSE;
 							}
 						}

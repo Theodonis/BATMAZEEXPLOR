@@ -10,6 +10,7 @@ C_SRCS += \
 ../Sources/Event.c \
 ../Sources/Events.c \
 ../Sources/Exploration_Drive.c \
+../Sources/Explore.c \
 ../Sources/Exploring_Com.c \
 ../Sources/FSM.c \
 ../Sources/IMU.c \
@@ -26,6 +27,7 @@ OBJS += \
 ./Sources/Event.o \
 ./Sources/Events.o \
 ./Sources/Exploration_Drive.o \
+./Sources/Explore.o \
 ./Sources/Exploring_Com.o \
 ./Sources/FSM.o \
 ./Sources/IMU.o \
@@ -42,6 +44,7 @@ C_DEPS += \
 ./Sources/Event.d \
 ./Sources/Events.d \
 ./Sources/Exploration_Drive.d \
+./Sources/Explore.d \
 ./Sources/Exploring_Com.d \
 ./Sources/FSM.d \
 ./Sources/IMU.d \
