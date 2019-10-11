@@ -258,6 +258,21 @@ void testJoystick()
 		LED_BLUE_F_L_Off();
 		LED_BLUE_F_R_Off();
 
+		exploFinishFlag = FALSE;
+
+		if(get_half_U_Bat()> 3.7){
+			Distance_INT_EnableEvent();
+			initMotors();
+			MazeSegmentsToBeDriven.segments[0].SingleSegment = 1;
+			MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
+			MazeSegmentsToBeDriven.numberOfSegments = 1;
+
+		}else{
+			BAT_LOW_ClrVal();
+			set_VREF(0,0);
+			deinitMotors();
+		}
+
 	} else {
 
 	}
@@ -355,7 +370,7 @@ void Init_Maze(void){
 
 
 #else
-	MazeSegmentsToBeDriven.segments[0].SingleSegment = 6;
+	MazeSegmentsToBeDriven.segments[0].SingleSegment = 1;
 	MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[2].SingleSegment = 7;
 	MazeSegmentsToBeDriven.segments[3].SingleSegment = 90;
@@ -475,11 +490,20 @@ void APP_Start(void) {
 									ms_Flag = FALSE;
 							}
 							else{//call exploration-fsm here
-								calcADC_data(&adcData);
-								calcENC_data(&encData);
-								calcIMU_data(&imuData);
-								//getSensors();
-								//Run_PID();
+//								calcADC_data(&adcData);
+//								calcENC_data(&encData);
+//								calcIMU_data(&imuData);
+								if(Driving(MazeSegmentsToBeDriven)){
+									Distance_INT_DisableEvent();
+									set_VREF(0,0);
+									deinitMotors();
+									LED_GREEN_F_R_Off();
+									LED_GREEN_F_L_Off();
+									LED_RED_F_R_Off();
+									LED_RED_F_L_Off();
+									ms_Flag = FALSE;
+									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
+								}
 								ms_Flag = FALSE;
 							}
 						}
