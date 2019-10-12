@@ -10,6 +10,10 @@
 
 #include "ADC_0.h"
 #include "ADC_1.h"
+#include "PlatformConfiguration.h"
+
+#define DISTANCE_BIASED_ENABLE  //If defined: A BIAS is measured when IR_LED is off and subtracted from the distancvalue
+// Attention: Has to be defined in PlatformConfig in Lib...
 
 #define MIN_RAW_VALUE 		2.281
 #define EXP_FIT 			25.37
@@ -33,6 +37,8 @@
 #define FAR_FIT_COEF_3 	0.11943
 #define FAR_FIT_COEF_4 	0
 #define FAR_FIT_COEF_5 	0
+
+
 
 typedef struct{
 	uint16_t raw_Right;	/* Input	: */
@@ -80,6 +86,10 @@ float fitMiddle(float raw);
 float fitExp(float raw);
 float fitFar(float raw);
 float get_half_U_Bat(void);
+
+#ifdef DISTANCE_BIASED_ENABLE
+	void set_dist_Bias(void);
+#endif
 
 static const uint8_t lookUpLeft[656] =
 {
