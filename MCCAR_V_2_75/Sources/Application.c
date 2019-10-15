@@ -380,7 +380,7 @@ void Init_Maze(void){
 
 
 #else
-	MazeSegmentsToBeDriven.segments[0].SingleSegment = 5;
+	MazeSegmentsToBeDriven.segments[0].SingleSegment = 7;
 	MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[2].SingleSegment = 7;
 	MazeSegmentsToBeDriven.segments[3].SingleSegment = 90;
@@ -410,7 +410,7 @@ void Init_Maze(void){
 	MazeSegmentsToBeDriven.segments[27].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[28].SingleSegment = 1;
 
-	MazeSegmentsToBeDriven.numberOfSegments = 1;
+	MazeSegmentsToBeDriven.numberOfSegments = 5;
 	#endif
 }
 
@@ -533,9 +533,13 @@ void APP_Start(void) {
 				}
 			}
 		  }else{
-			BAT_LOW_ClrVal();
+
 			set_VREF(0,0);
 			deinitMotors();
+			LED_RED_F_R_On();
+			WAIT1_Waitms(500);
+			BAT_LOW_ClrVal();
+
 		  }
 		}
 		else{
