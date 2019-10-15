@@ -121,16 +121,16 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 		Distance_sensors_HP_filtered *distance_HP, float x_IMU_dot_test, float x_enc_testfloat, float I_mot_ist[2],
 	Distance_sensors_LP_filtered *distanceLP, float d_hp_filtered, bool SegmentFinished,
 	float gyroXY[2], Distance_Bandpass_t *distanceBandpass, Wall_availability_state *wallState,
-	float vc_logging[2], float I_mot[2],float u_bat_test,ADC_data_t *adcData){
+	float vc_logging[2], float I_mot[2],float u_bat_test,ADC_data_t *adcData, raw_Values_t *p_ADC_BIAS){
 	if(ji < LOGGING_LENGTH){
-		raw_dataFloat[0][ji] = 0;//v_r[0];
-		raw_dataFloat[1][ji] = 0;//v_r[1];
-		raw_dataFloat[2][ji] = 0;//v_est[0];
-		raw_dataFloat[3][ji] = 0;//v_est[1];
+		raw_dataFloat[0][ji] = (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
+		raw_dataFloat[1][ji] = (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
+		raw_dataFloat[2][ji] = adcData->mm_Values.mm_Right;//0;//v_est[0];
+		raw_dataFloat[3][ji] = adcData->mm_Values.mm_Left;//0;//v_est[1];
 //		raw_dataFloat[2][ji] = vc_logging[0];
 //		raw_dataFloat[3][ji] = vc_logging[1];
-		raw_dataFloat[4][ji] = 0;//q_r[0];
-		raw_dataFloat[5][ji] = 0;//q_r[1];
+		raw_dataFloat[4][ji] = p_ADC_BIAS->raw_Right;//0;//q_r[0];
+		raw_dataFloat[5][ji] = p_ADC_BIAS->raw_Left;//0;//q_r[1];
 		raw_dataFloat[6][ji] = 0;//I_mot_ist[0];
 		raw_dataFloat[7][ji] = 0;//I_mot_ist[1];
 		raw_dataFloat[8][ji] = 0;//u_bat_test;
@@ -140,8 +140,8 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 //		raw_dataFloat[5][ji] = I_mot[1];
 
 		/* Walls */
-		raw_dataFloat[10][ji] = (float)adcData->raw_Values.raw_Right;//distanceLP->Right;//
-		raw_dataFloat[11][ji] = (float)adcData->raw_Values.raw_Left;//distanceLP->Left;//
+		raw_dataFloat[10][ji] = distanceLP->Right;//
+		raw_dataFloat[11][ji] = distanceLP->Left;//
 //		raw_dataFloat[12][ji] = *wallCenterDivergence;
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
 //		raw_dataFloat[10][ji] = vc_logging[0];

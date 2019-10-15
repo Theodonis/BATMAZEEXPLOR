@@ -48,7 +48,7 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 		Distance_sensors_HP_filtered *distance_HP, float x_IMU_dot_test, float x_enc_test, float I_mot_ist[2],
 		Distance_sensors_LP_filtered *distanceLP, float d_hp_filtered, bool SegmentFinished, float gyroXY[2],
 		Distance_Bandpass_t *distanceBandpass, Wall_availability_state *wallState,
-		float vc_logging[2], float I_mot[2] ,float u_bat_test, ADC_data_t *adcData);
+		float vc_logging[2], float I_mot[2] ,float u_bat_test, ADC_data_t *adcData, raw_Values_t *p_ADC_BIAS);
 void saveControllerData(float v_ref[2],float v_est[2],float U_mot[2],float M[2]);
 void printSaveControllerData(void);
 void ENCoverBLE(Encoder_data_t *pData);

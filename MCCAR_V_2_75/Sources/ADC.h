@@ -88,6 +88,7 @@ float get_half_U_Bat(void);
 
 #ifdef DISTANCE_BIASED_ENABLE
 	void set_dist_Bias(void);
+	void get_dist_Bias(raw_Values_t *p_ADC_BIAS);
 #endif
 
 static const uint8_t lookUpLeft[656] =
