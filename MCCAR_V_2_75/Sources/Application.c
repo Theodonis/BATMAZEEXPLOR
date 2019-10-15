@@ -204,6 +204,7 @@ void testJoystick()
 			 BAT_LOW_ClrVal();
 			set_VREF(0,0);
 			deinitMotors();
+
 		}
 
 
@@ -262,19 +263,24 @@ void testJoystick()
 		LED_BLUE_F_R_Off();
 
 		exploFinishFlag = FALSE;
+		WAIT1_Waitms(1000);
+		calcADC_data(&adcData);
+		calcIMU_data(&imuData);
+		WAIT1_Waitms(1000);
 
 		if(get_half_U_Bat()> 3.7){
 			MazeSegmentsToBeDriven.segments[0].SingleSegment = 1;
-			MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
 			MazeSegmentsToBeDriven.numberOfSegments = 1;
 
 
 			Distance_INT_EnableEvent();
 			initMotors();
 		}else{
-			BAT_LOW_ClrVal();
 			set_VREF(0,0);
 			deinitMotors();
+			LED_RED_F_R_On();
+			WAIT1_Waitms(500);
+			BAT_LOW_ClrVal();
 		}
 
 	} else {
@@ -374,7 +380,7 @@ void Init_Maze(void){
 
 
 #else
-	MazeSegmentsToBeDriven.segments[0].SingleSegment = 1;
+	MazeSegmentsToBeDriven.segments[0].SingleSegment = 5;
 	MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[2].SingleSegment = 7;
 	MazeSegmentsToBeDriven.segments[3].SingleSegment = 90;
@@ -406,7 +412,6 @@ void Init_Maze(void){
 
 	MazeSegmentsToBeDriven.numberOfSegments = 1;
 	#endif
-
 }
 
 
@@ -508,10 +513,10 @@ void APP_Start(void) {
 									ms_Flag = FALSE;
 									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 								}else{
-									calcADC_data(&adcData);
-									if(segEndDetection(&adcData,&segmentEnd)){
-										;
-									}
+//									calcADC_data(&adcData);
+//									if(segEndDetection(&adcData,&segmentEnd)){
+//										;
+//									}
 								}
 
 

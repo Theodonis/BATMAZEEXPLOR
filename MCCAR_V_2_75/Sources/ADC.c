@@ -5,10 +5,11 @@
  *      Author: cc-isn
  */
 #include "ADC.h"
-#include "PlatformConfiguration.h"
 #include <math.h>
 
-static raw_Values_t ADC_BIAS;
+#ifdef DISTANCE_BIASED_ENABLE
+ 	 static raw_Values_t ADC_BIAS;
+#endif
 
 /**
  *

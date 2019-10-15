@@ -12,8 +12,7 @@
 #include "ADC_1.h"
 #include "PlatformConfiguration.h"
 
-#define DISTANCE_BIASED_ENABLE  //If defined: A BIAS is measured when IR_LED is off and subtracted from the distancvalue
-// Attention: Has to be defined in PlatformConfig in Lib...
+
 
 #define MIN_RAW_VALUE 		2.281
 #define EXP_FIT 			25.37
