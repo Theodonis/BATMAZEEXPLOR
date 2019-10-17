@@ -161,9 +161,19 @@ float get_half_U_Bat(){
 		ADC_BIAS.raw_45Left = (uint16_t)0xFFFF-values_ADC0_raw[0];
 		ADC_BIAS.raw_Left = (uint16_t)0xFFFF-values_ADC1_raw[0];
 	}
-	void get_dist_Bias(raw_Values_t *p_ADC_BIAS){
-		*p_ADC_BIAS 		= ADC_BIAS;
-	}
 #endif
+
+void get_dist_Bias(raw_Values_t *p_ADC_BIAS){
+	#ifdef DISTANCE_BIASED_ENABLE
+		*p_ADC_BIAS 		= ADC_BIAS;
+	#else//Visibility in log
+		p_ADC_BIAS->raw_Right 	= 0;
+		p_ADC_BIAS->raw_45Right = 0;
+		p_ADC_BIAS->raw_MiddleR = 0;
+		p_ADC_BIAS->raw_MiddleL = 0;
+		p_ADC_BIAS->raw_45Left 	= 0;
+		p_ADC_BIAS->raw_Left 	= 0;
+	#endif
+}
 
 
