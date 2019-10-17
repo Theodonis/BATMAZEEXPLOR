@@ -380,9 +380,9 @@ void Init_Maze(void){
 
 
 #else
-	MazeSegmentsToBeDriven.segments[0].SingleSegment = 2;
+	MazeSegmentsToBeDriven.segments[0].SingleSegment = 6;
 	MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
-	MazeSegmentsToBeDriven.segments[2].SingleSegment = 3;
+	MazeSegmentsToBeDriven.segments[2].SingleSegment = 1;
 	MazeSegmentsToBeDriven.segments[3].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[4].SingleSegment = 7;
 	MazeSegmentsToBeDriven.segments[5].SingleSegment = 90;
@@ -410,7 +410,7 @@ void Init_Maze(void){
 	MazeSegmentsToBeDriven.segments[27].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[28].SingleSegment = 1;
 
-	MazeSegmentsToBeDriven.numberOfSegments = 3;
+	MazeSegmentsToBeDriven.numberOfSegments = 1;
 	#endif
 }
 

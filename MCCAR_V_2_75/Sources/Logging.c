@@ -134,7 +134,7 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 		raw_dataFloat[6][ji] = p_ADC_BIAS->raw_Right;//0;//I_mot_ist[0];
 		raw_dataFloat[7][ji] = p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
 		raw_dataFloat[8][ji] = u_bat_test;
-		raw_dataFloat[8][ji] = 0;//q[1];
+//		raw_dataFloat[8][ji] = 0;//q[1];
 		raw_dataFloat[9][ji] = 0;//q[2];
 //		raw_dataFloat[4][ji] = I_mot[0];
 //		raw_dataFloat[5][ji] = I_mot[1];
