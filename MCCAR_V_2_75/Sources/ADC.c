@@ -7,9 +7,9 @@
 #include "ADC.h"
 #include <math.h>
 
-#ifdef DISTANCE_BIASED_ENABLE
+//#ifdef DISTANCE_BIASED_ENABLE
  	 static raw_Values_t ADC_BIAS;
-#endif
+//#endif
 
 /**
  *
@@ -145,7 +145,7 @@ float get_half_U_Bat(){
 	ADC_0_GetValue16(values_ADC0_raw);
 	return (float)(2*values_ADC0_raw[3]*0.000050354004);
 }
-#ifdef DISTANCE_BIASED_ENABLE
+//#ifdef DISTANCE_BIASED_ENABLE
 	void set_dist_Bias(void){
 		uint16_t values_ADC0_raw[5];
 		uint16_t values_ADC1_raw[5];
@@ -161,19 +161,19 @@ float get_half_U_Bat(){
 		ADC_BIAS.raw_45Left 	= (uint16_t)0xFFFF-values_ADC0_raw[0];
 		ADC_BIAS.raw_Left 		= (uint16_t)0xFFFF-values_ADC1_raw[0];
 	}
-#endif
+//#endif
 
 void get_dist_Bias(raw_Values_t *p_ADC_BIAS){
-	#ifdef DISTANCE_BIASED_ENABLE
+	//#ifdef DISTANCE_BIASED_ENABLE
 		*p_ADC_BIAS 		= ADC_BIAS;
-	#else//Visibility in log
-		p_ADC_BIAS->raw_Right 	= 0;
-		p_ADC_BIAS->raw_45Right = 0;
-		p_ADC_BIAS->raw_MiddleR = 0;
-		p_ADC_BIAS->raw_MiddleL = 0;
-		p_ADC_BIAS->raw_45Left 	= 0;
-		p_ADC_BIAS->raw_Left 	= 0;
-	#endif
+//	#else//Visibility in log
+//		p_ADC_BIAS->raw_Right 	= 0;
+//		p_ADC_BIAS->raw_45Right = 0;
+//		p_ADC_BIAS->raw_MiddleR = 0;
+//		p_ADC_BIAS->raw_MiddleL = 0;
+//		p_ADC_BIAS->raw_45Left 	= 0;
+//		p_ADC_BIAS->raw_Left 	= 0;
+//	#endif
 }
 
 
