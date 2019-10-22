@@ -140,8 +140,8 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 //		raw_dataFloat[5][ji] = I_mot[1];
 
 		/* Walls */
-		raw_dataFloat[10][ji] = x_enc_testfloat;
-		raw_dataFloat[11][ji] = x_IMU_dot_test;
+		raw_dataFloat[10][ji] = (float)adcData->raw_Values.raw_MiddleR;
+		raw_dataFloat[11][ji] = (float)adcData->raw_Values.raw_MiddleL;;
 //		raw_dataFloat[12][ji] = *wallCenterDivergence;
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
 //		raw_dataFloat[10][ji] = vc_logging[0];

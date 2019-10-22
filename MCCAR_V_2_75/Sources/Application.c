@@ -187,7 +187,8 @@ void testJoystick()
 		calcADC_data(&adcData);
 		calcENC_data(&encData);
 		calcIMU_data(&imuData);
-		I_LED_MR_ClrVal();I_LED_ML_ClrVal();
+		set_dist_Bias();
+		I_LED_MR_SetVal();I_LED_ML_SetVal();
 		I_LED_R_SetVal();I_LED_L_SetVal();
 		/* Initial measurement, as first measurement seemed to be corrupted for some reason.*/
 		WAIT1_Waitms(1000);

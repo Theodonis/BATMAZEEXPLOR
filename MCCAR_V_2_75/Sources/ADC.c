@@ -28,8 +28,8 @@ void calcADC_data(ADC_data_t *pData){
 	#ifdef DISTANCE_BIASED_ENABLE
 		pData->raw_Values.raw_Right 	= values_ADC1_raw[2]+ADC_BIAS.raw_Right;
 		pData->raw_Values.raw_45Right 	= values_ADC0_raw[1]+ADC_BIAS.raw_45Right;
-		pData->raw_Values.raw_MiddleR 	= values_ADC1_raw[1]+ADC_BIAS.raw_MiddleR;
-		pData->raw_Values.raw_MiddleL 	= values_ADC0_raw[2]+ADC_BIAS.raw_MiddleL;
+		pData->raw_Values.raw_MiddleR 	= values_ADC1_raw[1];//+ADC_BIAS.raw_MiddleR;
+		pData->raw_Values.raw_MiddleL 	= values_ADC0_raw[2];//+ADC_BIAS.raw_MiddleL;
 		pData->raw_Values.raw_45Left 	= values_ADC0_raw[0]+ADC_BIAS.raw_45Left;
 		pData->raw_Values.raw_Left 		= values_ADC1_raw[0]+ADC_BIAS.raw_Left;
 	#else
