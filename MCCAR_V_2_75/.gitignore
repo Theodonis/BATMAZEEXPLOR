@@ -1,5 +1,6 @@
 /.settings/
 /DEBUG/
+/Debug/
 /Generated_Code/
 /Documentation/
 *.g_c
