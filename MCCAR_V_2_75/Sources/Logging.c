@@ -135,7 +135,7 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 		raw_dataFloat[7][ji] = p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
 		raw_dataFloat[8][ji] = u_bat_test;
 //		raw_dataFloat[8][ji] = 0;//q[1];
-		raw_dataFloat[9][ji] = 0;//q[2];
+		raw_dataFloat[9][ji] = q[0];//0;//q[2]; /* x-Position of MC-Car in m */
 //		raw_dataFloat[4][ji] = I_mot[0];
 //		raw_dataFloat[5][ji] = I_mot[1];
 
@@ -146,8 +146,8 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
 //		raw_dataFloat[10][ji] = vc_logging[0];
 //		raw_dataFloat[11][ji] = vc_logging[1];
-		raw_dataFloat[12][ji] =0;// I_mot[0];
-		raw_dataFloat[13][ji] =0;// I_mot[1];
+		raw_dataFloat[12][ji] =q[1];//0;// I_mot[0]; /* y-Position of MC-Car in m */
+		raw_dataFloat[13][ji] =q[2];//0;// I_mot[1]; /* theat-Angle of MC-Car in rad */
 
 		//raw_dataFloat[15][ji] = v_r[0];
 
