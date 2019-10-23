@@ -10,11 +10,11 @@
 #include <stdint.h>
 #include "ADC.h"
 
-typedef enum segEndDet_state_ {
-	FIRST_CALL = 1,
-	SECOND_CALL,
-	LATER_CALL
-} segEndDet_state_t;
+
+/* Filter of Distance for SegmentEndDetection */
+#define SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR 0.95
+#define SEG_END_DET_DERIVATION_LP_LAST_VAL_FACTOR 0.93
+
 
 bool segEndDetection(ADC_data_t *adcData,bool *segmentEnd);
 void reinit_Explore(void);

@@ -8,79 +8,57 @@
 #include "stdbool.h"
 #include "ADC.h"
 #include "Explore.h"
-#define SEGMENT_END_TRESHOLD 0.08
-
-volatile static segEndDet_state_t segEndDetState = FIRST_CALL;
 
 bool segEndDetection(ADC_data_t *adcData,bool *segmentEnd) {
 
-	static float prev_2_dist[2] 	= { 0.0, 0.0};
-	static float prev_1_dist[2] 	= { 0.0, 0.0};
-	static float dist[2] 			= { 0.0, 0.0};
-	float prevVal;
-	float actualVal;
-	float d_Val;
+	static float LP_dist[2] 			= { 0.0, 0.0};
+	static float prev_LP_dist[2] 		= { 0.0, 0.0};
+	static float dist_dot_square[2] 	= { 0.0, 0.0};
+	static float LP_dist_dot_square[2] 	= { 0.0, 0.0};
+
 	bool segEnd = FALSE;
 
-
-
-	switch (segEndDetState){
-		case FIRST_CALL:
-			prev_2_dist[0] 	= adcData->mm_Values.mm_Right;
-			prev_2_dist[1] 	= adcData->mm_Values.mm_Left;
-			prev_1_dist[0] 	= adcData->mm_Values.mm_Right;
-			prev_1_dist[1] 	= adcData->mm_Values.mm_Left;
-			dist[0] 		= adcData->mm_Values.mm_Right;
-			dist[1] 		= adcData->mm_Values.mm_Left;
-			segEndDetState  = SECOND_CALL;
-			break;
-		case SECOND_CALL:
-			prev_1_dist[0] 	= adcData->mm_Values.mm_Right;
-			prev_1_dist[1] 	= adcData->mm_Values.mm_Left;
-			dist[0] 		= adcData->mm_Values.mm_Right;
-			dist[1] 		= adcData->mm_Values.mm_Left;
-			segEndDetState 	= LATER_CALL;
-			break;
-		case LATER_CALL:
-			prev_2_dist[0] 	= prev_1_dist[0];
-			prev_2_dist[1] 	= prev_1_dist[1];
-			prev_1_dist[0] 	= dist[0];
-			prev_1_dist[1] 	= dist[1];
-			dist[0] 		= adcData->mm_Values.mm_Right;
-			dist[1] 		= adcData->mm_Values.mm_Left;
-			break;
-	}
-	/* Calculation for rightDistance */
-	prevVal  	= prev_2_dist[0] + prev_1_dist[0];
-	actualVal 	= prev_1_dist[0] + dist[0];
-
-	d_Val 		= actualVal - prevVal;
-	d_Val 		= d_Val*d_Val;
-
-	if (d_Val>SEGMENT_END_TRESHOLD){
-		segEnd = TRUE;
-	}
-	/* Calculation for leftDistance */
-	prevVal  	= prev_2_dist[1] + prev_1_dist[1];
-	actualVal 	= prev_1_dist[1] + dist[1];
-
-	d_Val 		= actualVal - prevVal;
-	d_Val 		= d_Val*d_Val;
-
-	/* Decide if segmentend detected */
-	if (d_Val>SEGMENT_END_TRESHOLD && segEnd){
-		segEnd = TRUE;
-	}else{
-		segEnd = FALSE;
+	/* init at first call */
+	if (LP_dist[0] == 0.0){
+		LP_dist[0]		= (float)adcData->raw_Values.raw_Right;
+		LP_dist[1]		= (float)adcData->raw_Values.raw_Left;
+		prev_LP_dist[0]	= LP_dist[0];
+		prev_LP_dist[1]	= LP_dist[1];
 	}
 
-	*segmentEnd =segEnd;
+	/* LowPass for rightDistance */
+	LP_dist[0] 	= LP_dist[0] * SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR  + (float)adcData->raw_Values.raw_Right * (1.0-SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR);
+	/* LowPass for leftDistance */
+	LP_dist[1] 	= LP_dist[1] * SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR  + (float)adcData->raw_Values.raw_Left * (1.0-SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR);
+
+
+	/* Derivation */
+
+	dist_dot_square[0] = LP_dist[0]-prev_LP_dist[0];	//Right side derivation
+	dist_dot_square[1] = LP_dist[0]-prev_LP_dist[1];	//Left side derivation
+
+	/* Derivation Square */
+
+	dist_dot_square[0] = dist_dot_square[0]*dist_dot_square[0]; //Square of right side derivation
+	dist_dot_square[1] = dist_dot_square[1]*dist_dot_square[1]; //Square of left side derivation
+
+	/* LowPass for rightDistanceDerivation */
+	LP_dist_dot_square[0] = LP_dist_dot_square[0] * SEG_END_DET_DERIVATION_LP_LAST_VAL_FACTOR + dist_dot_square[0] * (1.0-SEG_END_DET_DERIVATION_LP_LAST_VAL_FACTOR);
+	/* LowPass for leftDistanceDerivation */
+	LP_dist_dot_square[1] = LP_dist_dot_square[1] * SEG_END_DET_DERIVATION_LP_LAST_VAL_FACTOR + dist_dot_square[1] * (1.0-SEG_END_DET_DERIVATION_LP_LAST_VAL_FACTOR);
+
+
+	/* if filtered square of derivation is to high -> its a segment end */
+	if(LP_dist_dot_square[0]> 350){ // 350 is only a Test value to save up multiplications (instead of lowlow pass to compare) 70 ->expectation x 5 =350
+		*segmentEnd =segEnd;
+	}
+	if(LP_dist_dot_square[1]> 600){ // 600 is only a Test value to save up multiplications (instead of lowlow pass to compare) 120 ->expectation x 5 =600
+		*segmentEnd =segEnd;
+	}
+
 	return TRUE;
-
-
 }
 
 
 void reinit_Explore(void){
-	segEndDetState = FIRST_CALL;
 }

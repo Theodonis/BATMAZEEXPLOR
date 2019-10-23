@@ -500,9 +500,6 @@ void APP_Start(void) {
 									ms_Flag = FALSE;
 							}
 							else{//call exploration-fsm here
-//								calcADC_data(&adcData);
-//								calcENC_data(&encData);
-//								calcIMU_data(&imuData);
 								if(Driving(MazeSegmentsToBeDriven)||segmentEnd){
 									Distance_INT_DisableEvent();
 									set_VREF(0,0);
@@ -514,10 +511,9 @@ void APP_Start(void) {
 									ms_Flag = FALSE;
 									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 								}else{
-//									calcADC_data(&adcData);
-//									if(segEndDetection(&adcData,&segmentEnd)){
-//										;
-//									}
+									if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
+										//Error;
+									}
 								}
 
 
