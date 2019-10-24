@@ -471,6 +471,7 @@ void quadratureDecoder(void)
 }
 
 void APP_Start(void) {
+	static float Pos[3];
 	Init_GPIOs();
 	WAIT1_Waitms(500);
 	for(;;){
@@ -511,8 +512,11 @@ void APP_Start(void) {
 									ms_Flag = FALSE;
 									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 								}else{
-									if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
-										//Error;
+									(void)getPosition(&Pos);
+									if(Pos[0]<1.3){
+										if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
+											//Error;
+										}
 									}
 								}
 

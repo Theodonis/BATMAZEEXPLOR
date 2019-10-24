@@ -146,8 +146,8 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
 //		raw_dataFloat[10][ji] = vc_logging[0];
 //		raw_dataFloat[11][ji] = vc_logging[1];
-		raw_dataFloat[12][ji] =q[1];//0;// I_mot[0]; /* y-Position of MC-Car in m */
-		raw_dataFloat[13][ji] =q[2];//0;// I_mot[1]; /* theat-Angle of MC-Car in rad */
+		raw_dataFloat[12][ji] = q[1];//0;// I_mot[0]; /* y-Position of MC-Car in m */
+		raw_dataFloat[13][ji] = q[2];//0;// I_mot[1]; /* theat-Angle of MC-Car in rad */
 
 		//raw_dataFloat[15][ji] = v_r[0];
 
