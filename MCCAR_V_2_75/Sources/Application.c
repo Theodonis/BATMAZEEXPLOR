@@ -258,8 +258,8 @@ void testJoystick()
 		reinit_Drving();
 		//reinit_Explore();
 		WAIT1_Waitms(1000);
-		LED_GREEN_F_R_On();
-		LED_GREEN_F_L_On();
+//		LED_GREEN_F_R_On();
+//		LED_GREEN_F_L_On();
 		LED_BLUE_F_L_Off();
 		LED_BLUE_F_R_Off();
 
@@ -501,23 +501,32 @@ void APP_Start(void) {
 									ms_Flag = FALSE;
 							}
 							else{//call exploration-fsm here
-								if(Driving(MazeSegmentsToBeDriven)||segmentEnd){
+								if(Driving(MazeSegmentsToBeDriven)){
 									Distance_INT_DisableEvent();
 									set_VREF(0,0);
 									deinitMotors();
-									LED_GREEN_F_R_Off();
-									LED_GREEN_F_L_Off();
+									LED_GREEN_F_R_On();
+									LED_GREEN_F_L_On();
 									LED_RED_F_R_Off();
 									LED_RED_F_L_Off();
 									ms_Flag = FALSE;
 									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 								}else{
 									(void)getPosition(&Pos);
-									if(Pos[0]<1.3){
-										if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
-											//Error;
-										}
-									}
+//									if(Pos[0]<1.4){
+//										setStop();
+//										Distance_INT_DisableEvent();
+//										set_VREF(0,0);
+//										MazeSegmentsToBeDriven.segments[0].SingleSegment = 0;
+//										MazeSegmentsToBeDriven.numberOfSegments = 0;
+//										reinit_Drving();
+//										deinitMotors();
+//										LED_RED_F_L_On();
+										//segmentEnd=true;
+//										if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
+//											//Error;
+//										}
+//									}
 								}
 
 
