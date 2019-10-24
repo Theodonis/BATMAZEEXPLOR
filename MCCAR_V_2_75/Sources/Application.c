@@ -255,7 +255,7 @@ void testJoystick()
 		LED_GREEN_F_L_Off();
 		LED_BLUE_F_L_On();
 		LED_BLUE_F_R_On();
-		reinit_Drving();
+		reinit_Drving(true);
 		//reinit_Explore();
 		WAIT1_Waitms(1000);
 //		LED_GREEN_F_R_On();
@@ -514,7 +514,7 @@ void APP_Start(void) {
 									LED_RED_F_R_Off();
 									LED_RED_F_L_Off();
 								}else{
-									if(getPosition(&Pos)){
+									if(getPosition(&Pos[0])){
 										;//error;
 									}
 //									if(Pos[0]<1.4){
