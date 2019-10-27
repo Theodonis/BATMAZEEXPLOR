@@ -504,7 +504,7 @@ void APP_Start(void) {
 								if(Driving(MazeSegmentsToBeDriven)){
 									static int i=0;
 									/* Stop comand */
-									if(i>4){
+//									if(i>4){
 										Distance_INT_DisableEvent();
 										set_VREF(0,0);
 										deinitMotors();
@@ -515,30 +515,32 @@ void APP_Start(void) {
 										LED_GREEN_F_L_On();
 										LED_RED_F_R_Off();
 										LED_RED_F_L_Off();
-										i=0;
-									}else{
-										i++;
-										MazeSegmentsToBeDriven.numberOfSegments = MazeSegmentsToBeDriven.numberOfSegments+1;
-										MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 1;
-									}
+//										i=0;
+//									}else{
+//										i++;
+//										MazeSegmentsToBeDriven.numberOfSegments = MazeSegmentsToBeDriven.numberOfSegments+1;
+//										MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 1;
+//									}
 								}else{
+									static float d=1.40;
 									if(getPosition(&Pos[0])){
 										;//error;
 									}
-//									if(Pos[0]<1.4300){
-//										setStop();
+									if(Pos[0]<d){
 //										Distance_INT_DisableEvent();
-//										set_VREF(-0.01,-0.01);
+										set_VREF(-0.01,-0.01);
 //										MazeSegmentsToBeDriven.segments[0].SingleSegment = 0;
 //										MazeSegmentsToBeDriven.numberOfSegments = 0;
-//										reinit_Drving();
-//										deinitMotors();
-//										LED_RED_F_L_On();
+										reinit_Drving(true);
+										LED_RED_F_L_On();
+										d=d-0.1;
+										set_VREF(0,0);
+										deinitMotors();
 										//segmentEnd=true;
 //										if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
 //											//Error;
 //										}
-//									}
+									}
 								}
 
 
