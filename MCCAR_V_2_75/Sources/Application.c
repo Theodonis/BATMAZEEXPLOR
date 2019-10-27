@@ -502,25 +502,33 @@ void APP_Start(void) {
 							}
 							else{//call exploration-fsm here
 								if(Driving(MazeSegmentsToBeDriven)){
+									static int i=0;
 									/* Stop comand */
-									Distance_INT_DisableEvent();
-									set_VREF(0,0);
-									deinitMotors();
-									ms_Flag = FALSE;
-									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
+									if(i>4){
+										Distance_INT_DisableEvent();
+										set_VREF(0,0);
+										deinitMotors();
+										ms_Flag = FALSE;
+										I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 
-									LED_GREEN_F_R_On();
-									LED_GREEN_F_L_On();
-									LED_RED_F_R_Off();
-									LED_RED_F_L_Off();
+										LED_GREEN_F_R_On();
+										LED_GREEN_F_L_On();
+										LED_RED_F_R_Off();
+										LED_RED_F_L_Off();
+										i=0;
+									}else{
+										i++;
+										MazeSegmentsToBeDriven.numberOfSegments = MazeSegmentsToBeDriven.numberOfSegments+1;
+										MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 1;
+									}
 								}else{
 									if(getPosition(&Pos[0])){
 										;//error;
 									}
-//									if(Pos[0]<1.4){
+//									if(Pos[0]<1.4300){
 //										setStop();
 //										Distance_INT_DisableEvent();
-//										set_VREF(0,0);
+//										set_VREF(-0.01,-0.01);
 //										MazeSegmentsToBeDriven.segments[0].SingleSegment = 0;
 //										MazeSegmentsToBeDriven.numberOfSegments = 0;
 //										reinit_Drving();

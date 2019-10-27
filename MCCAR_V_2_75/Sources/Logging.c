@@ -125,8 +125,8 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 	if(ji < LOGGING_LENGTH){
 		raw_dataFloat[0][ji] = (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
 		raw_dataFloat[1][ji] = (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
-		raw_dataFloat[2][ji] = adcData->mm_Values.mm_Right;//0;//v_est[0];
-		raw_dataFloat[3][ji] = adcData->mm_Values.mm_Left;//0;//v_est[1];
+		raw_dataFloat[2][ji] = v_est[0];//adcData->mm_Values.mm_Right;//0;//v_est[0];
+		raw_dataFloat[3][ji] = v_est[1];//adcData->mm_Values.mm_Left;//0;//v_est[1];
 //		raw_dataFloat[2][ji] = vc_logging[0];
 //		raw_dataFloat[3][ji] = vc_logging[1];
 		raw_dataFloat[4][ji] = distanceLP->Right;//0;//q_r[0];
