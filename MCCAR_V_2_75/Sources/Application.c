@@ -346,8 +346,8 @@ void Init_Maze(void){
 
 
 #else
-	MazeSegmentsToBeDriven.segments[0].SingleSegment = 6;
-	MazeSegmentsToBeDriven.segments[1].SingleSegment = 90;
+	MazeSegmentsToBeDriven.segments[0].SingleSegment = 900;
+	MazeSegmentsToBeDriven.segments[1].SingleSegment = 900;
 	MazeSegmentsToBeDriven.segments[2].SingleSegment = 1;
 	MazeSegmentsToBeDriven.segments[3].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[4].SingleSegment = 7;
@@ -376,7 +376,7 @@ void Init_Maze(void){
 	MazeSegmentsToBeDriven.segments[27].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[28].SingleSegment = 1;
 
-	MazeSegmentsToBeDriven.numberOfSegments = 1;
+	MazeSegmentsToBeDriven.numberOfSegments = 2;
 	#endif
 }
 
@@ -475,8 +475,8 @@ void APP_Start(void) {
 										Distance_INT_DisableEvent();
 										set_VREF(0,0);
 										deinitMotors();
-										LED_GREEN_F_R_Off();
-										LED_GREEN_F_L_Off();
+										LED_GREEN_F_R_On();
+										LED_GREEN_F_L_On();
 										ms_Flag = FALSE;
 										I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 

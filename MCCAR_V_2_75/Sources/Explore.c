@@ -54,17 +54,21 @@ byte TargetPosStateMaschine(void){
 		case FrontWallDetected:
 			if(Driving(MazeSegmentsToBeDriven)){
 				posState = turnState;
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
+				MazeSegmentsToBeDriven.numberOfSegments++;
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
 				MazeSegmentsToBeDriven.numberOfSegments++;
 				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
 				MazeSegmentsToBeDriven.numberOfSegments++;
 				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
+				MazeSegmentsToBeDriven.numberOfSegments++;
 			}
 			break;
 		case turnState:
 			if(Driving(MazeSegmentsToBeDriven)){
 				posState = driveToLeftBranch;
-				MazeSegmentsToBeDriven.numberOfSegments++;
 				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
+				MazeSegmentsToBeDriven.numberOfSegments++;
 			}
 			break;
 		case driveToLeftBranch:
