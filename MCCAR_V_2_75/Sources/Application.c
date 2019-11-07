@@ -214,52 +214,15 @@ void testJoystick()
 	}
 	if(JOY_LEFT_GetVal() == 0) {
 		//exploration
-		/* comend out existing trys */
-//		WAIT1_Waitms(1000);
 //
-//		/* IMU */
-//		LED_GREEN_F_R_Off();
-//		LED_GREEN_F_L_Off();
-//		LED_BLUE_F_R_Off();
-//		LED_BLUE_F_L_Off();
-//		LED_RED_F_R_On();
-//		LED_RED_F_L_On();
-//		biasCalc();
-//		setBias();
-//		LED_RED_F_R_Off();
-//		LED_RED_F_L_Off();
-//
-//		I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();I_LED_MR_SetVal();
-//		/* Initial measurement, as first measurement seemed to be corrupted for some reason.*/
-//		WAIT1_Waitms(1000);
-//		calcADC_data(&adcData);
-//		calcIMU_data(&imuData);
-//		WAIT1_Waitms(1000);
-////		LED_GREEN_F_R_On();
-////		LED_GREEN_F_L_On();
-//		if(get_half_U_Bat()> 3.7){
-//		PID_Init();
-//		exploFinishFlag = FALSE;
-//		//initMotors();
-////		driveToTurn(0.05);
-////		stopp();
-//		Distance_INT_EnableEvent();
-//		}else{
-//			 BAT_LOW_ClrVal();
-//			set_VREF(0,0);
-//			deinitMotors();
-//		}
-		/* New Trys */
+		/* Prepare to Drive */
 
 		LED_GREEN_F_R_Off();
 		LED_GREEN_F_L_Off();
 		LED_BLUE_F_L_On();
 		LED_BLUE_F_R_On();
 		reinit_Drving(true);
-		//reinit_Explore();
 		WAIT1_Waitms(1000);
-//		LED_GREEN_F_R_On();
-//		LED_GREEN_F_L_On();
 		LED_BLUE_F_L_Off();
 		LED_BLUE_F_R_Off();
 		LED_RED_F_L_Off();
@@ -272,8 +235,8 @@ void testJoystick()
 		WAIT1_Waitms(1000);
 
 		if(get_half_U_Bat()> 3.7){
-			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
-			MazeSegmentsToBeDriven.numberOfSegments = 1;
+//			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
+//			MazeSegmentsToBeDriven.numberOfSegments = 1;
 
 			initMotors();
 			Distance_INT_EnableEvent();
@@ -502,30 +465,47 @@ void APP_Start(void) {
 								}
 									ms_Flag = FALSE;
 							}else{//call exploration-fsm here
-								static float d=55000.0;
-								if(Driving(MazeSegmentsToBeDriven)){
-									d=55000.0;
-									//static int i=0;
-									/* Stop comand */
-//									if(i>4){
+								switch(TargetPosStateMaschine()){
+									case ERR_BUSY:
+										break;
+									case ERR_FAILED:
+										LED_RED_F_L_On();
+										LED_RED_F_R_On();
+									case ERR_OK:
 										Distance_INT_DisableEvent();
 										set_VREF(0,0);
 										deinitMotors();
+										LED_GREEN_F_R_Off();
+										LED_GREEN_F_L_Off();
 										ms_Flag = FALSE;
 										I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 
-										LED_GREEN_F_R_On();
-										LED_GREEN_F_L_On();
-										LED_RED_F_R_Off();
-										LED_RED_F_L_Off();
-//										i=0;
-//									}else{
-//										i++;
-//										MazeSegmentsToBeDriven.numberOfSegments = MazeSegmentsToBeDriven.numberOfSegments+1;
-//										MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 1;
-//									}
-								}else{
-									ADC_data_t* adc = get_latest_ADC_data();
+								}
+
+//								static float d=55000.0;
+//								if(Driving(MazeSegmentsToBeDriven)){
+//									d=55000.0;
+//									//static int i=0;
+//									/* Stop comand */
+////									if(i>4){
+//										Distance_INT_DisableEvent();
+//										set_VREF(0,0);
+//										deinitMotors();
+//										ms_Flag = FALSE;
+//										I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
+//
+//										LED_GREEN_F_R_On();
+//										LED_GREEN_F_L_On();
+//										LED_RED_F_R_Off();
+//										LED_RED_F_L_Off();
+////										i=0;
+////									}else{
+////										i++;
+////										MazeSegmentsToBeDriven.numberOfSegments = MazeSegmentsToBeDriven.numberOfSegments+1;
+////										MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 1;
+////									}
+//								}else{
+//									ADC_data_t* adc = get_latest_ADC_data();
 //									if(!getPosition(&Pos[0])){
 //										;//error;
 //									}else{
@@ -544,7 +524,7 @@ void APP_Start(void) {
 //											LED_RED_F_L_On();
 //											d=-10.0;
 //									}
-								}
+//								}
 								ms_Flag = FALSE;
 							}
 						}

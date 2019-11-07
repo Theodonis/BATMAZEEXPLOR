@@ -8,6 +8,89 @@
 #include "stdbool.h"
 #include "ADC.h"
 #include "Explore.h"
+#include "Driving.h"
+#include "DrivingExplore_Interface.h"
+
+/*
+** ===================================================================
+**     Method      :  TargetPosStateMaschine (
+*/
+/*!
+**     @brief
+**     		State machine to drive to a wall in front and return to a left branch
+**     		has to be called every 500us
+**
+**     @param
+**
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - State machine finished
+**                           ERR_FAILED - Wall or branch to drive until not detected
+**                           ERR_BUSY - State machine is driving
+**
+*/
+/* ===================================================================*/
+byte TargetPosStateMaschine(void){
+	static t_PosState posState;
+	static Maze_segments MazeSegmentsToBeDriven;
+	ADC_data_t adc_data;
+ 	adc_data =	*get_latest_ADC_data();
+	t_data_for_exploration driving_data;
+	getDataForExplore(&driving_data);
+
+	switch(posState){
+		case initState:
+			posState = driveToFrontWall;
+			MazeSegmentsToBeDriven.numberOfSegments = 1;
+			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
+			break;
+		case driveToFrontWall:
+			if(Driving(MazeSegmentsToBeDriven)){
+				return ERR_FAILED;
+			}else if(adc_data.raw_Values.raw_MiddleR < 55000.0){
+				posState = FrontWallDetected;
+				setStopFlag();
+			}
+		case FrontWallDetected:
+			if(Driving(MazeSegmentsToBeDriven)){
+				posState = turnState;
+				MazeSegmentsToBeDriven.numberOfSegments++;
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
+				MazeSegmentsToBeDriven.numberOfSegments++;
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
+			}
+			break;
+		case turnState:
+			if(Driving(MazeSegmentsToBeDriven)){
+				posState = driveToLeftBranch;
+				MazeSegmentsToBeDriven.numberOfSegments++;
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
+			}
+			break;
+		case driveToLeftBranch:
+			if(Driving(MazeSegmentsToBeDriven)){
+				return ERR_FAILED;
+			}else if(adc_data.mm_Values.mm_Left > 90.0){
+				posState = leftBranchDetected;
+				setStopFlag();
+			}
+			break;
+		case leftBranchDetected:
+			if(Driving(MazeSegmentsToBeDriven)){
+				posState = stopped;
+			}
+			break;
+		case stopped:
+			return ERR_OK;
+	}
+	return ERR_BUSY;
+
+
+
+
+}
+
+
 
 bool segEndDetection(ADC_data_t *adcData,bool *segmentEnd) {
 
