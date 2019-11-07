@@ -262,6 +262,8 @@ void testJoystick()
 //		LED_GREEN_F_L_On();
 		LED_BLUE_F_L_Off();
 		LED_BLUE_F_R_Off();
+		LED_RED_F_L_Off();
+		LED_RED_F_R_Off();
 
 		exploFinishFlag = FALSE;
 		WAIT1_Waitms(1000);
@@ -270,12 +272,12 @@ void testJoystick()
 		WAIT1_Waitms(1000);
 
 		if(get_half_U_Bat()> 3.7){
-			MazeSegmentsToBeDriven.segments[0].SingleSegment = 1;
+			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
 			MazeSegmentsToBeDriven.numberOfSegments = 1;
 
-
-			Distance_INT_EnableEvent();
 			initMotors();
+			Distance_INT_EnableEvent();
+
 		}else{
 			set_VREF(0,0);
 			deinitMotors();
@@ -471,7 +473,7 @@ void quadratureDecoder(void)
 }
 
 void APP_Start(void) {
-	static float Pos[3];
+	static float Pos[6];
 	Init_GPIOs();
 	WAIT1_Waitms(500);
 	for(;;){
@@ -499,10 +501,11 @@ void APP_Start(void) {
 									I_LED_R_ClrVal();I_LED_L_ClrVal();I_LED_MR_ClrVal();I_LED_ML_ClrVal(); // turn IR leds off
 								}
 									ms_Flag = FALSE;
-							}
-							else{//call exploration-fsm here
+							}else{//call exploration-fsm here
+								static float d=55000.0;
 								if(Driving(MazeSegmentsToBeDriven)){
-									static int i=0;
+									d=55000.0;
+									//static int i=0;
 									/* Stop comand */
 //									if(i>4){
 										Distance_INT_DisableEvent();
@@ -522,28 +525,26 @@ void APP_Start(void) {
 //										MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 1;
 //									}
 								}else{
-									static float d=1.40;
-									if(getPosition(&Pos[0])){
-										;//error;
-									}
-									if(Pos[0]<d){
-//										Distance_INT_DisableEvent();
-										set_VREF(-0.01,-0.01);
-//										MazeSegmentsToBeDriven.segments[0].SingleSegment = 0;
-//										MazeSegmentsToBeDriven.numberOfSegments = 0;
-										reinit_Drving(true);
-										LED_RED_F_L_On();
-										d=d-0.1;
-										set_VREF(0,0);
-										deinitMotors();
-										//segmentEnd=true;
-//										if(!segEndDetection(get_latest_ADC_data(),&segmentEnd)){
-//											//Error;
+									ADC_data_t* adc = get_latest_ADC_data();
+//									if(!getPosition(&Pos[0])){
+//										;//error;
+//									}else{
+//										if(Pos[4]>90.0){// if right distance > 90.0 mm ->green_Led right
+//											LED_GREEN_F_R_On();
+//										}else{
+//											LED_GREEN_F_R_Off();
 //										}
-									}
+//										if(Pos[5]>90.0){// if left distance > 90.0 mm ->green_Led left
+//											LED_GREEN_F_L_On();
+//										}else{
+//											LED_GREEN_F_L_Off();
+//										}
+//										if(Pos[3]<d){
+//											setStopFlag();
+//											LED_RED_F_L_On();
+//											d=-10.0;
+//									}
 								}
-
-
 								ms_Flag = FALSE;
 							}
 						}

@@ -6,6 +6,7 @@
 C_SRCS += \
 ../Sources/ADC.c \
 ../Sources/Application.c \
+../Sources/DrivingExplore_Interface.c \
 ../Sources/Encoder.c \
 ../Sources/Event.c \
 ../Sources/Events.c \
@@ -23,6 +24,7 @@ C_SRCS += \
 OBJS += \
 ./Sources/ADC.o \
 ./Sources/Application.o \
+./Sources/DrivingExplore_Interface.o \
 ./Sources/Encoder.o \
 ./Sources/Event.o \
 ./Sources/Events.o \
@@ -40,6 +42,7 @@ OBJS += \
 C_DEPS += \
 ./Sources/ADC.d \
 ./Sources/Application.d \
+./Sources/DrivingExplore_Interface.d \
 ./Sources/Encoder.d \
 ./Sources/Event.d \
 ./Sources/Events.d \

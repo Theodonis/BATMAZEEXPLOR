@@ -125,23 +125,23 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 	if(ji < LOGGING_LENGTH){
 		raw_dataFloat[0][ji] = (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
 		raw_dataFloat[1][ji] = (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
-		raw_dataFloat[2][ji] = v_est[0];//adcData->mm_Values.mm_Right;//0;//v_est[0];
-		raw_dataFloat[3][ji] = v_est[1];//adcData->mm_Values.mm_Left;//0;//v_est[1];
+		raw_dataFloat[2][ji] = adcData->mm_Values.mm_Right;//0;//v_est[0];
+		raw_dataFloat[3][ji] = adcData->raw_Values.raw_MiddleR;//0;//v_est[1];
 //		raw_dataFloat[2][ji] = vc_logging[0];
 //		raw_dataFloat[3][ji] = vc_logging[1];
 		raw_dataFloat[4][ji] = distanceLP->Right;//0;//q_r[0];
 		raw_dataFloat[5][ji] = distanceLP->Left;//0;//q_r[1];
 		raw_dataFloat[6][ji] = p_ADC_BIAS->raw_Right;//0;//I_mot_ist[0];
 		raw_dataFloat[7][ji] = p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
-		raw_dataFloat[8][ji] = u_bat_test;
+		raw_dataFloat[8][ji] = 0;
 //		raw_dataFloat[8][ji] = 0;//q[1];
 		raw_dataFloat[9][ji] = q[0];//0;//q[2]; /* x-Position of MC-Car in m */
 //		raw_dataFloat[4][ji] = I_mot[0];
 //		raw_dataFloat[5][ji] = I_mot[1];
 
 		/* Walls */
-		raw_dataFloat[10][ji] = (float)adcData->raw_Values.raw_MiddleR;
-		raw_dataFloat[11][ji] = (float)adcData->raw_Values.raw_MiddleL;;
+		raw_dataFloat[10][ji] = v_est[0];//(float)adcData->mm_Values.mm_Right;
+		raw_dataFloat[11][ji] = v_est[1];// (float)adcData->mm_Values.mm_Left;
 //		raw_dataFloat[12][ji] = *wallCenterDivergence;
 //		raw_dataFloat[13][ji] = weightDistanceSensor;
 //		raw_dataFloat[10][ji] = vc_logging[0];
