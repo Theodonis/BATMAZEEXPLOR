@@ -12,6 +12,7 @@
 #include "ADC.h"
 #include "I_LED_L.h"
 #include "I_LED_R.h"
+#include "Explore.h"
 
 
 //#include "QuadSmaple.h"
@@ -24,7 +25,11 @@ int16_t ccounter;
 uint16_t speedR;
 uint16_t speedL;
 
-float raw_dataFloat[14][LOGGING_LENGTH];
+
+
+
+uint8_t header[LOGGING_NUMBER_OF_VALUES][50];
+float raw_dataFloat[LOGGING_NUMBER_OF_VALUES][LOGGING_LENGTH];
 //float raw_dataFloat[11][LOGGING_LENGTH];
 //float raw_dataAcc[1][LOGGING_LENGTH];
 //uint16_t raw_dataInt[2][LOGGING_LENGTH];
@@ -32,7 +37,7 @@ float raw_dataFloat[14][LOGGING_LENGTH];
 //nt16_t raw_dataSen[1][6100];
 //int16_t raw_dataSen[3][10000];
 //uint8_t lookUP[32768];
-uint16_t ji;
+uint16_t saveLinePointer = 0;
 uint8_t overstepflag;
 
 static void putStream(uint8_t *cmd) {
@@ -46,16 +51,16 @@ void saveControllerData(float v_ref[2],float v_est[2],float U_mot[2],float M[2])
 
 						//FC1_Reset();
 	overstepflag++;
-						if(ji < 1900){// && overstepflag >=2 ){
-						raw_dataFloat[0][ji] = v_ref[0];
-						raw_dataFloat[1][ji] = v_ref[1];
-						raw_dataFloat[2][ji] = v_est[0];
-						raw_dataFloat[3][ji] = v_est[1];
-						raw_dataFloat[4][ji] = U_mot[0];
-						raw_dataFloat[5][ji] = U_mot[1];
-						raw_dataFloat[6][ji] = M[0];
-						raw_dataFloat[7][ji] = M[1];
-						ji++;
+						if(saveLinePointer < 1900){// && overstepflag >=2 ){
+						raw_dataFloat[0][saveLinePointer] = v_ref[0];
+						raw_dataFloat[1][saveLinePointer] = v_ref[1];
+						raw_dataFloat[2][saveLinePointer] = v_est[0];
+						raw_dataFloat[3][saveLinePointer] = v_est[1];
+						raw_dataFloat[4][saveLinePointer] = U_mot[0];
+						raw_dataFloat[5][saveLinePointer] = U_mot[1];
+						raw_dataFloat[6][saveLinePointer] = M[0];
+						raw_dataFloat[7][saveLinePointer] = M[1];
+						saveLinePointer++;
 						overstepflag = 0;
 						}
 
@@ -68,7 +73,7 @@ void printSaveControllerData(void)
 	ccc[0] = '\0';
 	UTIL1_chcat(ccc, sizeof(ccc), '\n');
 	uint16_t j = 0;
-	  for(j; j<ji; j++){
+	  for(j; j<saveLinePointer; j++){
 		   uint8_t testt[147];
 			testt[0] = '\0';
 			UTIL1_chcat(testt, sizeof(testt), '\n');
@@ -122,52 +127,89 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 	Distance_sensors_LP_filtered *distanceLP, float d_hp_filtered, bool SegmentFinished,
 	float gyroXY[2], Distance_Bandpass_t *distanceBandpass, Wall_availability_state *wallState,
 	float vc_logging[2], float I_mot[2],float u_bat_test,ADC_data_t *adcData, raw_Values_t *p_ADC_BIAS){
-	if(ji < LOGGING_LENGTH){
-		raw_dataFloat[0][ji] = (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
-		raw_dataFloat[1][ji] = (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
-		raw_dataFloat[2][ji] = adcData->mm_Values.mm_Right;//0;//v_est[0];
-		raw_dataFloat[3][ji] = adcData->raw_Values.raw_MiddleR;//0;//v_est[1];
-//		raw_dataFloat[2][ji] = vc_logging[0];
-//		raw_dataFloat[3][ji] = vc_logging[1];
-		raw_dataFloat[4][ji] = distanceLP->Right;//0;//q_r[0];
-		raw_dataFloat[5][ji] = distanceLP->Left;//0;//q_r[1];
-		raw_dataFloat[6][ji] = p_ADC_BIAS->raw_Right;//0;//I_mot_ist[0];
-		raw_dataFloat[7][ji] = p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
-		raw_dataFloat[8][ji] = 0;
-//		raw_dataFloat[8][ji] = 0;//q[1];
-		raw_dataFloat[9][ji] = q[0];//0;//q[2]; /* x-Position of MC-Car in m */
-//		raw_dataFloat[4][ji] = I_mot[0];
-//		raw_dataFloat[5][ji] = I_mot[1];
+	if(saveLinePointer < LOGGING_LENGTH){
+		raw_dataFloat[0][saveLinePointer] = (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
+		raw_dataFloat[1][saveLinePointer] = (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
+		raw_dataFloat[2][saveLinePointer] = adcData->mm_Values.mm_Right;//0;//v_est[0];
+		raw_dataFloat[3][saveLinePointer] = adcData->raw_Values.raw_MiddleR;//0;//v_est[1];
+//		raw_dataFloat[2][saveLinePointer] = vc_logging[0];
+//		raw_dataFloat[3][saveLinePointer] = vc_logging[1];
+		raw_dataFloat[4][saveLinePointer] = distanceLP->Right;//0;//q_r[0];
+		raw_dataFloat[5][saveLinePointer] = distanceLP->Left;//0;//q_r[1];
+		raw_dataFloat[6][saveLinePointer] = p_ADC_BIAS->raw_Right;//0;//I_mot_ist[0];
+		raw_dataFloat[7][saveLinePointer] = p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
+		raw_dataFloat[8][saveLinePointer] = 0;
+//		raw_dataFloat[8][saveLinePointer] = 0;//q[1];
+		raw_dataFloat[9][saveLinePointer] = q[0];//0;//q[2]; /* x-Position of MC-Car in m */
+//		raw_dataFloat[4][saveLinePointer] = I_mot[0];
+//		raw_dataFloat[5][saveLinePointer] = I_mot[1];
 
 		/* Walls */
-		raw_dataFloat[10][ji] = v_est[0];//(float)adcData->mm_Values.mm_Right;
-		raw_dataFloat[11][ji] = v_est[1];// (float)adcData->mm_Values.mm_Left;
-//		raw_dataFloat[12][ji] = *wallCenterDivergence;
-//		raw_dataFloat[13][ji] = weightDistanceSensor;
-//		raw_dataFloat[10][ji] = vc_logging[0];
-//		raw_dataFloat[11][ji] = vc_logging[1];
-		raw_dataFloat[12][ji] = q[1];//0;// I_mot[0]; /* y-Position of MC-Car in m */
-		raw_dataFloat[13][ji] = q[2];//0;// I_mot[1]; /* theat-Angle of MC-Car in rad */
+		raw_dataFloat[10][saveLinePointer] = v_est[0];//(float)adcData->mm_Values.mm_Right;
+		raw_dataFloat[11][saveLinePointer] = v_est[1];// (float)adcData->mm_Values.mm_Left;
+//		raw_dataFloat[12][saveLinePointer] = *wallCenterDivergence;
+//		raw_dataFloat[13][saveLinePointer] = weightDistanceSensor;
+//		raw_dataFloat[10][saveLinePointer] = vc_logging[0];
+//		raw_dataFloat[11][saveLinePointer] = vc_logging[1];
+		raw_dataFloat[12][saveLinePointer] = q[1];//0;// I_mot[0]; /* y-Position of MC-Car in m */
+		raw_dataFloat[13][saveLinePointer] = q[2];//0;// I_mot[1]; /* theat-Angle of MC-Car in rad */
 
-		//raw_dataFloat[15][ji] = v_r[0];
+		//raw_dataFloat[15][saveLinePointer] = v_r[0];
 
-		ji++;
+		saveLinePointer++;
 		}
 }
 
 void saveIMU(IMU_data_t *imuData)
 {
-	if(ji < LOGGING_LENGTH){
-		//raw_dataAcc[0][ji] = imuData->unit_Values.x_Axis_Acc_ms2;
+	if(saveLinePointer < LOGGING_LENGTH){
+		//raw_dataAcc[0][saveLinePointer] = imuData->unit_Values.x_Axis_Acc_ms2;
 	}
-	ji++;
+	saveLinePointer++;
 }
 void saveADC(ADC_data_t *adcData)
 {
-	if(ji < LOGGING_LENGTH){
+	if(saveLinePointer < LOGGING_LENGTH){
 
-						//raw_dataInt[0][ji] = adcData->mm_Values.mm_Right;
-						//raw_dataInt[1][ji] = adcData->mm_Values.mm_Left;
+						//raw_dataInt[0][saveLinePointer] = adcData->mm_Values.mm_Right;
+						//raw_dataInt[1][saveLinePointer] = adcData->mm_Values.mm_Left;
+	}
+}
+
+void setExplorationDataHeader(uint8_t varName[], uint8_t savepos){
+	if(savepos<LOGGING_NUMBER_OF_VALUES){
+		UTIL1_strcpy(header[savepos], sizeof(header[savepos]),varName);
+		UTIL1_chcat(header[savepos], sizeof(header[savepos]), '\t');
+	}
+}
+
+
+void saveExplorationValue(float value, uint8_t varName[], uint8_t savepos){
+	if(saveLinePointer==0){
+ 		setExplorationDataHeader(varName,savepos);
+	}
+	if(saveLinePointer < LOGGING_LENGTH){
+		raw_dataFloat[savepos][saveLinePointer] = value;
+	}
+}
+
+void incrmentSaveLinePointer(void){
+	saveLinePointer++;
+}
+
+void resetSaveLinePointer(void){
+	saveLinePointer = 0;
+}
+
+void saveExplorationData(t_explore_log *data){
+	if(saveLinePointer==0){
+ 		setExplorationDataHeader(" ",1);
+	}
+	if(saveLinePointer < LOGGING_LENGTH){
+		raw_dataFloat[0][saveLinePointer] = data->logADC.mm_Values.mm_MiddleR;
+
+
+		saveLinePointer++;
 	}
 }
 
@@ -178,10 +220,21 @@ void printSaveData(void)
 	ccc[0] = '\0';
 	UTIL1_chcat(ccc, sizeof(ccc), '\n');
 	uint16_t j = 0;
-	  for(j; j<ji; j++){
-		   uint8_t testt[220]; //147, 180 works fine
-			testt[0] = '\0';
-			UTIL1_chcat(testt, sizeof(testt), '\n');
+	uint8_t headOut[LOGGING_NUMBER_OF_VALUES*50];
+	for(j;j<LOGGING_NUMBER_OF_VALUES; j++){
+		 UTIL1_strcat(headOut, sizeof(headOut), header[j]);
+
+	}
+	putStream((uint8_t*)headOut);
+	memset(&headOut[0], 0, sizeof(headOut));
+	WAIT1_Waitms(50); //20, 40
+
+
+	j = 0;
+	for(j; j<saveLinePointer; j++){
+		uint8_t testt[220]; //147, 180 works fine
+		testt[0] = '\0';
+		UTIL1_chcat(testt, sizeof(testt), '\n');
 
 //		  			  		  UTIL1_strcatNumFloat(testt, sizeof(testt),(raw_dataInt[0][j]),1); //Dist right
 //		  			  		  UTIL1_strcat(testt, sizeof(testt)," ");
@@ -283,7 +336,7 @@ void PIDoverBLE(PID_data_t *pData)
 			  		  UTIL1_strcatNumFloat(a_xbuf, sizeof(a_xbuf),(pData->states.D),8);//,8);//-biasGyro_Y)/1000,8);
 			  		  UTIL1_strcat(a_xbuf, sizeof(a_xbuf)," ");
 			  		  UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\t');
-			  		putStream((uint8_t*)a_xbuf);
+			  		  putStream((uint8_t*)a_xbuf);
 			  		  UTIL1_Num16uToStr(a_xbuf, sizeof(a_xbuf),pData->states.v_motor_right);
 			  		  UTIL1_strcat(a_xbuf, sizeof(a_xbuf)," ");
 			  		  UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\n');

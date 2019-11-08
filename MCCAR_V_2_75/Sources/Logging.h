@@ -16,8 +16,11 @@
 #include "PID.h"
 #include "Encoder.h"
 #include "Driving.h"
+#include "Explore.h"
 
 #define LOGGING_LENGTH 2500
+#define LOGGING_NUMBER_OF_VALUES 14
+#define varNameToString(var) #var
 
 void RawDataOverBLE(void);
 void IMUoverBLE(IMU_data_t *pData);
@@ -39,6 +42,7 @@ void PIDoverBLE(PID_data_t *pData);
  */
 void printSaveData(void);
 
+
 void FloatOverBLE(float pData);
 void NewLine(void);
 void saveADC(ADC_data_t *adcData);
@@ -52,4 +56,12 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 void saveControllerData(float v_ref[2],float v_est[2],float U_mot[2],float M[2]);
 void printSaveControllerData(void);
 void ENCoverBLE(Encoder_data_t *pData);
+
+
+//void setExplorationDataHeader(uint8_t varName, uint8_t savepos);
+void saveExplorationValue(float value, uint8_t varName[], uint8_t savepos);
+void resetSaveLinePointer(void);
+void incrmentSaveLinePointer(void);
+
+//void saveExplorationData(t_explore_log *data);
 #endif /* SOURCES_LOGGING_H_ */

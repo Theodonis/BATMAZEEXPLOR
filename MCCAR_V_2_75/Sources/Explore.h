@@ -10,6 +10,9 @@
 #include <stdint.h>
 #include "ADC.h"
 #include "PE_Error.h"
+#include "DrivingExplore_Interface.h"
+
+
 
 typedef enum PosState{
 	initState,
@@ -22,6 +25,13 @@ typedef enum PosState{
 	stateNumbers /*mustz be last one*/
 }t_PosState;
 
+typedef struct explore_log{
+	t_PosState logPosState;
+	ADC_data_t logADC;
+	t_data_for_exploration logPosSpeed;
+
+
+}t_explore_log;
 
 /* Filter of Distance for SegmentEndDetection */
 #define SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR 0.95

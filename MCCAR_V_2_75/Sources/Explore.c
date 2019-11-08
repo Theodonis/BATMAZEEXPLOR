@@ -10,6 +10,7 @@
 #include "Explore.h"
 #include "Driving.h"
 #include "DrivingExplore_Interface.h"
+#include "Logging.h"
 
 /*
 ** ===================================================================
@@ -33,16 +34,24 @@
 byte TargetPosStateMaschine(void){
 	static t_PosState posState;
 	static Maze_segments MazeSegmentsToBeDriven;
-	ADC_data_t adc_data;
- 	adc_data =	*get_latest_ADC_data();
+	ADC_data_t adc_data =	*get_latest_ADC_data();
+	t_explore_log logData;
 	t_data_for_exploration driving_data;
 	getDataForExplore(&driving_data);
+
+	/* Data Log */
+
+	saveExplorationValue((float)adc_data.mm_Values.mm_MiddleR, varNameToString(adc_data.mm_Values.mm_MiddleR),0);
+
+
+
 
 	switch(posState){
 		case initState:
 			posState = driveToFrontWall;
 			MazeSegmentsToBeDriven.numberOfSegments = 1;
 			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
+			resetSaveLinePointer();
 			break;
 		case driveToFrontWall:
 			if(Driving(MazeSegmentsToBeDriven)){
@@ -87,6 +96,8 @@ byte TargetPosStateMaschine(void){
 		case stopped:
 			return ERR_OK;
 	}
+
+	incrmentSaveLinePointer();
 	return ERR_BUSY;
 
 
