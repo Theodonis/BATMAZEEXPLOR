@@ -126,32 +126,32 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 		Distance_sensors_HP_filtered *distance_HP, float x_IMU_dot_test, float x_enc_testfloat, float I_mot_ist[2],
 	Distance_sensors_LP_filtered *distanceLP, float d_hp_filtered, bool SegmentFinished,
 	float gyroXY[2], Distance_Bandpass_t *distanceBandpass, Wall_availability_state *wallState,
-	float vc_logging[2], float I_mot[2],float u_bat_test,ADC_data_t *adcData, raw_Values_t *p_ADC_BIAS){
+	float vc_logging[2], float I_mot[2],float u_bat_test,ADC_data_t *adcData, uint16_t* p_dirstCnt){
 	if(saveLinePointer < LOGGING_LENGTH){
-		raw_dataFloat[0][saveLinePointer] = (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
-		raw_dataFloat[1][saveLinePointer] = (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
-		raw_dataFloat[2][saveLinePointer] = adcData->mm_Values.mm_Right;//0;//v_est[0];
-		raw_dataFloat[3][saveLinePointer] = adcData->raw_Values.raw_MiddleR;//0;//v_est[1];
+		raw_dataFloat[0][saveLinePointer] = (float) *p_dirstCnt;// (float)adcData->raw_Values.raw_Right;//0;//v_r[0];
+		raw_dataFloat[1][saveLinePointer] = (float) *(p_dirstCnt+1);// (float)adcData->raw_Values.raw_Left;//0;//v_r[1];
+		raw_dataFloat[2][saveLinePointer] = (float) *(p_dirstCnt+2);// adcData->mm_Values.mm_Right;//0;//v_est[0];
+		raw_dataFloat[3][saveLinePointer] = 0;// adcData->raw_Values.raw_MiddleR;//0;//v_est[1];
 //		raw_dataFloat[2][saveLinePointer] = vc_logging[0];
 //		raw_dataFloat[3][saveLinePointer] = vc_logging[1];
-		raw_dataFloat[4][saveLinePointer] = distanceLP->Right;//0;//q_r[0];
-		raw_dataFloat[5][saveLinePointer] = distanceLP->Left;//0;//q_r[1];
-		raw_dataFloat[6][saveLinePointer] = p_ADC_BIAS->raw_Right;//0;//I_mot_ist[0];
-		raw_dataFloat[7][saveLinePointer] = p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
+		raw_dataFloat[4][saveLinePointer] = 0;// distanceLP->Right;//0;//q_r[0];
+		raw_dataFloat[5][saveLinePointer] = 0;// distanceLP->Left;//0;//q_r[1];
+		raw_dataFloat[6][saveLinePointer] = 0;// p_ADC_BIAS->raw_Right;//0;//I_mot_ist[0];
+		raw_dataFloat[7][saveLinePointer] = 0;// p_ADC_BIAS->raw_Left;//0;//I_mot_ist[1];
 		raw_dataFloat[8][saveLinePointer] = 0;
 //		raw_dataFloat[8][saveLinePointer] = 0;//q[1];
-		raw_dataFloat[9][saveLinePointer] = q[0];//0;//q[2]; /* x-Position of MC-Car in m */
+		raw_dataFloat[9][saveLinePointer] = q[0];// 0;//q[2]; /* x-Position of MC-Car in m */
 //		raw_dataFloat[4][saveLinePointer] = I_mot[0];
 //		raw_dataFloat[5][saveLinePointer] = I_mot[1];
 
 		/* Walls */
-		raw_dataFloat[10][saveLinePointer] = v_est[0];//(float)adcData->mm_Values.mm_Right;
-		raw_dataFloat[11][saveLinePointer] = v_est[1];// (float)adcData->mm_Values.mm_Left;
+		raw_dataFloat[10][saveLinePointer] = 0;// v_est[0];//(float)adcData->mm_Values.mm_Right;
+		raw_dataFloat[11][saveLinePointer] = 0;//  v_est[1];// (float)adcData->mm_Values.mm_Left;
 //		raw_dataFloat[12][saveLinePointer] = *wallCenterDivergence;
 //		raw_dataFloat[13][saveLinePointer] = weightDistanceSensor;
 //		raw_dataFloat[10][saveLinePointer] = vc_logging[0];
 //		raw_dataFloat[11][saveLinePointer] = vc_logging[1];
-		raw_dataFloat[12][saveLinePointer] = q[1];//0;// I_mot[0]; /* y-Position of MC-Car in m */
+		raw_dataFloat[12][saveLinePointer] = q[1];//I_mot[0]; 0;///* y-Position of MC-Car in m */
 		raw_dataFloat[13][saveLinePointer] = q[2];//0;// I_mot[1]; /* theat-Angle of MC-Car in rad */
 
 		//raw_dataFloat[15][saveLinePointer] = v_r[0];
