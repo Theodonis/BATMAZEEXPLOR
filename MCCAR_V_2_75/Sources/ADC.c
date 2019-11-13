@@ -25,21 +25,21 @@ void calcADC_data(ADC_data_t *pData){
 	ADC_0_GetValue16(values_ADC0_raw);
 	ADC_1_Measure(TRUE);
 	ADC_1_GetValue16(values_ADC1_raw);
-	#ifdef DISTANCE_BIASED_ENABLE
-		pData->raw_Values.raw_Right 	= values_ADC1_raw[2]+ADC_BIAS.raw_Right;
-		pData->raw_Values.raw_45Right 	= values_ADC0_raw[1]+ADC_BIAS.raw_45Right;
-		pData->raw_Values.raw_MiddleR 	= values_ADC1_raw[1];//+ADC_BIAS.raw_MiddleR;
-		pData->raw_Values.raw_MiddleL 	= values_ADC0_raw[2];//+ADC_BIAS.raw_MiddleL;
-		pData->raw_Values.raw_45Left 	= values_ADC0_raw[0]+ADC_BIAS.raw_45Left;
-		pData->raw_Values.raw_Left 		= values_ADC1_raw[0]+ADC_BIAS.raw_Left;
-	#else
+//	#ifdef DISTANCE_BIASED_ENABLE
+//		pData->raw_Values.raw_Right 	= values_ADC1_raw[2]+ADC_BIAS.raw_Right;
+//		pData->raw_Values.raw_45Right 	= values_ADC0_raw[1]+ADC_BIAS.raw_45Right;
+//		pData->raw_Values.raw_MiddleR 	= values_ADC1_raw[1];//+ADC_BIAS.raw_MiddleR;
+//		pData->raw_Values.raw_MiddleL 	= values_ADC0_raw[2];//+ADC_BIAS.raw_MiddleL;
+//		pData->raw_Values.raw_45Left 	= values_ADC0_raw[0]+ADC_BIAS.raw_45Left;
+//		pData->raw_Values.raw_Left 		= values_ADC1_raw[0]+ADC_BIAS.raw_Left;
+//	#else
 		pData->raw_Values.raw_Right= values_ADC1_raw[2];
 		pData->raw_Values.raw_45Right = values_ADC0_raw[1];
 		pData->raw_Values.raw_MiddleR = values_ADC1_raw[1];
 		pData->raw_Values.raw_MiddleL = values_ADC0_raw[2];
 		pData->raw_Values.raw_45Left = values_ADC0_raw[0];
 		pData->raw_Values.raw_Left = values_ADC1_raw[0];
-	#endif
+//	#endif
 
 	pData->raw_Values.raw_DRV1_IPROI = values_ADC1_raw[3];
 	pData->raw_Values.raw_DRV2_IPROI = values_ADC1_raw[4];
@@ -149,10 +149,10 @@ float get_half_U_Bat(){
 	void set_dist_Bias(void){
 		uint16_t values_ADC0_raw[5];
 		uint16_t values_ADC1_raw[5];
-		ADC_0_Measure(TRUE);
-		ADC_0_GetValue16(values_ADC0_raw);
-		ADC_1_Measure(TRUE);
-		ADC_1_GetValue16(values_ADC1_raw);
+//		ADC_0_Measure(TRUE);
+//		ADC_0_GetValue16(values_ADC0_raw);
+//		ADC_1_Measure(TRUE);
+//		ADC_1_GetValue16(values_ADC1_raw);
 
 		ADC_BIAS.raw_Right 		= (uint16_t)0xFFFF-values_ADC1_raw[2];
 		ADC_BIAS.raw_45Right 	= (uint16_t)0xFFFF-values_ADC0_raw[1];
