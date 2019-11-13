@@ -1473,6 +1473,9 @@
     <Properties>
       <Component_name v="MCUC1" />
       <SDK v="Processor Expert" />
+      <SDK_Major_Version v="2" />
+      <SDK_Minor_Version v="5" />
+      <SDK_Build_Version v="0" />
       <Config_Files_Folder v="" />
     </Properties>
     <Methods>
@@ -2448,6 +2451,7 @@
       <WriteBlock v="generate code" />
       <ReadBlock v="generate code" />
       <ReadBlockGeneric v="don&amp;apos;t generate code" />
+      <ReadAddressWait v="generate code" />
       <ReadAddress v="generate code" />
       <WriteAddress v="generate code" />
       <ReadByte v="generate code" />
@@ -3130,6 +3134,7 @@
       <SendNum32s v="generate code" />
       <SendCh v="generate code" />
       <SendStr v="generate code" />
+      <PrintMemory v="generate code" />
       <printfIO v="generate code" />
       <printf v="generate code" />
       <SendData v="generate code" />
@@ -3193,6 +3198,7 @@
       <strcatNum16sFormatted v="generate code" />
       <strcatNum32uFormatted v="generate code" />
       <strcatNum32sFormatted v="generate code" />
+      <strcatNumHex v="generate code" />
       <strcatNum8Hex v="generate code" />
       <strcatNum16Hex v="generate code" />
       <strcatNum24Hex v="generate code" />
@@ -3320,6 +3326,7 @@
       <SendNum32s v="generate code" />
       <SendCh v="generate code" />
       <SendStr v="generate code" />
+      <PrintMemory v="generate code" />
       <printfIO v="generate code" />
       <printf v="generate code" />
       <SendData v="generate code" />

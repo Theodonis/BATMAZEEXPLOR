@@ -4401,7 +4401,7 @@ rising or falling edge
         <Interrupt v="INT_FTM0" />
         <Interrupt_priority v="medium priority" />
       </boolgroup>
-      <Interrupt_period v="500 &amp;#181;s" />
+      <Interrupt_period v="700 &amp;#181;s" />
       <Same_period_in_modes v="yes" />
       <Component_uses_entire_timer v="no" />
       <group name="Initialization">
@@ -4424,7 +4424,7 @@ rising or falling edge
               <Interrupt v="INT_FTM0" />
               <Interrupt_priority v="medium priority" />
             </boolgroup>
-            <Interrupt_period v="500 &amp;#181;s" />
+            <Interrupt_period v="700 &amp;#181;s" />
             <group name="Initialization">
               <Enabled_in_init__code v="yes" />
               <group name="Event mask">
@@ -4509,7 +4509,7 @@ rising or falling edge
         <group name="Channel 0">
           <enumgroup name="Mode" v="Compare">
             <Compare v="FTM0_C0V" />
-            <Offset v="500 &amp;#181;s" />
+            <Offset v="700 &amp;#181;s" />
             <enumgroup name="Output on compare" v="Disconnect">
               <EmptySection_DummyValue />
             </enumgroup>

@@ -7,7 +7,7 @@
 **     Version     : Component 01.164, Driver 01.11, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2019-07-22, 14:22, # CodeGen: 163
+**     Date/Time   : 2019-11-13, 18:26, # CodeGen: 242
 **     Abstract    :
 **          This TimerUnit component provides a low level API for unified hardware access across
 **          various timer devices using the Prescaler-Counter-Compare-Capture timer structure.
@@ -27,7 +27,7 @@
 **            Channel 0                                    : 
 **              Mode                                       : Compare
 **                Compare                                  : FTM0_C0V
-**                Offset                                   : 500 µs
+**                Offset                                   : 700 µs
 **                Output on compare                        : Disconnect
 **                Interrupt                                : Enabled
 **                  Interrupt                              : INT_FTM0
@@ -215,8 +215,8 @@ LDD_TDeviceData* TU3_Init(LDD_TUserData *UserDataPtr)
   FTM0_MOD = FTM_MOD_MOD(0xFFFF);      /* Set up modulo register */
   /* FTM0_C0SC: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,CHF=0,CHIE=1,MSB=0,MSA=1,ELSB=0,ELSA=0,??=0,DMA=0 */
   FTM0_C0SC = (FTM_CnSC_CHIE_MASK | FTM_CnSC_MSA_MASK); /* Set up channel status and control register */
-  /* FTM0_C0V: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,VAL=0xEA */
-  FTM0_C0V = FTM_CnV_VAL(0xEA);        /* Set up channel value register */
+  /* FTM0_C0V: ??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,VAL=0x0148 */
+  FTM0_C0V = FTM_CnV_VAL(0x0148);      /* Set up channel value register */
   DeviceDataPrv->EnEvents = 0x01U;     /* Enable selected events */
   /* NVICIP42: PRI42=0x70 */
   NVICIP42 = NVIC_IP_PRI42(0x70);

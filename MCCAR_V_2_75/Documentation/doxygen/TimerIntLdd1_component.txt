@@ -62,7 +62,7 @@ by the component.
 <td class="regNotResetVal">0x0000FFFF</td>
  <td>FTM0_MOD register, peripheral TimerIntLdd1.</td></tr>
 <tr><td>0x40038010</td><td>FTM0_C0V</td>
-<td class="regNotResetVal">0x000000EA</td>
+<td class="regNotResetVal">0x00000148</td>
  <td>FTM0_C0V register, peripheral TimerIntLdd1.</td></tr>
 <tr><td>0xE000E42A</td><td>NVICIP42</td>
 <td class="regNotResetVal">0x00000070</td>
@@ -913,7 +913,7 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0x40038010</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x000000EA</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00000148</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>0 - 15</td><td>VAL</td><td>0x00</td><td>Channel Value</td>
@@ -994,7 +994,7 @@ registers of the peripheral(s) configured by the component.
 **          Interrupt service/event                        : Enabled
 **            Interrupt                                    : INT_FTM0
 **            Interrupt priority                           : medium priority
-**          Interrupt period                               : 500 µs
+**          Interrupt period                               : 700 µs
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : yes
