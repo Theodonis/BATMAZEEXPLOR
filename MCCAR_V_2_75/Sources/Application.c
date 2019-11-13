@@ -187,8 +187,8 @@ void testJoystick()
 		calcADC_data(&adcData);
 		calcENC_data(&encData);
 		calcIMU_data(&imuData);
-		set_dist_Bias();
-		I_LED_MR_SetVal();I_LED_ML_SetVal();
+		//set_dist_Bias();
+		I_LED_MR_SetVal();//I_LED_ML_SetVal();
 		I_LED_R_SetVal();I_LED_L_SetVal();
 		/* Initial measurement, as first measurement seemed to be corrupted for some reason.*/
 		WAIT1_Waitms(1000);
@@ -346,9 +346,9 @@ void Init_Maze(void){
 
 
 #else
-	MazeSegmentsToBeDriven.segments[0].SingleSegment = 900;
+	MazeSegmentsToBeDriven.segments[0].SingleSegment = 3;
 	MazeSegmentsToBeDriven.segments[1].SingleSegment = 900;
-	MazeSegmentsToBeDriven.segments[2].SingleSegment = 1;
+	MazeSegmentsToBeDriven.segments[2].SingleSegment = 3;
 	MazeSegmentsToBeDriven.segments[3].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[4].SingleSegment = 7;
 	MazeSegmentsToBeDriven.segments[5].SingleSegment = 90;
@@ -376,7 +376,7 @@ void Init_Maze(void){
 	MazeSegmentsToBeDriven.segments[27].SingleSegment = 90;
 	MazeSegmentsToBeDriven.segments[28].SingleSegment = 1;
 
-	MazeSegmentsToBeDriven.numberOfSegments = 2;
+	MazeSegmentsToBeDriven.numberOfSegments = 3;
 	#endif
 }
 
