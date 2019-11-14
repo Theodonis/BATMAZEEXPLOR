@@ -33,7 +33,8 @@ typedef enum fieldstate{
 	firstQuarterOfField,
 	secondQuarterOfField,
 	thirdQuarterOfField,
-	fourthQuarterOfField
+	fourthQuarterOfField,
+	detectWalls
 
 }t_fieldState;
 
@@ -74,12 +75,30 @@ typedef struct explore_log{
 	t_data_for_exploration logPosSpeed;
 }t_explore_log;
 
-/* Filter of Distance for SegmentEndDetection */
-#define SEG_END_DET_DISTANCE_LP_LAST_VAL_FACTOR 0.95
-#define SEG_END_DET_DERIVATION_LP_LAST_VAL_FACTOR 0.93
 
+
+
+/*
+** ===================================================================
+**     Method      :  TargetPosStateMaschine (void)
+**
+**
+**     @brief
+**     		State machine to drive to a wall in front and return to a left branch
+**     		has to be called with cycle frequency -> defined in PlatformConfig.h
+**
+**     @param
+**
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - State machine finished
+**                           ERR_FAILED - Wall or branch to drive until not detected
+**                           ERR_BUSY - State machine is driving
+**
+*/
+/* ===================================================================*/
 byte TargetPosStateMaschine(void);
-bool segEndDetection(ADC_data_t *adcData,bool *segmentEnd);
+//bool segEndDetection(ADC_data_t *adcData,bool *segmentEnd);
 void reinit_Explore(void);
 
 

@@ -19,6 +19,7 @@ C_SRCS += \
 ../Sources/Motor.c \
 ../Sources/PID.c \
 ../Sources/Platform.c \
+../Sources/TargetInField_Position.c \
 ../Sources/main.c 
 
 OBJS += \
@@ -37,6 +38,7 @@ OBJS += \
 ./Sources/Motor.o \
 ./Sources/PID.o \
 ./Sources/Platform.o \
+./Sources/TargetInField_Position.o \
 ./Sources/main.o 
 
 C_DEPS += \
@@ -55,6 +57,7 @@ C_DEPS += \
 ./Sources/Motor.d \
 ./Sources/PID.d \
 ./Sources/Platform.d \
+./Sources/TargetInField_Position.d \
 ./Sources/main.d 
 
 
