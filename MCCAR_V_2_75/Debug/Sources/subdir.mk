@@ -20,6 +20,7 @@ C_SRCS += \
 ../Sources/PID.c \
 ../Sources/Platform.c \
 ../Sources/TargetInField_Position.c \
+../Sources/TargetInFiled_Position.c \
 ../Sources/main.c 
 
 OBJS += \
@@ -39,6 +40,7 @@ OBJS += \
 ./Sources/PID.o \
 ./Sources/Platform.o \
 ./Sources/TargetInField_Position.o \
+./Sources/TargetInFiled_Position.o \
 ./Sources/main.o 
 
 C_DEPS += \
@@ -58,6 +60,7 @@ C_DEPS += \
 ./Sources/PID.d \
 ./Sources/Platform.d \
 ./Sources/TargetInField_Position.d \
+./Sources/TargetInFiled_Position.d \
 ./Sources/main.d 
 
 

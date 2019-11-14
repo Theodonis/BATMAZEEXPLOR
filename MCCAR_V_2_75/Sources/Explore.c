@@ -125,7 +125,9 @@ byte TargetPosStateMaschine(void){
 			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
 			initMaze(&MazeData[0][0]);
 			xPos =0 ,yPos =0;
-			//resetSaveLinePointer();
+			#ifdef ENABLE_DATALOG
+				resetSaveLinePointer();
+			#endif
 			return ERR_BUSY;
 			break;
 		case driveToFrontWall:
@@ -137,7 +139,6 @@ byte TargetPosStateMaschine(void){
 			}
 			#ifdef ENABLE_DATALOG
 				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
-				saveExplorationValue(1,"state",3);
 			#endif
 			break;
 		case FrontWallDetected:
@@ -154,18 +155,19 @@ byte TargetPosStateMaschine(void){
 //				MazeSegmentsToBeDriven.numberOfSegments++;
 //				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
 //				MazeSegmentsToBeDriven.numberOfSegments++;
-			}
-
+			}else{
 			#ifdef ENABLE_DATALOG
-				saveExplorationValue(2,"state",3);
 				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 			#endif
+			}
+
+
 			break;
 		case turnState:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-//				if(get_half_U_Bat()> 3.4){
-//					return ERR_FAILED;
-//				}
+				if(adc_data.voltage_Values.v_Bat < 3.2){
+					return ERR_FAILED;
+				}
 				if(adc_data.mm_Values.mm_Left > 90.0){
 					posState = stopped;
 					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	0;
@@ -177,9 +179,7 @@ byte TargetPosStateMaschine(void){
 				}
 				//reinit_Drving(true);
 			}
-			#ifdef ENABLE_DATALOG
-				saveExplorationValue(3,"state",3);
-			#endif
+
 			break;
 		case driveToLeftBranch:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
@@ -189,7 +189,7 @@ byte TargetPosStateMaschine(void){
 				setStopFlag();
 			}
 			#ifdef ENABLE_DATALOG
-				saveExplorationValue(4,"state",3);
+				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 			#endif
 			break;
 		case leftBranchDetected:
@@ -198,7 +198,7 @@ byte TargetPosStateMaschine(void){
 			}
 
 			#ifdef ENABLE_DATALOG
-				saveExplorationValue(5,"state",3);
+				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 			#endif
 			break;
 		case stopped:
@@ -228,11 +228,11 @@ byte TargetPosStateMaschine(void){
 
 //		saveExplorationValue(adc_data.raw_Values.raw_Right,"rawRight", logValCnt++);
 		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
-//		saveExplorationValue(driving_data.velocityEstimation.forwardVeloc,"Velocity", logValCnt++);
+		saveExplorationValue(posState,"state",3);
 		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
 		saveExplorationValue(xPos,"x-Position (index)", 6);
-		saveExplorationValue(adc_data.voltage_Values.v_Bat,"Bateriespannung", 9);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
+		saveExplorationValue(adc_data.voltage_Values.v_Bat,"Bateriespannung", 9);
 
 
 #ifdef ENABLE_TIMING_CONROLL
