@@ -12,9 +12,23 @@
 #include "ADC.h"
 #include <stdbool.h>
 
-#define MAZE_FIELD_LENGTH (0.17)
-#define HALF_OF_MAZE_FIELD_LENGTH (0.085)
-#define QUARTER_OF_MAZE_FIELD_LENGTH (0.0425)
+#define MAZE_FIELD_LENGTH 				(0.17)
+#define HALF_OF_MAZE_FIELD_LENGTH 		(0.085)
+#define QUARTER_OF_MAZE_FIELD_LENGTH 	(0.0425)
+#define INIT_POS_INFIELD 				(0.074)
+#define POS_INFIELD_AFTER_TURN_180 		(0.075)
+#define POS_INFIELD_AFTER_TURN_90 		(0.0425)
+
+typedef enum fieldstate{
+	fieldinitState,
+	firstQuarterOfField,
+	secondQuarterOfField,
+	thirdQuarterOfField,
+	fourthQuarterOfField,
+	detectWalls,
+	targetHasTurned
+
+}t_fieldState;
 
 
 

@@ -28,15 +28,7 @@ typedef enum PosState{
 	stateNumbers /*must be last one*/
 }t_PosState;
 
-typedef enum fieldstate{
-	fieldinitState,
-	firstQuarterOfField,
-	secondQuarterOfField,
-	thirdQuarterOfField,
-	fourthQuarterOfField,
-	detectWalls
 
-}t_fieldState;
 
 typedef enum directons{
 	north,

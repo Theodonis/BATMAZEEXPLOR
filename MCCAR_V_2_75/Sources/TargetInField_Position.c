@@ -16,21 +16,26 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 	static float fieldpos 	= 0; /*pos in curent field */
 	static float initpos 	= 0;
 	static t_fieldState fieldState = fieldinitState;
+	static t_directions prevTargetOrientation=north;
 
-	fieldpos = initpos - pos.xPos;
-//	if(targetOrientation==north || targetOrientation==south){
-//		fieldpos = initpos - pos.xPos;
-//	}else{
-//		fieldpos = initpos - pos.yPos;
-//	}
+	/* new position in current field */
+	if(targetOrientation==north || targetOrientation==south){
+		fieldpos = initpos - pos.xPos;
+	}else{
+		fieldpos = initpos - pos.yPos;
+	}
+
+	if(prevTargetOrientation!=targetOrientation){
+		fieldState = targetHasTurned;
+	}
 
 	switch(fieldState){
 		case fieldinitState:
 			if(pos.xPos>1.4){
-				fieldpos = 0;
+				fieldpos = INIT_POS_INFIELD;
 				fieldState = firstQuarterOfField;
 				if(targetOrientation==north || targetOrientation==south){
-					initpos = pos.xPos;
+					initpos = pos.xPos-INIT_POS_INFIELD;
 				}else{
 					initpos = pos.yPos;
 				}
@@ -82,8 +87,51 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 				fieldState = thirdQuarterOfField;
 			}
 			break;
+		case targetHasTurned:
+			if((prevTargetOrientation-targetOrientation)%2){//is a 90° turn
+				switch(targetOrientation){
+					case north:
+						initpos = pos.xPos+POS_INFIELD_AFTER_TURN_90;
+						fieldpos = initpos - pos.xPos;
+						break;
+					case east:
+						initpos = pos.yPos+POS_INFIELD_AFTER_TURN_90;
+						fieldpos = initpos - pos.yPos;
+						break;
+					case south:
+						initpos = pos.xPos-POS_INFIELD_AFTER_TURN_90;
+						fieldpos = initpos - pos.xPos;
+						break;
+					case west:
+						initpos = pos.yPos-POS_INFIELD_AFTER_TURN_90;
+						fieldpos = initpos - pos.yPos;
+						break;
+				}
+			}else{
+				switch(targetOrientation){
+					case north:
+						initpos = pos.xPos+POS_INFIELD_AFTER_TURN_180;
+						fieldpos = initpos - pos.xPos;
+						break;
+					case east:
+						initpos = pos.yPos+POS_INFIELD_AFTER_TURN_180;
+						fieldpos = initpos - pos.yPos;
+						break;
+					case south:
+						initpos = pos.xPos-POS_INFIELD_AFTER_TURN_180;
+						fieldpos = initpos - pos.xPos;
+						break;
+					case west:
+						initpos = pos.yPos-POS_INFIELD_AFTER_TURN_180;
+						fieldpos = initpos - pos.yPos;
+						break;
+				}
+			}
+
+			break;
 	}
 
+	prevTargetOrientation = targetOrientation;
 	return fieldState;
 }
 

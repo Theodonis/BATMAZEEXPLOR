@@ -125,7 +125,7 @@ byte TargetPosStateMaschine(void){
 			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
 			initMaze(&MazeData[0][0]);
 			xPos =0 ,yPos =0;
-			resetSaveLinePointer();
+			//resetSaveLinePointer();
 			return ERR_BUSY;
 			break;
 		case driveToFrontWall:
@@ -163,9 +163,19 @@ byte TargetPosStateMaschine(void){
 			break;
 		case turnState:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				posState = driveToLeftBranch;
-				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
-				MazeSegmentsToBeDriven.numberOfSegments++;
+//				if(get_half_U_Bat()> 3.4){
+//					return ERR_FAILED;
+//				}
+				if(adc_data.mm_Values.mm_Left > 90.0){
+					posState = stopped;
+					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	0;
+					MazeSegmentsToBeDriven.numberOfSegments=0;
+				}else{
+					posState = driveToLeftBranch;
+					MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
+					MazeSegmentsToBeDriven.numberOfSegments++;
+				}
+				//reinit_Drving(true);
 			}
 			#ifdef ENABLE_DATALOG
 				saveExplorationValue(3,"state",3);
@@ -194,6 +204,8 @@ byte TargetPosStateMaschine(void){
 		case stopped:
 			return ERR_OK;
 			break;
+
+
 		case initTurnAngleCalibration:
 			posState = turnAngleCalibration;
 			for(uint8_t numOfTurns = 0; numOfTurns<2; numOfTurns++){
@@ -219,7 +231,7 @@ byte TargetPosStateMaschine(void){
 //		saveExplorationValue(driving_data.velocityEstimation.forwardVeloc,"Velocity", logValCnt++);
 		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
 		saveExplorationValue(xPos,"x-Position (index)", 6);
-//		saveExplorationValue(yPos,"y-Position (index)", 7);
+		saveExplorationValue(adc_data.voltage_Values.v_Bat,"Bateriespannung", 9);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
 
 
