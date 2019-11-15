@@ -143,18 +143,21 @@ byte TargetPosStateMaschine(void){
 			break;
 		case FrontWallDetected:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-
-				reinit_Drving(true);
-				posState = turnState;
-				MazeSegmentsToBeDriven.segments[0].SingleSegment = 	900;
-				currentTargetOrientation++;
-				MazeSegmentsToBeDriven.segments[1].SingleSegment = 	900;
-				currentTargetOrientation++;
-				MazeSegmentsToBeDriven.numberOfSegments=2;
-//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
-//				MazeSegmentsToBeDriven.numberOfSegments++;
-//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
-//				MazeSegmentsToBeDriven.numberOfSegments++;
+				if(currentTargetOrientation==north|currentTargetOrientation==east){
+					reinit_Drving(true);
+					posState = turnState;
+					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	900;
+					currentTargetOrientation++;
+					MazeSegmentsToBeDriven.segments[1].SingleSegment = 	900;
+					currentTargetOrientation++;
+					MazeSegmentsToBeDriven.numberOfSegments=2;
+	//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
+	//				MazeSegmentsToBeDriven.numberOfSegments++;
+	//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
+	//				MazeSegmentsToBeDriven.numberOfSegments++;
+				}else if(currentTargetOrientation == west){
+					posState=stopped;
+				}
 			}else{
 			#ifdef ENABLE_DATALOG
 				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
@@ -165,15 +168,19 @@ byte TargetPosStateMaschine(void){
 			break;
 		case turnState:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				if(adc_data.voltage_Values.v_Bat < 3.2){
-					return ERR_FAILED;
-				}
+//				if(adc_data.voltage_Values.v_Bat < 3.2){
+//					return ERR_FAILED;
+//				}
 				if(adc_data.mm_Values.mm_Left > 90.0){
 					posState = stopped;
 					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	0;
 					MazeSegmentsToBeDriven.numberOfSegments=0;
 				}else{
-					posState = driveToLeftBranch;
+					if(currentTargetOrientation==south){
+						posState = driveToLeftBranch;
+					}else if(currentTargetOrientation==west|currentTargetOrientation==east){
+						posState = driveToFrontWall;
+					}
 					MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
 					MazeSegmentsToBeDriven.numberOfSegments++;
 				}
@@ -209,9 +216,9 @@ byte TargetPosStateMaschine(void){
 
 		case turn90State:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	2;
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
 				MazeSegmentsToBeDriven.numberOfSegments++;
-				posState = driveToEnd;
+				posState = driveToFrontWall;
 			}
 			break;
 		case driveToEnd:
@@ -267,7 +274,7 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
 
-		if(saveDataCnt>=0){  //to set sample period (0 => 0,5ms)
+		if(saveDataCnt>=4){  //to set sample period (0 => 0,5ms)
 			incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 			saveDataCnt=0;
 		}else{
