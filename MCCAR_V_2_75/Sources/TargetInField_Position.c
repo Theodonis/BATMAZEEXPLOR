@@ -22,7 +22,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 	if(targetOrientation==north || targetOrientation==south){
 		fieldpos = initpos - pos.xPos;
 	}else{
-		fieldpos = initpos - pos.yPos;
+		fieldpos = pos.yPos + initpos;
 	}
 
 	if(prevTargetOrientation!=targetOrientation){
@@ -37,7 +37,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 				if(targetOrientation==north || targetOrientation==south){
 					initpos = pos.xPos + INIT_POS_INFIELD;
 				}else{
-					initpos = pos.yPos;
+					initpos = -pos.yPos;
 				}
 			}
 
@@ -81,7 +81,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 					initpos = pos.xPos;
 				}else if(targetOrientation==east){
 					(*yPos)++;
-					initpos = pos.yPos;
+					initpos = -pos.yPos;
 				}
 			}else if(fieldpos<0-QUARTER_OF_MAZE_FIELD_LENGTH){
 				fieldState = thirdQuarterOfField;
@@ -91,47 +91,47 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			if((prevTargetOrientation-targetOrientation)%2){//is a 90° turn
 				switch(targetOrientation){
 					case north:
-						initpos = pos.xPos + POS_INFIELD_AFTER_TURN_90;
-						fieldpos = initpos - pos.xPos;
-						fieldState = firstQuarterOfField;
+						initpos 	= pos.xPos + POS_INFIELD_AFTER_TURN_90;
+						fieldpos 	= initpos - pos.xPos;
+						fieldState 	= firstQuarterOfField;
 						break;
 					case east:
-						initpos = pos.yPos + POS_INFIELD_AFTER_TURN_90;
-						fieldpos = initpos - pos.yPos;
-						fieldState = firstQuarterOfField;
+						initpos 	= POS_INFIELD_AFTER_TURN_90 - pos.yPos  ;
+						fieldpos 	= initpos + pos.yPos;
+						fieldState 	= firstQuarterOfField;
 						break;
 					case south:
-						initpos = pos.xPos - POS_INFIELD_AFTER_TURN_90;
-						fieldpos = initpos - pos.xPos;
-						fieldState = fourthQuarterOfField;
+						initpos 	= pos.xPos - POS_INFIELD_AFTER_TURN_90;
+						fieldpos 	= initpos - pos.xPos;
+						fieldState 	= fourthQuarterOfField;
 						break;
 					case west:
-						initpos = pos.yPos - POS_INFIELD_AFTER_TURN_90;
-						fieldpos = initpos - pos.yPos;
-						fieldState = fourthQuarterOfField;
+						initpos	 	= -pos.yPos - POS_INFIELD_AFTER_TURN_90;
+						fieldpos	= initpos + pos.yPos;
+						fieldState 	= fourthQuarterOfField;
 						break;
 				}
 			}else{
 				switch(targetOrientation){
 					case north:
-						initpos = pos.xPos + POS_INFIELD_AFTER_TURN_180;
-						fieldpos = initpos - pos.xPos;
-						fieldState = firstQuarterOfField;
+						initpos 	= pos.xPos + POS_INFIELD_AFTER_TURN_180;
+						fieldpos 	= initpos - pos.xPos;
+						fieldState 	= firstQuarterOfField;
 						break;
 					case east:
-						initpos = pos.yPos + POS_INFIELD_AFTER_TURN_180;
-						fieldpos = initpos - pos.yPos;
-						fieldState = firstQuarterOfField;
+						initpos 	= POS_INFIELD_AFTER_TURN_180 - pos.yPos;
+						fieldpos 	= initpos + pos.yPos;
+						fieldState 	= firstQuarterOfField;
 						break;
 					case south:
-						initpos = pos.xPos - POS_INFIELD_AFTER_TURN_180;
-						fieldpos = initpos - pos.xPos;
-						fieldState = fourthQuarterOfField;
+						initpos 	= pos.xPos - POS_INFIELD_AFTER_TURN_180;
+						fieldpos 	= initpos - pos.xPos;
+						fieldState 	= fourthQuarterOfField;
 						break;
 					case west:
-						initpos = pos.yPos - POS_INFIELD_AFTER_TURN_180;
-						fieldpos = initpos - pos.yPos;
-						fieldState = fourthQuarterOfField;
+						initpos 	= -pos.yPos - POS_INFIELD_AFTER_TURN_180;
+						fieldpos 	= initpos + pos.yPos;
+						fieldState 	= fourthQuarterOfField;
 						break;
 				}
 			}

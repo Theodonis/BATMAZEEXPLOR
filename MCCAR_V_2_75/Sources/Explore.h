@@ -22,6 +22,8 @@ typedef enum PosState{
 	turnState,
 	driveToLeftBranch,
 	leftBranchDetected,
+	turn90State,
+	driveToEnd,
 	stopped,
 	turnAngleCalibration,
 	initTurnAngleCalibration,

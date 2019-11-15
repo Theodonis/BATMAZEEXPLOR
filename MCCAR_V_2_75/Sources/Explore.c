@@ -194,9 +194,30 @@ byte TargetPosStateMaschine(void){
 			break;
 		case leftBranchDetected:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+				reinit_Drving(true);
+				posState = turn90State;
+				MazeSegmentsToBeDriven.segments[0].SingleSegment = 	900;
+				MazeSegmentsToBeDriven.numberOfSegments=1;
+				currentTargetOrientation--;
+			}else{
+
+				#ifdef ENABLE_DATALOG
+					saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
+				#endif
+			}
+			break;
+
+		case turn90State:
+			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	2;
+				MazeSegmentsToBeDriven.numberOfSegments++;
+				posState = driveToEnd;
+			}
+			break;
+		case driveToEnd:
+			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
 				posState = stopped;
 			}
-
 			#ifdef ENABLE_DATALOG
 				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 			#endif
@@ -233,6 +254,11 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
 		saveExplorationValue(adc_data.voltage_Values.v_Bat,"Bateriespannung", 9);
+
+
+		saveExplorationValue(yPos,"y-Position (index)", 11);
+		saveExplorationValue(driving_data.posEstimation.yPos,"yPos", 10);
+
 
 
 #ifdef ENABLE_TIMING_CONROLL
