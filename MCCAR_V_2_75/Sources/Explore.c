@@ -168,9 +168,9 @@ byte TargetPosStateMaschine(void){
 			break;
 		case turnState:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-//				if(adc_data.voltage_Values.v_Bat < 3.2){
-//					return ERR_FAILED;
-//				}
+				if(adc_data.voltage_Values.v_Bat < 3.2){
+					return ERR_FAILED;
+				}
 				if(adc_data.mm_Values.mm_Left > 90.0){
 					posState = stopped;
 					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	0;
@@ -191,9 +191,9 @@ byte TargetPosStateMaschine(void){
 		case driveToLeftBranch:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
 				return ERR_FAILED;
-			}else if(adc_data.raw_Values.raw_MiddleR < 55000.0){
-				posState = errorStop;
-				setStopFlag();
+//			}else if(adc_data.raw_Values.raw_MiddleR < 55000.0){
+//				posState = errorStop;
+//				setStopFlag();
 			}else if(adc_data.mm_Values.mm_Left > 90.0){
 				posState = leftBranchDetected;
 				setStopFlag();
