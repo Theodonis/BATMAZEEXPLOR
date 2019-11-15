@@ -27,6 +27,7 @@ typedef enum PosState{
 	stopped,
 	turnAngleCalibration,
 	initTurnAngleCalibration,
+	errorStop,
 	stateNumbers /*must be last one*/
 }t_PosState;
 

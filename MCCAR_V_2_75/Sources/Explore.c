@@ -178,7 +178,7 @@ byte TargetPosStateMaschine(void){
 				}else{
 					if(currentTargetOrientation==south){
 						posState = driveToLeftBranch;
-					}else if(currentTargetOrientation==west|currentTargetOrientation==east){
+					}else if(currentTargetOrientation==west){
 						posState = driveToFrontWall;
 					}
 					MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
@@ -191,6 +191,9 @@ byte TargetPosStateMaschine(void){
 		case driveToLeftBranch:
 			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
 				return ERR_FAILED;
+			}else if(adc_data.raw_Values.raw_MiddleR < 55000.0){
+				posState = errorStop;
+				setStopFlag();
 			}else if(adc_data.mm_Values.mm_Left > 90.0){
 				posState = leftBranchDetected;
 				setStopFlag();
@@ -246,6 +249,12 @@ byte TargetPosStateMaschine(void){
 				posState=stopped;
 			}
 			break;
+		case errorStop:
+			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+				posState=stopped;
+				return ERR_FAILED;
+			}
+
 
 	}
 
