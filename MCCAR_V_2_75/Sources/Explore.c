@@ -107,7 +107,7 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = driveToLeftBranch;//initTurnAngleCalibration;//
+			posState = turnState;//initTurnAngleCalibration;//
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
@@ -138,7 +138,7 @@ byte TargetPosStateMaschine(void){
 
 			break;
 		case turnState:
-			switch(turn90(&segmentNumber, &currentTargetOrientation, left)){
+			switch(turn180(&segmentNumber, &currentTargetOrientation, left)){
 				case ERR_BUSY:
 					posState = turnState;
 					break;
@@ -146,9 +146,8 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= driveToFront;
+					posState= stopped;
 					break;
-
 			}
 			break;
 		case driveToLeftBranch:
@@ -162,7 +161,6 @@ byte TargetPosStateMaschine(void){
 				case ERR_OK:
 					posState= turnState;
 					break;
-
 			}
 			break;
 		case leftBranchDetected:
