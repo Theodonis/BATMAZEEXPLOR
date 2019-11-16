@@ -99,12 +99,13 @@ byte driveToBranch(uint8_t* segmentNumber, uint16_t frontDistance, float sideDis
 			state_toBranch = gen_runnigState;
 
 			/*put on I_LED's to measure distance correct at frist ADC_Cal in Driving*/
-			I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();
+			//I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();
+			//->should be done from Application
 
-			//don't call yet to because of I_LED's not read
-//			if(exploreDriving(Maze_seg, &adc_data)){
-//				return ERR_FAILED;
-//			}
+			//don't call yet to because of I_LED's not read -> no more problem because use of newest adc in function
+			if(exploreDriving(Maze_seg, &adc_data)){
+				return ERR_FAILED;
+			}
 			break;
 		case gen_runnigState: /*Drive till branch
 		 -> error if segments finished driven without branch detected
@@ -179,10 +180,12 @@ byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir)
 		case gen_deinitState:
 			if(exploreDriving(Maze_seg, &adc_data)){
 				/* be sure is terminated, v ref=0 and Segmenttime at end*/
+				(*currentOrientation)++; /* ubdate orientation */
 				state_turn90 = gen_initState;
 				return ERR_OK;
 
 			}
+			break;
 		case gen_waitState:  /* not used in this case*/
 		case gen_ErrorState: /* not used in this case*/
 		default:
@@ -191,6 +194,51 @@ byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir)
 	}
 	return ERR_BUSY;
 
+}
+
+
+byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir){
+	static t_genericState state_turn180 = gen_initState;
+	static Maze_segments Maze_seg;
+	ADC_data_t adc_data;
+
+	switch(state_turn180){
+	 	 case gen_initState: /* is not used as init -> do ing 90° turn */
+			 switch(turn90(segmentNumber, currentOrientation, dir)){
+				 case ERR_BUSY:
+					 state_turn180 = gen_initState;
+					 break;
+				 case ERR_FAILED:
+					 state_turn180 = gen_initState;
+					 return ERR_FAILED;
+				 case ERR_OK:
+					 state_turn180 = gen_runnigState;
+					 break;
+			 }
+			 break;
+		 case gen_runnigState: /* turn again 90° */
+			 switch(turn90(segmentNumber, currentOrientation, dir)){
+				 case ERR_BUSY:
+					 state_turn180 = gen_runnigState;
+					 break;
+				 case ERR_FAILED:
+					 state_turn180 = gen_initState;
+					 return ERR_FAILED;
+				 case ERR_OK:
+					 state_turn180 = gen_deinitState;
+					 break;
+			 }
+			 break;
+		 case gen_deinitState:
+			 state_turn180 = gen_initState;
+			 return ERR_OK;
+		 case gen_waitState:  /* not used in this case*/
+		 case gen_ErrorState: /* not used in this case*/
+		 default:
+			 state_turn180 = gen_initState;
+			 break;
+	}
+	return ERR_BUSY;
 }
 
 

@@ -32,6 +32,6 @@ typedef enum dir{
 byte driveToFrontWall(uint8_t* segmentNumber, uint16_t frontDistance);
 byte driveToBranch(uint8_t* segmentNumber, uint16_t frontDistance, float sideDist);
 byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
-
+byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
 
 #endif /* SOURCES_EXPLOROREDRIVINGCONTROLL_H_ */
