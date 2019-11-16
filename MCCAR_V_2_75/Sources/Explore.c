@@ -8,10 +8,10 @@
 #include "stdbool.h"
 #include "ADC.h"
 #include "Explore.h"
-#include "Driving.h"
 #include "DrivingExplore_Interface.h"
 #include "TargetInField_Position.h"
 #include "ExplororeDrivingControll.h"
+
 
 #ifdef ENABLE_DATALOG
 	#include "Logging.h"
@@ -81,10 +81,10 @@ byte TargetPosStateMaschine(void){
 	static t_directions  currentTargetOrientation = north;
 
 
-	static uint8_t  segmentNumber = 0;
+	static uint8_t  segmentNumber = 0; /* to Handle the current SegNumb for all Driving calls*/
 
 	static uint8_t saveDataCnt = 0; // for calculation of logging sample period
-	uint8_t logValCnt = 0;
+
 	/* Data Log */
 	#ifdef ENABLE_DATALOG
 		#ifdef ENABLE_TIMING_CONROLL
@@ -96,7 +96,7 @@ byte TargetPosStateMaschine(void){
 		#endif
 	#endif
 
-	ADC_data_t adc_data =	*get_latest_ADC_data();
+	ADC_data_t adc_data =	*get_latest_ADC_data();/* is always one step behind newest data because driving will be called use*/
 	t_data_for_exploration driving_data;
 	getDataForExplore(&driving_data);
 	#ifdef ENABLE_DATALOG
