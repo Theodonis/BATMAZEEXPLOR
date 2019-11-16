@@ -1,0 +1,9 @@
+diff a/MCCAR_V_2_75/Sources/TargetInField_Position.c b/MCCAR_V_2_75/Sources/TargetInField_Position.c	(rejected hunks)
+@@ -91,6 +91,7 @@
+ 			if((prevTargetOrientation-targetOrientation)%2){//is a 90� turn
+ 				switch(targetOrientation){
+ 					case north:
++<<<<<<< HEAD
+ 						initpos 	= pos.xPos + POS_INFIELD_AFTER_TURN_90;
+ 						fieldpos 	= initpos - pos.xPos;
+ 						fieldState 	= firstQuarterOfField;
