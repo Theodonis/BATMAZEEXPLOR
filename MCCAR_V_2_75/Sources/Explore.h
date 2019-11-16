@@ -17,7 +17,7 @@
 
 typedef enum PosState{
 	initState,
-	driveToFrontWall,
+	driveToFront,
 	FrontWallDetected,
 	turnState,
 	driveToLeftBranch,

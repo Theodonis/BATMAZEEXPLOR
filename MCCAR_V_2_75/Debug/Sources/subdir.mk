@@ -13,6 +13,7 @@ C_SRCS += \
 ../Sources/Exploration_Drive.c \
 ../Sources/Explore.c \
 ../Sources/Exploring_Com.c \
+../Sources/ExplororeDrivingControll.c \
 ../Sources/FSM.c \
 ../Sources/IMU.c \
 ../Sources/Logging.c \
@@ -33,6 +34,7 @@ OBJS += \
 ./Sources/Exploration_Drive.o \
 ./Sources/Explore.o \
 ./Sources/Exploring_Com.o \
+./Sources/ExplororeDrivingControll.o \
 ./Sources/FSM.o \
 ./Sources/IMU.o \
 ./Sources/Logging.o \
@@ -53,6 +55,7 @@ C_DEPS += \
 ./Sources/Exploration_Drive.d \
 ./Sources/Explore.d \
 ./Sources/Exploring_Com.d \
+./Sources/ExplororeDrivingControll.d \
 ./Sources/FSM.d \
 ./Sources/IMU.d \
 ./Sources/Logging.d \

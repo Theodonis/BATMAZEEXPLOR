@@ -8,6 +8,13 @@
 #ifndef SOURCES_EXPLOROREDRIVINGCONTROLL_H_
 #define SOURCES_EXPLOROREDRIVINGCONTROLL_H_
 
+
+
+#include "PE_Error.h"
+#include "stdint.h"
+#include "PE_Types.h"
+#include "Explore.h"
+
 typedef enum genericState{
 	gen_initState,
 	gen_runnigState,
@@ -20,5 +27,11 @@ typedef enum dir{
 	left,
 	right
 } t_dir;
+
+
+byte driveToFrontWall(uint8_t* segmentNumber, uint16_t frontDistance);
+byte driveToBranch(uint8_t* segmentNumber, uint16_t frontDistance, float sideDist);
+byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
+
 
 #endif /* SOURCES_EXPLOROREDRIVINGCONTROLL_H_ */

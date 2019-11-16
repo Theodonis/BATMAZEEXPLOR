@@ -222,6 +222,8 @@ void testJoystick()
 		LED_BLUE_F_L_On();
 		LED_BLUE_F_R_On();
 		reinit_Drving(true);
+		I_LED_ML_SetVal();//I_LED_ML_SetVal();
+		I_LED_L_SetVal();I_LED_R_SetVal();
 		WAIT1_Waitms(1000);
 		LED_BLUE_F_L_Off();
 		LED_BLUE_F_R_Off();
@@ -232,8 +234,12 @@ void testJoystick()
 		WAIT1_Waitms(1000);
 		calcADC_data(&adcData);
 		calcIMU_data(&imuData);
-		WAIT1_Waitms(1000);
 
+		I_LED_ML_ClrVal();
+		I_LED_L_ClrVal();I_LED_R_ClrVal();
+		WAIT1_Waitms(1000);
+		I_LED_ML_SetVal();
+		I_LED_L_SetVal();I_LED_R_SetVal();
 		if(get_half_U_Bat()> 3.7){
 //			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
 //			MazeSegmentsToBeDriven.numberOfSegments = 1;

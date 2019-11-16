@@ -11,6 +11,7 @@
 #include "Driving.h"
 #include "DrivingExplore_Interface.h"
 #include "TargetInField_Position.h"
+#include "ExplororeDrivingControll.h"
 
 #ifdef ENABLE_DATALOG
 	#include "Logging.h"
@@ -70,23 +71,7 @@ void initMaze(t_mazeFieldData* MazePointer){
 **
 */
 /* ===================================================================*/
-bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, uint8_t* logValCnt){
-	bool drivingFinishedFlag;
-//	#ifdef ENABLE_TIMING_CONROLL
-//			uint16_t beforDriving;
-//			FC1_GetCounterValue(&beforDriving);
-//			saveExplorationValue((float)beforDriving, "beforDriving", (*logValCnt)++);
-//	#endif
-	drivingFinishedFlag = Driving(MazeSegmentsToBeDriven);
-	#ifdef ENABLE_DATALOG
-	#ifdef ENABLE_TIMING_CONROLL
-		uint16_t ticksAfterDriving;
-		FC1_GetCounterValue(&ticksAfterDriving);
-		saveExplorationValue((float)ticksAfterDriving, "ticksAfterDriving", 1);//(*logValCnt)++);
-	#endif
-	#endif
-	return drivingFinishedFlag;
-}
+
 
 
 byte TargetPosStateMaschine(void){
@@ -95,7 +80,9 @@ byte TargetPosStateMaschine(void){
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
 
-	static Maze_segments MazeSegmentsToBeDriven;
+
+	static uint8_t  segmentNumber = 0;
+
 	static uint8_t saveDataCnt = 0; // for calculation of logging sample period
 	uint8_t logValCnt = 0;
 	/* Data Log */
@@ -120,117 +107,93 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = driveToFrontWall;//initTurnAngleCalibration;//
-			MazeSegmentsToBeDriven.numberOfSegments = 1;
-			MazeSegmentsToBeDriven.segments[0].SingleSegment = 	10;
+			posState = driveToLeftBranch;//initTurnAngleCalibration;//
 			initMaze(&MazeData[0][0]);
+			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
 			#ifdef ENABLE_DATALOG
 				resetSaveLinePointer();
 			#endif
 			return ERR_BUSY;
 			break;
-		case driveToFrontWall:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				return ERR_FAILED;
-			}else if(adc_data.raw_Values.raw_MiddleR < 55000.0){
-				posState = FrontWallDetected;
-				setStopFlag();
+		case driveToFront:
+			switch(driveToFrontWall(&segmentNumber, adc_data.raw_Values.raw_MiddleL)){
+				case ERR_BUSY:
+					posState = driveToFront;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= stopped;
+					break;
 			}
+
 			#ifdef ENABLE_DATALOG
 				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 			#endif
 			break;
 		case FrontWallDetected:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				if(currentTargetOrientation==north|currentTargetOrientation==east){
-					reinit_Drving(true);
-					posState = turnState;
-					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	900;
-					currentTargetOrientation++;
-					MazeSegmentsToBeDriven.segments[1].SingleSegment = 	900;
-					currentTargetOrientation++;
-					MazeSegmentsToBeDriven.numberOfSegments=2;
-	//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
-	//				MazeSegmentsToBeDriven.numberOfSegments++;
-	//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	900;
-	//				MazeSegmentsToBeDriven.numberOfSegments++;
-				}else if(currentTargetOrientation == west){
-					posState=stopped;
-				}
-			}else{
-			#ifdef ENABLE_DATALOG
-				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
-			#endif
-			}
 
 
 			break;
 		case turnState:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				if(adc_data.voltage_Values.v_Bat < 3.2){
+			switch(turn90(&segmentNumber, &currentTargetOrientation, left)){
+				case ERR_BUSY:
+					posState = turnState;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
 					return ERR_FAILED;
-				}
-				if(adc_data.mm_Values.mm_Left > 90.0){
-					posState = stopped;
-					MazeSegmentsToBeDriven.segments[0].SingleSegment = 	0;
-					MazeSegmentsToBeDriven.numberOfSegments=0;
-				}else{
-					if(currentTargetOrientation==south){
-						posState = driveToLeftBranch;
-					}else if(currentTargetOrientation==west){
-						posState = driveToFrontWall;
-					}
-					MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
-					MazeSegmentsToBeDriven.numberOfSegments++;
-				}
-				//reinit_Drving(true);
-			}
+				case ERR_OK:
+					posState= driveToFront;
+					break;
 
+			}
 			break;
 		case driveToLeftBranch:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				return ERR_FAILED;
-//			}else if(adc_data.raw_Values.raw_MiddleR < 55000.0){
-//				posState = errorStop;
-//				setStopFlag();
-			}else if(adc_data.mm_Values.mm_Left > 90.0){
-				posState = leftBranchDetected;
-				setStopFlag();
+			switch(driveToBranch(&segmentNumber, adc_data.raw_Values.raw_MiddleL, adc_data.mm_Values.mm_Left)){
+				case ERR_BUSY:
+					posState = driveToLeftBranch;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= turnState;
+					break;
+
 			}
-			#ifdef ENABLE_DATALOG
-				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
-			#endif
 			break;
 		case leftBranchDetected:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				reinit_Drving(true);
-				posState = turn90State;
-				MazeSegmentsToBeDriven.segments[0].SingleSegment = 	900;
-				MazeSegmentsToBeDriven.numberOfSegments=1;
-				currentTargetOrientation--;
-			}else{
-
-				#ifdef ENABLE_DATALOG
-					saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
-				#endif
-			}
+//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+//				reinit_Drving(true);
+//				posState = turn90State;
+//				MazeSegmentsToBeDriven.segments[0].SingleSegment = 	900;
+//				MazeSegmentsToBeDriven.numberOfSegments=1;
+//				currentTargetOrientation--;
+//			}else{
+//
+//				#ifdef ENABLE_DATALOG
+//					saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
+//				#endif
+//			}
 			break;
 
 		case turn90State:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
-				MazeSegmentsToBeDriven.numberOfSegments++;
-				posState = driveToFrontWall;
-			}
+//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
+//				MazeSegmentsToBeDriven.numberOfSegments++;
+//				posState = driveToFrontWall;
+//			}
 			break;
 		case driveToEnd:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				posState = stopped;
-			}
-			#ifdef ENABLE_DATALOG
-				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
-			#endif
+//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+//				posState = stopped;
+//			}
+//			#ifdef ENABLE_DATALOG
+//				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
+//			#endif
 			break;
 		case stopped:
 			return ERR_OK;
@@ -238,22 +201,23 @@ byte TargetPosStateMaschine(void){
 
 
 		case initTurnAngleCalibration:
-			posState = turnAngleCalibration;
-			for(uint8_t numOfTurns = 0; numOfTurns<2; numOfTurns++){
-				MazeSegmentsToBeDriven.segments[numOfTurns].SingleSegment = 	900;
-				MazeSegmentsToBeDriven.numberOfSegments=numOfTurns+1;
-			}
+//			posState = turnAngleCalibration;
+//			for(uint8_t numOfTurns = 0; numOfTurns<2; numOfTurns++){
+//				MazeSegmentsToBeDriven.segments[numOfTurns].SingleSegment = 	900;
+//				MazeSegmentsToBeDriven.numberOfSegments=numOfTurns+1;
+//			}
 			return ERR_BUSY;
 		case turnAngleCalibration:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){//Driving(MazeSegmentsToBeDriven)){//
-				posState=stopped;
-			}
-			break;
+//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){//Driving(MazeSegmentsToBeDriven)){//
+//				posState=stopped;
+//			}
+//			break;
 		case errorStop:
-			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-				posState=stopped;
-				return ERR_FAILED;
-			}
+//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
+//				posState=stopped;
+//				return ERR_FAILED;
+//			}
+			break;
 
 
 	}
