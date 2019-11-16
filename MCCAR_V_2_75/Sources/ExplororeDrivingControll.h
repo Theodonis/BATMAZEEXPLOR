@@ -29,8 +29,8 @@ typedef enum dir{
 } t_dir;
 
 
-byte driveToFrontWall(uint8_t* segmentNumber, uint16_t frontDistance);
-byte driveToBranch(uint8_t* segmentNumber, uint16_t frontDistance, float sideDist);
+byte driveToFrontWall(uint8_t* segmentNumber);
+byte driveToBranch(uint8_t* segmentNumber, t_dir dir);
 byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
 byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
 

@@ -117,7 +117,7 @@ byte TargetPosStateMaschine(void){
 			return ERR_BUSY;
 			break;
 		case driveToFront:
-			switch(driveToFrontWall(&segmentNumber, adc_data.raw_Values.raw_MiddleL)){
+			switch(driveToFrontWall(&segmentNumber)){
 				case ERR_BUSY:
 					posState = driveToFront;
 					break;
@@ -152,7 +152,7 @@ byte TargetPosStateMaschine(void){
 			}
 			break;
 		case driveToLeftBranch:
-			switch(driveToBranch(&segmentNumber, adc_data.raw_Values.raw_MiddleL, adc_data.mm_Values.mm_Left)){
+			switch(driveToBranch(&segmentNumber,left)){
 				case ERR_BUSY:
 					posState = driveToLeftBranch;
 					break;

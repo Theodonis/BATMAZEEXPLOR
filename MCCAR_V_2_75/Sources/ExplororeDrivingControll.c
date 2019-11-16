@@ -48,7 +48,7 @@ bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 
 
 
-byte driveToFrontWall(uint8_t* segmentNumber, uint16_t frontDistance){
+byte driveToFrontWall(uint8_t* segmentNumber){
 	static t_genericState state_toWall = gen_initState;
 	static Maze_segments Maze_seg;
 	ADC_data_t adc_data;
@@ -86,7 +86,7 @@ byte driveToFrontWall(uint8_t* segmentNumber, uint16_t frontDistance){
 	return ERR_BUSY;
 }
 
-byte driveToBranch(uint8_t* segmentNumber, uint16_t frontDistance, float sideDist){
+byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 	static t_genericState state_toBranch = gen_initState;
 	static Maze_segments Maze_seg;
 
@@ -117,11 +117,16 @@ byte driveToBranch(uint8_t* segmentNumber, uint16_t frontDistance, float sideDis
 				/*Error but Driving must be finished */
 				state_toBranch=gen_ErrorState;
 				setStopFlag();
-			}else if(adc_data.mm_Values.mm_Left>90){
+			}else if(dir==left|adc_data.mm_Values.mm_Left>90){
+				/* Branch detected Finish Driving */
+				state_toBranch = gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
+				setStopFlag();
+			}else if(dir==right|adc_data.mm_Values.mm_Right>90){
 				/* Branch detected Finish Driving */
 				state_toBranch = gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
 				setStopFlag();
 			}
+
 			break;
 		case gen_deinitState: /* Finish driving nd return Ok if finished*/
 			if(exploreDriving(Maze_seg, &adc_data)){
