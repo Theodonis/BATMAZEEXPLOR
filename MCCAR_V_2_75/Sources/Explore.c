@@ -107,7 +107,7 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = driveToFront;//initTurnAngleCalibration;//
+			posState = driveToLeftBranch;//initTurnAngleCalibration;//
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
