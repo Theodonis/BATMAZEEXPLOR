@@ -146,7 +146,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= driveToLeftBranch;
+					posState= stopped;
 					break;
 			}
 			break;
@@ -159,7 +159,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= stopped;
+					posState= turn90State;
 					break;
 			}
 			break;
@@ -179,11 +179,17 @@ byte TargetPosStateMaschine(void){
 			break;
 
 		case turn90State:
-//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
-//				MazeSegmentsToBeDriven.segments[MazeSegmentsToBeDriven.numberOfSegments].SingleSegment = 	10;
-//				MazeSegmentsToBeDriven.numberOfSegments++;
-//				posState = driveToFrontWall;
-//			}
+			switch(turn90(&segmentNumber, &currentTargetOrientation, left)){
+				case ERR_BUSY:
+					posState = turn90State;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= driveToFront;
+					break;
+			}
 			break;
 		case driveToEnd:
 //			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){

@@ -208,7 +208,6 @@ void resetSaveLinePointer(void){
 	for(uint8_t j=0;j<LOGGING_NUMBER_OF_VALUES; j++){
 		UTIL1_strcpy(header[j], sizeof(header[j]), "\t");
 	}
-//	UTIL1_strcpy(header[LOGGING_NUMBER_OF_VALUES-1], sizeof(header[LOGGING_NUMBER_OF_VALUES-1]), "\n");
 }
 
 void saveExplorationData(t_explore_log *data){
