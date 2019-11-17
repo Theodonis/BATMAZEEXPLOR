@@ -18,7 +18,7 @@
 #include "I_LED_MR.h"
 #include "I_LED_ML.h"
 
-#ifdef ENABLE_DATALOG
+#if ENABLE_EXPLORE_DATALOG
 	#include "Logging.h"
 #endif
 
@@ -36,8 +36,8 @@ bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 //	#endif
 	drivingFinishedFlag = Driving(MazeSegmentsToBeDriven);
 	(*adc_data) =	*get_latest_ADC_data();/* get newest ADC after Driving*/
-	#ifdef ENABLE_DATALOG
-	#ifdef ENABLE_TIMING_CONROLL
+	#if ENABLE_EXPLORE_DATALOG
+	#if ENABLE_TIMING_CONROLL
 		uint16_t ticksAfterDriving;
 		FC1_GetCounterValue(&ticksAfterDriving);
 		saveExplorationValue((float)ticksAfterDriving, "ticksAfterDriving", 1);//(*logValCnt)++);
@@ -183,13 +183,13 @@ byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir)
 			break;
 
 		case gen_deinitState:
-			if(exploreDriving(Maze_seg, &adc_data)){
+//			if(exploreDriving(Maze_seg, &adc_data)){
 				/* be sure is terminated, v ref=0 and Segmenttime at end*/
 				(*currentOrientation)++; /* ubdate orientation */
 				state_turn90 = gen_initState;
 				return ERR_OK;
 
-			}
+//			}
 			break;
 		case gen_waitState:  /* not used in this case*/
 		case gen_ErrorState: /* not used in this case*/

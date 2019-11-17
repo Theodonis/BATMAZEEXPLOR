@@ -17,7 +17,7 @@
 	#include "Logging.h"
 #endif
 
-#ifdef ENABLE_TIMING_CONROLL
+#if ENABLE_TIMING_CONROLL
 	#include "FC1.h"
 #endif
 
@@ -87,7 +87,7 @@ byte TargetPosStateMaschine(void){
 
 	/* Data Log */
 	#if ENABLE_EXPLORE_DATALOG
-		#ifdef ENABLE_TIMING_CONROLL
+		#if ENABLE_TIMING_CONROLL
 			uint16_t callPeriod;
 			FC1_GetCounterValue(&callPeriod);
 			FC1_Reset();
@@ -96,7 +96,7 @@ byte TargetPosStateMaschine(void){
 		#endif
 	#endif
 
-	ADC_data_t adc_data =	*get_latest_ADC_data();/* is always one step behind newest data because driving will be called use*/
+	ADC_data_t adc_data =	*getLatestADC();/* is always one step behind newest data because driving will be called use*/
 	t_data_for_exploration driving_data;
 	getDataForExplore(&driving_data);
 	#if ENABLE_EXPLORE_DATALOG
@@ -107,7 +107,7 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = turnState;//initTurnAngleCalibration;//
+			posState = driveToFront;//initTurnAngleCalibration;//
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
@@ -125,7 +125,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= stopped;
+					posState= turnState;
 					break;
 			}
 
@@ -146,7 +146,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= stopped;
+					posState= driveToLeftBranch;
 					break;
 			}
 			break;
@@ -159,7 +159,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= turnState;
+					posState= stopped;
 					break;
 			}
 			break;
@@ -226,20 +226,20 @@ byte TargetPosStateMaschine(void){
 	#if ENABLE_EXPLORE_DATALOG
 
 //		saveExplorationValue(adc_data.raw_Values.raw_Right,"rawRight", logValCnt++);
-		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
 		saveExplorationValue(posState,"state",3);
+		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
 		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
-		saveExplorationValue(adc_data.voltage_Values.v_Bat,"Bateriespannung", 9);
+		saveExplorationValue(adc_data.voltage_Values.v_Bat,"battery voltage", 9);
 
-
-		saveExplorationValue(yPos,"y-Position (index)", 11);
 		saveExplorationValue(driving_data.posEstimation.yPos,"yPos", 10);
+		saveExplorationValue(yPos,"y-Position (index)", 11);
+		saveExplorationValue(adc_data.mm_Values.mm_Left,"mm_Left", 12);
 
 
 
-#ifdef ENABLE_TIMING_CONROLL
+	#if ENABLE_TIMING_CONROLL
 		uint16_t ticksAfterExplore;
 		FC1_GetCounterValue(&ticksAfterExplore);
 		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);

@@ -12,6 +12,8 @@
 #include "ADC.h"
 #include "I_LED_L.h"
 #include "I_LED_R.h"
+
+#include "Driving.h"
 #include "Explore.h"
 
 
@@ -203,6 +205,10 @@ void incrmentSaveLinePointer(void){
 
 void resetSaveLinePointer(void){
 	saveLinePointer = 0;
+	for(uint8_t j=0;j<LOGGING_NUMBER_OF_VALUES; j++){
+		UTIL1_strcpy(header[j], sizeof(header[j]), "\t");
+	}
+//	UTIL1_strcpy(header[LOGGING_NUMBER_OF_VALUES-1], sizeof(header[LOGGING_NUMBER_OF_VALUES-1]), "\n");
 }
 
 void saveExplorationData(t_explore_log *data){
