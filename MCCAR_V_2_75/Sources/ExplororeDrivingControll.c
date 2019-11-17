@@ -22,14 +22,14 @@
 	#include "Logging.h"
 #endif
 
-#ifdef ENABLE_TIMING_CONROLL
+#if ENABLE_TIMING_CONROLL
 	#include "FC1.h"
 #endif
 
 
 bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 	bool drivingFinishedFlag;
-//	#ifdef ENABLE_TIMING_CONROLL
+//	#if ENABLE_TIMING_CONROLL
 //			uint16_t beforDriving;
 //			FC1_GetCounterValue(&beforDriving);
 //			saveExplorationValue((float)beforDriving, "beforDriving", (*logValCnt)++);
