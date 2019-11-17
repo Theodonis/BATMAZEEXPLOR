@@ -13,7 +13,7 @@
 #include "ExplororeDrivingControll.h"
 
 
-#ifdef ENABLE_DATALOG
+#if ENABLE_EXPLORE_DATALOG
 	#include "Logging.h"
 #endif
 
@@ -86,7 +86,7 @@ byte TargetPosStateMaschine(void){
 	static uint8_t saveDataCnt = 0; // for calculation of logging sample period
 
 	/* Data Log */
-	#ifdef ENABLE_DATALOG
+	#if ENABLE_EXPLORE_DATALOG
 		#ifdef ENABLE_TIMING_CONROLL
 			uint16_t callPeriod;
 			FC1_GetCounterValue(&callPeriod);
@@ -99,7 +99,7 @@ byte TargetPosStateMaschine(void){
 	ADC_data_t adc_data =	*get_latest_ADC_data();/* is always one step behind newest data because driving will be called use*/
 	t_data_for_exploration driving_data;
 	getDataForExplore(&driving_data);
-	#ifdef ENABLE_DATALOG
+	#if ENABLE_EXPLORE_DATALOG
 	//saveExplorationValue((float)adc_data.mm_Values.mm_MiddleR, "adc_data.mm_Values.mm_MiddleR", logValCnt++);
 	#endif
 
@@ -111,7 +111,7 @@ byte TargetPosStateMaschine(void){
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
-			#ifdef ENABLE_DATALOG
+			#if ENABLE_EXPLORE_DATALOG
 				resetSaveLinePointer();
 			#endif
 			return ERR_BUSY;
@@ -129,7 +129,7 @@ byte TargetPosStateMaschine(void){
 					break;
 			}
 
-			#ifdef ENABLE_DATALOG
+			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 			#endif
 			break;
@@ -172,7 +172,7 @@ byte TargetPosStateMaschine(void){
 //				currentTargetOrientation--;
 //			}else{
 //
-//				#ifdef ENABLE_DATALOG
+//				#if ENABLE_EXPLORE_DATALOG
 //					saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 //				#endif
 //			}
@@ -189,7 +189,7 @@ byte TargetPosStateMaschine(void){
 //			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
 //				posState = stopped;
 //			}
-//			#ifdef ENABLE_DATALOG
+//			#if ENABLE_EXPLORE_DATALOG
 //				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
 //			#endif
 			break;
@@ -223,7 +223,7 @@ byte TargetPosStateMaschine(void){
 
 
 
-	#ifdef ENABLE_DATALOG
+	#if ENABLE_EXPLORE_DATALOG
 
 //		saveExplorationValue(adc_data.raw_Values.raw_Right,"rawRight", logValCnt++);
 		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
