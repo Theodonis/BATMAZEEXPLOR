@@ -17,6 +17,7 @@ C_SRCS += \
 ../Sources/FSM.c \
 ../Sources/IMU.c \
 ../Sources/Logging.c \
+../Sources/MazeHndl.c \
 ../Sources/Motor.c \
 ../Sources/PID.c \
 ../Sources/Platform.c \
@@ -37,6 +38,7 @@ OBJS += \
 ./Sources/FSM.o \
 ./Sources/IMU.o \
 ./Sources/Logging.o \
+./Sources/MazeHndl.o \
 ./Sources/Motor.o \
 ./Sources/PID.o \
 ./Sources/Platform.o \
@@ -57,6 +59,7 @@ C_DEPS += \
 ./Sources/FSM.d \
 ./Sources/IMU.d \
 ./Sources/Logging.d \
+./Sources/MazeHndl.d \
 ./Sources/Motor.d \
 ./Sources/PID.d \
 ./Sources/Platform.d \

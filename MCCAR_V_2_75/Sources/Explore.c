@@ -6,11 +6,11 @@
  */
 
 #include "stdbool.h"
-#include "ADC.h"
 #include "Explore.h"
 #include "DrivingExplore_Interface.h"
 #include "TargetInField_Position.h"
 #include "ExplororeDrivingControll.h"
+#include "MazeHndl.h"
 
 
 #if ENABLE_EXPLORE_DATALOG
@@ -22,35 +22,7 @@
 #endif
 
 
-/*
-** ===================================================================
-**     Method      :  initMaze(t_mazeFieldData* MazePointer)
-**
-**     @brief
-**     		Set every walls in maze data matrix to unknown and each field
-**     		to unexplored.
-**
-**     @param
-**						- MazePointer: Pointer to first field of maze data
-**						  matrix
-**
-**     @return
-**
-**
-*/
-/* ===================================================================*/
-void initMaze(t_mazeFieldData* MazePointer){
-	t_mazeFieldData maze;
-	maze.exploredFlag= FALSE;
-	maze.posibDirections.north = ex_unknew;
-	maze.posibDirections.east = ex_unknew;
-	maze.posibDirections.south = ex_unknew;
-	maze.posibDirections.west = ex_unknew;
 
-	for(uint8_t index =0; index<MAZE_FIELDS_LENGTH_EAST_DIRECTION*MAZE_FIELDS_WIDTH_NORTH_DIRECTION; index++){
-		*(MazePointer+index) = maze;
-	}
-}
 
 /*
 ** ===================================================================
@@ -79,6 +51,8 @@ byte TargetPosStateMaschine(void){
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
+
+	t_fieldState currentFieldState = 0;
 
 
 	static uint8_t  segmentNumber = 0; /* to Handle the current SegNumb for all Driving calls*/
@@ -128,9 +102,12 @@ byte TargetPosStateMaschine(void){
 					posState= turnState;
 					break;
 			}
-
+			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
+			if(currentFieldState == detectWalls){
+				(void) doMazeMeasurement(&adc_data, &MazeData[xPos][yPos]);
+			}
 			#if ENABLE_EXPLORE_DATALOG
-				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
+				saveExplorationValue(currentFieldState,"fieldState",7);
 			#endif
 			break;
 		case FrontWallDetected:
