@@ -52,7 +52,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 					initpos = pos.xPos;
 				}else if(targetOrientation==west){
 					(*yPos)--;
-					initpos = pos.yPos;
+					initpos = -pos.yPos;
 				}
 			}
 			break;
