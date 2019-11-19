@@ -162,6 +162,9 @@ byte TargetPosStateMaschine(void){
 					posState= turn90State;
 					break;
 			}
+			#if ENABLE_EXPLORE_DATALOG
+				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
+			#endif
 			break;
 		case leftBranchDetected:
 //			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){
