@@ -58,19 +58,30 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			break;
 		case secondQuarterOfField:
 			if(fieldpos>HALF_OF_MAZE_FIELD_LENGTH){
-				fieldState = thirdQuarterOfField;
+				fieldState = detectWalls;
 			}else if(fieldpos<0-QUARTER_OF_MAZE_FIELD_LENGTH-HALF_OF_MAZE_FIELD_LENGTH){
 				fieldState = firstQuarterOfField;
 			}
 			break;
-		case detectWalls:
-			fieldState=thirdQuarterOfField;
+		case detectWalls: //one tick in middle of field: do Measure in Explore...
+			switch(targetOrientation){
+				case north:
+				case east:
+					/*is forwards running */
+					fieldState=thirdQuarterOfField;
+					break;
+				case south:
+				case west:
+					/*is backwards running */
+					fieldState=secondQuarterOfField;
+					break;
+			}
 			break;
 		case thirdQuarterOfField:
 			if(fieldpos>QUARTER_OF_MAZE_FIELD_LENGTH+HALF_OF_MAZE_FIELD_LENGTH){
 				fieldState = fourthQuarterOfField;
 			}else if(fieldpos<0-HALF_OF_MAZE_FIELD_LENGTH){
-				fieldState = secondQuarterOfField;
+				fieldState = detectWalls;
 			}
 			break;
 		case fourthQuarterOfField:
