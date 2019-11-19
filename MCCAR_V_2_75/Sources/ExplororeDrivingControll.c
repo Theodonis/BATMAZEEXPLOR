@@ -170,7 +170,7 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 }
 
 
-
+//ToDo: is an internal Wrapper function-> used to deside if reinit or not... -> should be fixed
 byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir, bool reinit){
 	static t_genericState state_turn90 = gen_initState;
 	static Maze_segments Maze_seg;
@@ -194,9 +194,9 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 				Maze_seg.segments[1].SingleSegment = 0; /* stop after this */
 			}else{
 				if(dir == left){
-					Maze_seg.segments[Maze_seg.numberOfSegments].SingleSegment = 900;
+					Maze_seg.segments[*segmentNumber].SingleSegment = 900;
 				}else if(dir == right){
-					Maze_seg.segments[Maze_seg.numberOfSegments].SingleSegment = -900;
+					Maze_seg.segments[*segmentNumber].SingleSegment = -900;
 				}else{
 					state_turn90 = gen_initState;
 					return ERR_FAILED;
@@ -248,7 +248,7 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 }
 
 byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir){
-	turn90Intern(segmentNumber, currentOrientation, dir, true);
+	return turn90Intern(segmentNumber, currentOrientation, dir, true);
 }
 
 
@@ -272,7 +272,7 @@ byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir
 			 }
 			 break;
 		 case gen_runnigState: /* turn again 90° */
-			 switch(turn90Intern(segmentNumber, currentOrientation, dir, false)){
+			 switch(turn90Intern(segmentNumber, currentOrientation, dir, true)){
 				 case ERR_BUSY:
 					 state_turn180 = gen_runnigState;
 					 break;
