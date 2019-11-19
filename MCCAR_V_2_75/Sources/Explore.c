@@ -151,7 +151,7 @@ byte TargetPosStateMaschine(void){
 			}
 			break;
 		case driveToLeftBranch:
-			switch(driveToBranch(&segmentNumber,left)){
+			switch(driveToBranch(&segmentNumber,right)){
 				case ERR_BUSY:
 					posState = driveToLeftBranch;
 					break;
@@ -182,7 +182,7 @@ byte TargetPosStateMaschine(void){
 			break;
 
 		case turn90State:
-			switch(turn90(&segmentNumber, &currentTargetOrientation, left)){
+			switch(turn90(&segmentNumber, &currentTargetOrientation, right)){
 				case ERR_BUSY:
 					posState = turn90State;
 					break;
@@ -254,7 +254,7 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
 
-		if(saveDataCnt>=4){  //to set sample period (0 => 0,5ms)
+		if(saveDataCnt>=4){  //to set sample period (0 => 0,7ms)
 			incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 			saveDataCnt=0;
 		}else{
