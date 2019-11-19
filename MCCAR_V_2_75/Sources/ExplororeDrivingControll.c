@@ -89,6 +89,7 @@ byte driveToFrontWall(uint8_t* segmentNumber){
 byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 	static t_genericState state_toBranch = gen_initState;
 	static Maze_segments Maze_seg;
+	static uint16_t waitTicksCnt = 1;
 
 	ADC_data_t adc_data;
 
@@ -97,6 +98,8 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 			Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
 			Maze_seg.numberOfSegments = ++(*segmentNumber);
 			state_toBranch = gen_runnigState;
+
+			waitTicksCnt = 1;
 
 			/*put on I_LED's to measure distance correct at frist ADC_Cal in Driving*/
 			//I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();
@@ -128,6 +131,24 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 			}
 
 			break;
+		case gen_waitState:  /* drive some more steps to stop in middle of Branch*/
+			if(exploreDriving(Maze_seg, &adc_data)){
+				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitstait */
+				state_toBranch = gen_initState;
+				return ERR_FAILED;
+			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_AFTER_BRANCHDETECT){
+				state_toBranch 	= gen_deinitState;
+				waitTicksCnt 	= 1;
+				setStopFlag();
+			}else if(adc_data.raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+				state_toBranch 	= gen_deinitState;
+				waitTicksCnt 	= 1;
+				setStopFlag();
+			}else{
+				state_toBranch 	= gen_waitState;
+				waitTicksCnt++;
+			}
+			break;
 		case gen_deinitState: /* Finish driving nd return Ok if finished*/
 			if(exploreDriving(Maze_seg, &adc_data)){
 				state_toBranch = gen_initState;
@@ -140,7 +161,6 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 				return ERR_FAILED;
 			}
 			break;
-		case gen_waitState:  /* not used in this case*/
 		default:
 			state_toBranch = gen_initState;
 			break;
