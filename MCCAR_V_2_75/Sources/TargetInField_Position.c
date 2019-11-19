@@ -26,18 +26,18 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 	}
 
 	if(prevTargetOrientation!=targetOrientation){
-		fieldState = targetHasTurned;
+		fieldState = targetHasTurned; //turn flag to update direction
 	}
 
 	switch(fieldState){
 		case fieldinitState:
-			if(pos.xPos>1.4){
+			if(pos.xPos>1.4){ //value after init of Driving
 				fieldpos = INIT_POS_INFIELD;
 				fieldState = firstQuarterOfField;
 				if(targetOrientation==north || targetOrientation==south){
 					initpos = pos.xPos + INIT_POS_INFIELD;
 				}else{
-					initpos = -pos.yPos;
+					initpos = -pos.yPos; //error?
 				}
 			}
 
