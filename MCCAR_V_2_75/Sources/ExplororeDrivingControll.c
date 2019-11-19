@@ -122,12 +122,12 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 				setStopFlag();
 			}else if(dir==left&&(adc_data.mm_Values.mm_Left>90)){
 				/* Branch detected Finish Driving */
-				state_toBranch = gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
-				setStopFlag();
+				state_toBranch = gen_waitState;//gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
+//				setStopFlag();
 			}else if(dir==right&&(adc_data.mm_Values.mm_Right>90)){
 				/* Branch detected Finish Driving */
-				state_toBranch = gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
-				setStopFlag();
+				state_toBranch = gen_waitState;//gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
+//				setStopFlag();
 			}
 
 			break;
