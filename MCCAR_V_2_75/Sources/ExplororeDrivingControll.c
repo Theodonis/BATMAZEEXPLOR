@@ -220,11 +220,22 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 		case gen_deinitState:
 //			if(exploreDriving(Maze_seg, &adc_data)){
 				/* be sure is terminated, v ref=0 and Segmenttime at end*/
-				(*currentOrientation)++; /* ubdate orientation */
-				state_turn90 = gen_initState;
-				return ERR_OK;
-
 //			}
+			if(dir==left){
+				if(*currentOrientation==north){
+					(*currentOrientation) = west;
+				}else{
+					(*currentOrientation)--;
+				} /* ubdate orientation */
+			}else if(dir==right){
+				if(*currentOrientation==west){
+					(*currentOrientation) = north;
+				}else{
+					(*currentOrientation)++;
+				}/* ubdate orientation */
+			}
+			state_turn90 = gen_initState;
+			return ERR_OK;
 			break;
 		case gen_waitState:  /* not used in this case*/
 		case gen_ErrorState: /* not used in this case*/
