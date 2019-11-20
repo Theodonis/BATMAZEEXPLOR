@@ -187,7 +187,7 @@ void setExplorationDataHeader(uint8_t varName[], uint8_t savepos){
 
 
 void saveExplorationValue(float value, uint8_t varName[], uint8_t savepos){
-	if(savePos<LOGGING_NUMBER_OF_VALUES){
+	if(savepos<LOGGING_NUMBER_OF_VALUES){
 		if(saveLinePointer<LOGGING_LENGTH){
 			if(saveLinePointer==0){
 				setExplorationDataHeader(varName,savepos);
