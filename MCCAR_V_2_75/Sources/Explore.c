@@ -100,7 +100,7 @@ byte TargetPosStateMaschine(void){
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			if(currentFieldState == detectWalls){
-				(void) doMazeMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 			}
 			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(currentFieldState,"fieldState",7);
@@ -135,8 +135,12 @@ byte TargetPosStateMaschine(void){
 					posState= turn90State;
 					break;
 			}
+			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
+			if(currentFieldState == detectWalls){
+				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+			}
 			#if ENABLE_EXPLORE_DATALOG
-				saveExplorationValue(fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation),"fieldState",7);
+				saveExplorationValue(currentFieldState,"fieldState",7);
 			#endif
 			break;
 		case leftBranchDetected:
@@ -218,6 +222,8 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue(driving_data.posEstimation.yPos,"yPos", 10);
 		saveExplorationValue(yPos,"y-Position (index)", 11);
 		saveExplorationValue(adc_data.mm_Values.mm_Left,"mm_Left", 12);
+
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand des aktuellen Feld", 13);
 
 
 
