@@ -31,7 +31,15 @@ void initMaze(t_mazeFieldData* MazePointer){
 	maze.posibDirections.south = ex_unknew;
 	maze.posibDirections.west = ex_unknew;
 
-	for(uint8_t index =0; index<MAZE_FIELDS_LENGTH_EAST_DIRECTION*MAZE_FIELDS_WIDTH_NORTH_DIRECTION; index++){
+	/*init start Field */
+	MazePointer->exploredFlag=TRUE;
+	MazePointer->posibDirections.north = ex_true;
+	MazePointer->posibDirections.east = ex_false;
+	MazePointer->posibDirections.south = ex_false;
+	MazePointer->posibDirections.west = ex_false;
+
+	/*init other fields as unknew (start at secondffield)*/
+	for(uint8_t index = 1; index<MAZE_FIELDS_LENGTH_EAST_DIRECTION*MAZE_FIELDS_WIDTH_NORTH_DIRECTION; index++){
 		*(MazePointer+index) = maze;
 	}
 }
