@@ -8,10 +8,23 @@
 #include "TargetInField_Position.h"
 
 
-t_directions calcDrivingDirection(float theataAngle){
-
-}
-
+/*
+** ===================================================================
+**     Method      :  t_fieldState fieldPositioner(t_PosEstimation pos, uint8_t* xPos,uint8_t* yPos,t_mazeFieldData* maze)
+**
+**
+**     @brief
+**     		State machine to handle the position in current maze field
+**
+**     @param
+**     			- pos: Estimation from driving() of x, y distance and theta angle of target
+**     			- xPos: Pointer to current field x-index of maze data matrix
+**				- yPos: Pointer to current field y-index of maze data matrix
+**
+**     @return
+**         		- fieldState: the current state in field -> allows to do measurement in midle of the field
+**
+*/
 t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation){
 	static float fieldpos 	= 0; /*pos in curent field */
 	static float initpos 	= 0;
@@ -58,12 +71,12 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			break;
 		case secondQuarterOfField:
 			if(fieldpos>HALF_OF_MAZE_FIELD_LENGTH){
-				fieldState = detectWalls;
+				fieldState = detectSideWalls;
 			}else if(fieldpos<0-QUARTER_OF_MAZE_FIELD_LENGTH-HALF_OF_MAZE_FIELD_LENGTH){
 				fieldState = firstQuarterOfField;
 			}
 			break;
-		case detectWalls: //one tick in middle of field: do Measure in Explore...
+		case detectSideWalls: //one tick in middle of field: do Measure in Explore...
 			switch(targetOrientation){
 				case north:
 				case east:
@@ -81,7 +94,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			if(fieldpos>QUARTER_OF_MAZE_FIELD_LENGTH+HALF_OF_MAZE_FIELD_LENGTH){
 				fieldState = fourthQuarterOfField;
 			}else if(fieldpos<0-HALF_OF_MAZE_FIELD_LENGTH){
-				fieldState = detectWalls;
+				fieldState = detectSideWalls;
 			}
 			break;
 		case fourthQuarterOfField:

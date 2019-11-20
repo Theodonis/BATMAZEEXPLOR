@@ -25,7 +25,7 @@ typedef enum fieldstate{
 	secondQuarterOfField,
 	thirdQuarterOfField,
 	fourthQuarterOfField,
-	detectWalls,
+	detectSideWalls,
 	targetHasTurned
 
 }t_fieldState;
@@ -38,23 +38,7 @@ typedef enum fieldstate{
 
 
 
-/*
-** ===================================================================
-**     Method      :  t_fieldState fieldPositioner(t_PosEstimation pos, uint8_t* xPos,uint8_t* yPos,t_mazeFieldData* maze)
-**
-**
-**     @brief
-**     		State machine to handle the position in current maze field
-**
-**     @param
-**     			- pos: Estimation from driving() of x, y distance and theta angle of target
-**     			- xPos: Pointer to current field x-index of maze data matrix
-**				- yPos: Pointer to current field y-index of maze data matrix
-**
-**     @return
-**         		- fieldState: the current state in field -> allows to do measurement in midle of the field
-**
-*/
+
 t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation);
 
 
