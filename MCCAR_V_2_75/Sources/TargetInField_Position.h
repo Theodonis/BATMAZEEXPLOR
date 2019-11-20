@@ -55,7 +55,6 @@ typedef enum fieldstate{
 **         		- fieldState: the current state in field -> allows to do measurement in midle of the field
 **
 */
-/* ===================================================================*/
 t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation);
 
 

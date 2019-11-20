@@ -42,10 +42,6 @@
 **                           ERR_BUSY - State machine is driving
 **
 */
-/* ===================================================================*/
-
-
-
 byte TargetPosStateMaschine(void){
 	static t_PosState posState;
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
@@ -104,7 +100,7 @@ byte TargetPosStateMaschine(void){
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			if(currentFieldState == detectWalls){
-				(void) doMazeMeasurement(&adc_data, &MazeData[xPos][yPos]);
+				(void) doMazeMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 			}
 			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(currentFieldState,"fieldState",7);
@@ -239,7 +235,7 @@ byte TargetPosStateMaschine(void){
 		}
 	#endif
 
-		return ERR_BUSY;
+	return ERR_BUSY;
 
 }
 

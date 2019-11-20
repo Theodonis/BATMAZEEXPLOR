@@ -9,8 +9,8 @@
 #define SOURCES_MAZEHNDL_H_
 
 
-
 void initMaze(t_mazeFieldData* MazePointer);
-byte doMazeMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField);
+
+byte doMazeMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
 
 #endif /* SOURCES_MAZEHNDL_H_ */
