@@ -99,8 +99,29 @@ byte TargetPosStateMaschine(void){
 					break;
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
-			if(currentFieldState == detectSideWalls){
+			switch(currentFieldState){
+			 case detectSideWalls:
 				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+				break;
+			 case saveFrontwall:
+				 switch(currentTargetOrientation){
+				 	 case north:
+				 		 (void) saveFrontWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
+				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+				 		 break;
+				 	 case east:
+				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
+				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
+				 		 break;
+				 	 case south:
+				 		 (void) saveFrontWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
+				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
+				 		 break;
+				 	 case west:
+				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
+				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
+				 		 break;
+				 }
 			}
 			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(currentFieldState,"fieldState",7);
@@ -136,8 +157,29 @@ byte TargetPosStateMaschine(void){
 					break;
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
-			if(currentFieldState == detectSideWalls){
-				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+			switch(currentFieldState){
+			 	 case detectSideWalls:
+					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+					break;
+			 	 case saveFrontwall:
+					 switch(currentTargetOrientation){
+						 case north:
+							 (void) saveFrontWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+							 break;
+						 case east:
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
+							 break;
+						 case south:
+							 (void) saveFrontWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
+							 break;
+						 case west:
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
+							 break;
+					 }
 			}
 			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(currentFieldState,"fieldState",7);
