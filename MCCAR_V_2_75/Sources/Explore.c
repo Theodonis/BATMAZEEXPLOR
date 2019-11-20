@@ -99,7 +99,7 @@ byte TargetPosStateMaschine(void){
 					break;
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
-			if(currentFieldState == detectWalls){
+			if(currentFieldState == detectSideWalls){
 				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 			}
 			#if ENABLE_EXPLORE_DATALOG
@@ -136,7 +136,7 @@ byte TargetPosStateMaschine(void){
 					break;
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
-			if(currentFieldState == detectWalls){
+			if(currentFieldState == detectSideWalls){
 				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 			}
 			#if ENABLE_EXPLORE_DATALOG
