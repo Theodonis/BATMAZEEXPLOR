@@ -26,6 +26,7 @@ typedef enum fieldstate{
 	thirdQuarterOfField,
 	fourthQuarterOfField,
 	detectSideWalls,
+	saveFrontwall,
 	targetHasTurned
 
 }t_fieldState;

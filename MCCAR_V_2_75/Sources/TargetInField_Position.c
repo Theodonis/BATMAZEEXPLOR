@@ -59,7 +59,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			if(fieldpos>QUARTER_OF_MAZE_FIELD_LENGTH){
 				fieldState = secondQuarterOfField;
 			}else if(fieldpos<0-MAZE_FIELD_LENGTH ){
-				fieldState = fourthQuarterOfField;
+				fieldState = saveFrontwall;
 				if(targetOrientation==south){
 					(*xPos)--;
 					initpos = pos.xPos;
@@ -99,7 +99,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			break;
 		case fourthQuarterOfField:
 			if(fieldpos>MAZE_FIELD_LENGTH){
-				fieldState = firstQuarterOfField;
+				fieldState = saveFrontwall;
 				if(targetOrientation==north){
 					(*xPos)++;
 					initpos = pos.xPos;
@@ -110,6 +110,22 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			}else if(fieldpos<0-QUARTER_OF_MAZE_FIELD_LENGTH){
 				fieldState = thirdQuarterOfField;
 			}
+			break;
+
+		case saveFrontwall:
+			switch(targetOrientation){
+				case north:
+				case east:
+					/*is forwards running */
+					fieldState = firstQuarterOfField;
+					break;
+				case south:
+				case west:
+					fieldState = fourthQuarterOfField;
+					/*is backwards running */
+					break;
+			}
+
 			break;
 		case targetHasTurned:
 			if((prevTargetOrientation-targetOrientation)%2){//is a 90° turn
