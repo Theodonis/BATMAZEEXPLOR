@@ -11,6 +11,8 @@
 
 void initMaze(t_mazeFieldData* MazePointer);
 
-byte doMazeMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
+byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
+
+byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen);
 
 #endif /* SOURCES_MAZEHNDL_H_ */

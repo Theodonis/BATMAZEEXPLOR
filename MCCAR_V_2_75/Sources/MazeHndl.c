@@ -39,7 +39,7 @@ void initMaze(t_mazeFieldData* MazePointer){
 
 /*
 ** ===================================================================
-**     	Method      :  byte doMazeMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField)
+**     	Method      :  byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField)
 **
 **     	@brief	Measure side walls in each middle of Field
 **
@@ -47,10 +47,10 @@ void initMaze(t_mazeFieldData* MazePointer){
 **     			currentField: Pointer to currentField to write data in
 **
 **		@return Error code, possible codes:
-**                           ERR_OK - measurement don
-**                           ERR_FAILED - Wall or branch to drive until not detected
+**                           ERR_OK - measurement done
+**                           ERR_FAILED - not yet used
 */
-byte doMazeMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
+byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
 	switch(currentTargetOrientation){
 		case north:
 			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
@@ -104,3 +104,38 @@ byte doMazeMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_di
 	currentField->exploredFlag = true;
 	return ERR_OK;
 }
+
+
+/*
+** ===================================================================
+**     	Method      :  byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen){
+**
+**     	@brief	To set front wall info of current filed in maze
+**
+**     	@param	currentField: Pointer to currentField to write data in
+**     			currentTargetOrientation: current orientation of MC-Car
+**     			frontIsOpen: the value, should be written in in MazeFieldinfo
+**     				->ex_true: possible to drive strait, ex_false: not possible
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - value set
+**                           ERR_FAILED - not yet used
+*/
+byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen){
+	switch(currentTargetOrientation){
+		case north:
+			currentField->posibDirections.north = frontIsOpen;
+			break;
+		case east:
+			currentField->posibDirections.east = frontIsOpen;
+			break;
+		case south:
+			currentField->posibDirections.south = frontIsOpen;
+			break;
+		case west:
+			currentField->posibDirections.west = frontIsOpen;
+			break;
+	}
+	return ERR_OK;
+}
+
