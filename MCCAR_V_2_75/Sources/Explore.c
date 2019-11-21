@@ -253,26 +253,31 @@ byte TargetPosStateMaschine(void){
 
 	#if ENABLE_EXPLORE_DATALOG
 
+	saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
 //		saveExplorationValue(adc_data.raw_Values.raw_Right,"rawRight", logValCnt++);
 		saveExplorationValue(posState,"state",3);
 		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
-		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
+//		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
+
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
-		saveExplorationValue(adc_data.voltage_Values.v_Bat,"battery voltage", 9);
+
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
+//		saveExplorationValue(adc_data.voltage_Values.v_Bat,"battery voltage", 9);
 
 		saveExplorationValue(driving_data.posEstimation.yPos,"yPos", 10);
 		saveExplorationValue(yPos,"y-Position (index)", 11);
 		saveExplorationValue(adc_data.mm_Values.mm_Left,"mm_Left", 12);
 
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand des aktuellen Feld", 13);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
 
 
 
 	#if ENABLE_TIMING_CONROLL
-		uint16_t ticksAfterExplore;
-		FC1_GetCounterValue(&ticksAfterExplore);
-		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
+//		uint16_t ticksAfterExplore;
+//		FC1_GetCounterValue(&ticksAfterExplore);
+//		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
 
 		if(saveDataCnt>=4){  //to set sample period (0 => 0,7ms)
