@@ -23,10 +23,7 @@ typedef enum genericState{
 	gen_ErrorState
 }t_genericState;
 
-typedef enum dir{
-	left,
-	right
-} t_dir;
+
 
 #define  getLatestADC() (get_latest_ADC_data()) /* wrapper to us function in Explore.c*/
 

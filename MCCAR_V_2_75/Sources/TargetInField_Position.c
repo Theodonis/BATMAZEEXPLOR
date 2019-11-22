@@ -184,6 +184,46 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 }
 
 
+/*
+	** ===================================================================
+	**     Method      :  t_directions get_wallOrientation(t_directions targetOrientation, t_dir dir)
+	**
+	**
+	**     @brief
+	**     		calculates the wall orientation (north, east...) in rel directen of MC-Car (right, left behinfe)
+	**
+	**     @param
+	**     			- targetOrientation: Current orientation of MC-Cat
+	**     			- dir: direction relative to drive direction (right, left behind)
+	**
+	**     @return
+	**         		- wallOrientation: absolute orientation of wall in directon "dir"
+	**
+	*/
+t_directions get_wallOrientation(t_directions targetOrientation, t_dir dir){
+	t_directions wallOrientation;
+	if(dir==left){
+		if(targetOrientation==north){
+			wallOrientation = west;
+		}else{
+			wallOrientation = targetOrientation-1;
+		} /* ubdate orientation */
+	}else if(dir==right){
+		if(targetOrientation==west){
+			wallOrientation = north;
+		}else{
+			wallOrientation = targetOrientation+1;
+		}/* ubdate orientation */
+	}else if(dir==behind){
+		if(targetOrientation==south){
+			wallOrientation = north;
+		}else{
+			wallOrientation = targetOrientation+2;
+		}
+	}
+}
+
+
 
 bool segEndDetection(ADC_data_t *adcData,bool *segmentEnd) {
 

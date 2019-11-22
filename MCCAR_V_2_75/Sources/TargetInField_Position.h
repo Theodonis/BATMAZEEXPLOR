@@ -43,5 +43,8 @@ typedef enum fieldstate{
 t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation);
 
 
+t_directions  get_wallOrientation(t_directions targetOrientation, t_dir dir);
+
+
 
 #endif /* SOURCES_TARGETINFIELD_POSITION_H_ */

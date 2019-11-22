@@ -17,6 +17,8 @@
 
 typedef enum PosState{
 	initState,
+	explore,
+	calcNextStep,
 	driveToFront,
 	FrontWallDetected,
 	turnState,
@@ -31,7 +33,11 @@ typedef enum PosState{
 	stateNumbers /*must be last one*/
 }t_PosState;
 
-
+typedef enum dir{
+	left,
+	right,
+	behind
+} t_dir;
 
 typedef enum directons{
 	north,
