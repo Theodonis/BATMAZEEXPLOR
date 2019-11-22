@@ -87,6 +87,7 @@ byte TargetPosStateMaschine(void){
 			return ERR_BUSY;
 			break;
 		case driveToFront:
+			/*Driving*/
 			switch(driveToFrontWall(&segmentNumber)){
 				case ERR_BUSY:
 					posState = driveToFront;
@@ -96,32 +97,65 @@ byte TargetPosStateMaschine(void){
 					return ERR_FAILED;
 				case ERR_OK:
 					posState= turnState;
+					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation); /* do an extra sideMasurement before turn*/
+					(void) saveFrontWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);/*Front wall of old field */
+
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
+					 saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
+					 saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
+					 saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
+
+					incrmentSaveLinePointer(); /*save last fieldinfos*/
 					break;
 			}
+
+			/*Field info -> measure and log...*/
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			switch(currentFieldState){
-			 case detectSideWalls:
-				(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
-				break;
-			 case saveFrontwall:
-				 switch(currentTargetOrientation){
-				 	 case north:
-				 		 (void) saveFrontWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
-				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
-				 		 break;
-				 	 case east:
-				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
-				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
-				 		 break;
-				 	 case south:
-				 		 (void) saveFrontWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
-				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
-				 		 break;
-				 	 case west:
-				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
-				 		 (void) saveFrontWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
-				 		 break;
-				 }
+				 case detectSideWalls:
+					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+					break;
+				 case saveFrontwall:
+					 switch(currentTargetOrientation){
+						 case north:
+							 (void) saveFrontWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
+							 break;
+						 case east:
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.west,"Westwand", 13);
+							 break;
+						 case south:
+							 (void) saveFrontWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.west,"Westwand", 13);
+							 break;
+						 case west:
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
+							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
+							 break;
+					 }
+					 incrmentSaveLinePointer(); /*only log at enter of new field*/
+					 break;
 			}
 			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(currentFieldState,"fieldState",7);
@@ -154,6 +188,12 @@ byte TargetPosStateMaschine(void){
 					return ERR_FAILED;
 				case ERR_OK:
 					posState= turn90State;
+					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation); /* do an extra sideMasurement before turn*/
+					if(adc_data.mm_Values.mm_MiddleL < 110){/*Set front wall before turn */
+						 (void) saveFrontWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);
+					}else{
+						 (void) saveFrontWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_true);/*Front wall of old field */
+					}
 					break;
 			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
@@ -161,25 +201,47 @@ byte TargetPosStateMaschine(void){
 			 	 case detectSideWalls:
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
-			 	 case saveFrontwall:
+				 case saveFrontwall:
 					 switch(currentTargetOrientation){
 						 case north:
 							 (void) saveFrontWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
 							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
 							 break;
 						 case east:
 							 (void) saveFrontWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
 							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.west,"Westwand", 13);
 							 break;
 						 case south:
 							 (void) saveFrontWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
 							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.west,"Westwand", 13);
 							 break;
 						 case west:
 							 (void) saveFrontWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
 							 (void) saveFrontWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
+							 /*log info of old Field */
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.north,"Nordwand", 2);
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.east,"Ostwand", 5);
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.south,"Südwand", 9);
+							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
 							 break;
 					 }
+					 incrmentSaveLinePointer(); /*only log at enter of new field->means all other values are from one call before*/
+					 break;
 			}
 			#if ENABLE_EXPLORE_DATALOG
 				saveExplorationValue(currentFieldState,"fieldState",7);
@@ -253,24 +315,21 @@ byte TargetPosStateMaschine(void){
 
 	#if ENABLE_EXPLORE_DATALOG
 
-	saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
+
 //		saveExplorationValue(adc_data.raw_Values.raw_Right,"rawRight", logValCnt++);
 		saveExplorationValue(posState,"state",3);
 		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
 //		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
 
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
 
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
 //		saveExplorationValue(adc_data.voltage_Values.v_Bat,"battery voltage", 9);
 
 		saveExplorationValue(driving_data.posEstimation.yPos,"yPos", 10);
 		saveExplorationValue(yPos,"y-Position (index)", 11);
-		saveExplorationValue(adc_data.mm_Values.mm_Left,"mm_Left", 12);
+		saveExplorationValue(adc_data.mm_Values.mm_MiddleL,"mm_MiddleL", 12);
 
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
 
 
 
@@ -281,7 +340,7 @@ byte TargetPosStateMaschine(void){
 	#endif
 
 		if(saveDataCnt>=4){  //to set sample period (0 => 0,7ms)
-			incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
+//			incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 			saveDataCnt=0;
 		}else{
 			saveDataCnt++;

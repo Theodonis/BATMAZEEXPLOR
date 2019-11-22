@@ -17,7 +17,7 @@
 #define QUARTER_OF_MAZE_FIELD_LENGTH 	(0.0475)//(0.0425)
 #define INIT_POS_INFIELD 				(0.078)		//(0.074)
 #define POS_INFIELD_AFTER_TURN_180 		(0.075)//not yet done...		//(0.075)
-#define POS_INFIELD_AFTER_TURN_90 		(0.0425)//not yet done...
+#define POS_INFIELD_AFTER_TURN_90 		(0.0725)//not yet done...
 
 typedef enum fieldstate{
 	fieldinitState,
