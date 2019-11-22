@@ -19,6 +19,7 @@ typedef enum PosState{
 	initState,
 	explore,
 	calcNextStep,
+	turnleft,
 	driveToFront,
 	FrontWallDetected,
 	turnState,

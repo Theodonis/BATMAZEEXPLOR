@@ -86,6 +86,61 @@ byte TargetPosStateMaschine(void){
 			#endif
 			return ERR_BUSY;
 			break;
+
+		case explore:
+			/*drive strait until e wall and detect all field infos */
+			switch(driveToFrontWall(&segmentNumber,&adc_data)){
+				case ERR_BUSY:
+					posState = driveToFront;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= calcNextStep;
+			}
+			break;
+		case calcNextStep:
+			switch(get_wallOrientation(currentTargetOrientation,left)){/*is left an unexplored branch?*/
+				case north:
+					if(MazeData[xPos][yPos].posibDirections.north== ex_true){
+						if(!MazeData[xPos+1][yPos].exploredFlag){/*has even been there?*/
+
+							/* it's an unexplored branch!*/
+							posState= turnleft;
+						}
+					}
+					break;
+				case east:
+					if(MazeData[xPos][yPos].posibDirections.east== ex_true){
+						if(!MazeData[xPos][yPos+1].exploredFlag){ /*has even been there?*/
+
+							/* it's an unexplored branch!*/
+							posState= turnleft;
+						}
+					}
+					break;
+				case south:
+					if(MazeData[xPos][yPos].posibDirections.south== ex_true){
+						if(!MazeData[xPos-1][yPos].exploredFlag){ /*has even been there?*/
+
+							/* it's an unexplored branch!*/
+							posState= turnleft;
+						}
+					}
+					break;
+				case west:
+					if(MazeData[xPos][yPos].posibDirections.west== ex_true){
+						if(!MazeData[xPos][yPos-1].exploredFlag){ /*has even been there?*/
+
+							/* it's an unexplored branch!*/
+							posState= turnleft;
+						}
+					}
+					break;
+			}
+			break;
+
 		case driveToFront:
 			/*Driving*/
 			switch(driveToFrontWall(&segmentNumber,&adc_data)){
