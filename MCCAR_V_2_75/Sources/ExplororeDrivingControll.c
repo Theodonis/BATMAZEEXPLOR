@@ -86,12 +86,12 @@ byte driveToFrontWall(uint8_t* segmentNumber){
 	return ERR_BUSY;
 }
 
-byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
+byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data){
 	static t_genericState state_toBranch = gen_initState;
 	static Maze_segments Maze_seg;
 	static uint16_t waitTicksCnt = 1;
 
-	ADC_data_t adc_data;
+//	ADC_data_t adc_data;
 
 	switch(state_toBranch){
 		case gen_initState: /* Set up segments to drive */
@@ -106,25 +106,25 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 			//->should be done from Application
 
 			//don't call yet to because of I_LED's not read -> no more problem because use of newest adc in function
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				return ERR_FAILED;
 			}
 			break;
 		case gen_runnigState: /*Drive till branch
 		 -> error if segments finished driven without branch detected
 		 -> error if front wall bevore branch*/
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				state_toBranch=gen_initState;
 				return ERR_FAILED;
-			}else if(adc_data.raw_Values.raw_MiddleL < 55000){
+			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
 				/*Error but Driving must be finished */
 				state_toBranch=gen_ErrorState;
 				setStopFlag();
-			}else if(dir==left&&(adc_data.mm_Values.mm_Left>90)){
+			}else if(dir==left&&(adc_data->mm_Values.mm_Left>90)){
 				/* Branch detected Finish Driving */
 				state_toBranch = gen_waitState;//gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
 //				setStopFlag();
-			}else if(dir==right&&(adc_data.mm_Values.mm_Right>90)){
+			}else if(dir==right&&(adc_data->mm_Values.mm_Right>90)){
 				/* Branch detected Finish Driving */
 				state_toBranch = gen_waitState;//gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
 //				setStopFlag();
@@ -132,7 +132,7 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 
 			break;
 		case gen_waitState:  /* drive some more steps to stop in middle of Branch*/
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitstait */
 				state_toBranch = gen_initState;
 				return ERR_FAILED;
@@ -140,7 +140,7 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 				state_toBranch 	= gen_deinitState;
 				waitTicksCnt 	= 1;
 				setStopFlag();
-			}else if(adc_data.raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
 				state_toBranch 	= gen_deinitState;
 				waitTicksCnt 	= 1;
 				setStopFlag();
@@ -150,13 +150,13 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir){
 			}
 			break;
 		case gen_deinitState: /* Finish driving nd return Ok if finished*/
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				state_toBranch = gen_initState;
 				return ERR_OK;
 			}
 			break;
 		case gen_ErrorState: /* finish driving and return Error*/
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				state_toBranch = gen_initState;
 				return ERR_FAILED;
 			}

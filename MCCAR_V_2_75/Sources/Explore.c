@@ -179,7 +179,7 @@ byte TargetPosStateMaschine(void){
 			}
 			break;
 		case driveToLeftBranch:
-			switch(driveToBranch(&segmentNumber,right)){
+			switch(driveToBranch(&segmentNumber,right,&adc_data)){
 				case ERR_BUSY:
 					posState = driveToLeftBranch;
 					break;
