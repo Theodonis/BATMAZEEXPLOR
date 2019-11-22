@@ -48,31 +48,31 @@ bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 
 
 
-byte driveToFrontWall(uint8_t* segmentNumber){
+byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 	static t_genericState state_toWall = gen_initState;
 	static Maze_segments Maze_seg;
-	ADC_data_t adc_data;
+//	ADC_data_t adc_data;
 
 	switch(state_toWall){
 		case gen_initState: /* Set up segments to drive */
 			Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
 			Maze_seg.numberOfSegments = ++(*segmentNumber);
 			state_toWall = gen_runnigState;
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				return ERR_FAILED;
 			}
 			break;
 		case gen_runnigState: /*Drive till wall -> error if segments driven without Walldetection*/
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				state_toWall=gen_initState;
 				return ERR_FAILED;
-			}else if(adc_data.raw_Values.raw_MiddleL < 55000){
+			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
 				state_toWall=gen_deinitState;
 				setStopFlag();
 			}
 			break;
 		case gen_deinitState: /* Finish driving nd return Ok if finished*/
-			if(exploreDriving(Maze_seg, &adc_data)){
+			if(exploreDriving(Maze_seg, adc_data)){
 				state_toWall = gen_initState;
 				return ERR_OK;
 			}

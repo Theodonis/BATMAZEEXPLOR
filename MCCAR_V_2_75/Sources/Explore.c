@@ -88,7 +88,7 @@ byte TargetPosStateMaschine(void){
 			break;
 		case driveToFront:
 			/*Driving*/
-			switch(driveToFrontWall(&segmentNumber)){
+			switch(driveToFrontWall(&segmentNumber,&adc_data)){
 				case ERR_BUSY:
 					posState = driveToFront;
 					break;

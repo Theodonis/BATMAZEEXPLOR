@@ -30,7 +30,7 @@ typedef enum dir{
 
 #define  getLatestADC() (get_latest_ADC_data()) /* wrapper to us function in Explore.c*/
 
-byte driveToFrontWall(uint8_t* segmentNumber);
+byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data);
 byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data);
 byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
 byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
