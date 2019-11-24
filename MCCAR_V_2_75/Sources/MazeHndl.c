@@ -116,12 +116,12 @@ byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, 
 
 /*
 ** ===================================================================
-**     	Method      :  byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField)
+**     	Method      :  byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTargetOrientation)
 **
-**     	@brief	Measure side walls in each middle of Field
+**     	@brief	set Flag if current Field has an unexplored way after leaving
 **
-**     	@param	adc_data: Pointer to current adc values
-**     			currentField: Pointer to currentField to write data in
+**     	@param	currentField: Pointer to currentField to write data in
+**     			currentTargetOrientation: current driving direction of MC-Car
 **
 **		@return Error code, possible codes:
 **                           ERR_OK - measurement done

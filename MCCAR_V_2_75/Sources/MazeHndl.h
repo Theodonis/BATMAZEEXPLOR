@@ -15,4 +15,6 @@ byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, 
 
 byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen);
 
+byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
+
 #endif /* SOURCES_MAZEHNDL_H_ */

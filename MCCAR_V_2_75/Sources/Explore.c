@@ -307,6 +307,7 @@ byte TargetPosStateMaschine(void){
 							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
 							 break;
 					 }
+					 (void)unexploredBranchSet(&MazeData[xPos][yPos], currentTargetOrientation);
 					 incrmentSaveLinePointer(); /*only log at enter of new field*/
 					 break;
 			}
