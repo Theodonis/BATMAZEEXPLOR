@@ -9,6 +9,7 @@
 #include "ExploreConfig.h"
 #include "MazeHndl.h"
 #include "stdbool.h"
+#include "TargetInField_Position.h"
 
 
 /*
@@ -110,6 +111,84 @@ byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, 
 			break;
 	}
 	currentField->exploredFlag = true;
+	return ERR_OK;
+}
+
+/*
+** ===================================================================
+**     	Method      :  byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField)
+**
+**     	@brief	Measure side walls in each middle of Field
+**
+**     	@param	adc_data: Pointer to current adc values
+**     			currentField: Pointer to currentField to write data in
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - measurement done
+**                           ERR_FAILED - not yet used
+*/
+byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
+	currentField->hasUnexploredBranchFlag=false;
+	switch(get_wallOrientation(currentTargetOrientation,left)){
+		case north:
+			if(currentField->posibDirections.north==ex_true){
+				if((currentField+1)->exploredFlag==false){
+					currentField->hasUnexploredBranchFlag=true;
+				}
+			}
+			break;
+		case east:
+			if(currentField->posibDirections.east==ex_true){
+				if((currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
+					currentField->hasUnexploredBranchFlag=true;
+				}
+			}
+			break;
+		case south:
+			if(currentField->posibDirections.south==ex_true){
+				if((currentField-1)->exploredFlag==false){
+					currentField->hasUnexploredBranchFlag=true;
+				}
+			}
+			break;
+		case west:
+			if(currentField->posibDirections.west==ex_true){
+				if((currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
+					currentField->hasUnexploredBranchFlag=true;
+				}
+			}
+			break;
+	}
+	switch(get_wallOrientation(currentTargetOrientation,right)){
+			case north:
+				if(currentField->posibDirections.north==ex_true){
+					if((currentField+1)->exploredFlag==false){
+						currentField->hasUnexploredBranchFlag=true;
+					}
+				}
+				break;
+			case east:
+				if(currentField->posibDirections.east==ex_true){
+					if((currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
+						currentField->hasUnexploredBranchFlag=true;
+					}
+				}
+				break;
+			case south:
+				if(currentField->posibDirections.south==ex_true){
+					if((currentField-1)->exploredFlag==false){
+						currentField->hasUnexploredBranchFlag=true;
+					}
+				}
+				break;
+			case west:
+				if(currentField->posibDirections.west==ex_true){
+					if((currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
+						currentField->hasUnexploredBranchFlag=true;
+					}
+				}
+				break;
+	}
 	return ERR_OK;
 }
 
