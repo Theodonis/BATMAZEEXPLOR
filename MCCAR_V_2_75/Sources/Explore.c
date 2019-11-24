@@ -29,12 +29,10 @@
 **     Method      :  exploreDriving(Maze_segments MazeSegmentsToBeDriven, uint8_t* logValCnt)
 **
 **     @brief
-**     		Adaptation from Driving(MazeSegmentsToBeDriven) -> with this function instead of
-**     		call driving directly is the time after the call also logged.
+**     		Main FSM to handle exploration
 **
 **     @param
-**						- MazeSegmentsToBeDriven: way to drive -> Driving() in Driving.c
-**						- logValCnt: pointer to Log variable number
+
 **     @return
 **                      - Error code, possible codes:
 **                           ERR_OK - State machine finished
@@ -47,8 +45,8 @@ byte TargetPosStateMaschine(void){
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
-	static t_directions wayHist = north;
-
+	static t_directions wayHist[SIZE_OF_WAY_HIST];
+	static uint8_t wayHistPointer = 0;
 	t_fieldState currentFieldState = 0;
 
 
@@ -232,7 +230,7 @@ byte TargetPosStateMaschine(void){
 			break;
 
 		case returnToBranch:
-			if(currentTargetOrientation == get_wallOrientation(wayHist,behind)){
+			if(currentTargetOrientation == get_wallOrientation(wayHist[wayHistPointer],behind)){
 
 			}
 
@@ -308,6 +306,7 @@ byte TargetPosStateMaschine(void){
 							 break;
 					 }
 					 (void)unexploredBranchSet(&MazeData[xPos][yPos], currentTargetOrientation);
+					 wayHist[wayHistPointer++]=currentTargetOrientation;
 					 incrmentSaveLinePointer(); /*only log at enter of new field*/
 					 break;
 			}
@@ -394,6 +393,9 @@ byte TargetPosStateMaschine(void){
 							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
 							 break;
 					 }
+
+					 (void)unexploredBranchSet(&MazeData[xPos][yPos], currentTargetOrientation);
+					 wayHist[wayHistPointer++]=currentTargetOrientation;
 					 incrmentSaveLinePointer(); /*only log at enter of new field->means all other values are from one call before*/
 					 break;
 			}
