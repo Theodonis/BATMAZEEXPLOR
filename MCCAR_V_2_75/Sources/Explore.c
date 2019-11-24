@@ -47,6 +47,7 @@ byte TargetPosStateMaschine(void){
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
+	static t_directions wayHist = north;
 
 	t_fieldState currentFieldState = 0;
 
@@ -88,7 +89,7 @@ byte TargetPosStateMaschine(void){
 			break;
 
 		case explore:
-			/*drive strait until e wall and detect all field infos */
+			/*drive strait until e wall and detect all field info */
 			switch(driveToFrontWall(&segmentNumber,&adc_data)){
 				case ERR_BUSY:
 					posState = driveToFront;
@@ -98,16 +99,17 @@ byte TargetPosStateMaschine(void){
 					return ERR_FAILED;
 				case ERR_OK:
 					posState= calcNextStep;
+					break;
 			}
 			break;
 		case calcNextStep:
-			switch(get_wallOrientation(currentTargetOrientation,left)){/*is left an unexplored branch?*/
+			switch(get_wallOrientation(currentTargetOrientation,left)){/*is left an branch?*/
 				case north:
 					if(MazeData[xPos][yPos].posibDirections.north== ex_true){
 						if(!MazeData[xPos+1][yPos].exploredFlag){/*has even been there?*/
 
 							/* it's an unexplored branch!*/
-							posState= turnleft;
+							posState= turnLeft;
 						}
 					}
 					break;
@@ -116,7 +118,7 @@ byte TargetPosStateMaschine(void){
 						if(!MazeData[xPos][yPos+1].exploredFlag){ /*has even been there?*/
 
 							/* it's an unexplored branch!*/
-							posState= turnleft;
+							posState= turnLeft;
 						}
 					}
 					break;
@@ -125,7 +127,7 @@ byte TargetPosStateMaschine(void){
 						if(!MazeData[xPos-1][yPos].exploredFlag){ /*has even been there?*/
 
 							/* it's an unexplored branch!*/
-							posState= turnleft;
+							posState= turnLeft;
 						}
 					}
 					break;
@@ -134,13 +136,109 @@ byte TargetPosStateMaschine(void){
 						if(!MazeData[xPos][yPos-1].exploredFlag){ /*has even been there?*/
 
 							/* it's an unexplored branch!*/
-							posState= turnleft;
+							posState= turnLeft;
 						}
 					}
 					break;
 			}
+			if(posState != turnLeft){
+				switch(get_wallOrientation(currentTargetOrientation,right)){/*is right an branch?*/
+					case north:
+						if(MazeData[xPos][yPos].posibDirections.north== ex_true){
+							if(!MazeData[xPos+1][yPos].exploredFlag){/*has even been there?*/
+
+								/* it's an unexplored branch!*/
+								posState= turnRight;
+							}
+						}
+						break;
+					case east:
+						if(MazeData[xPos][yPos].posibDirections.east== ex_true){
+							if(!MazeData[xPos][yPos+1].exploredFlag){ /*has even been there?*/
+
+								/* it's an unexplored branch!*/
+								posState= turnRight;
+							}
+						}
+						break;
+					case south:
+						if(MazeData[xPos][yPos].posibDirections.south== ex_true){
+							if(!MazeData[xPos-1][yPos].exploredFlag){ /*has even been there?*/
+
+								/* it's an unexplored branch!*/
+								posState= turnRight;
+							}
+						}
+						break;
+					case west:
+						if(MazeData[xPos][yPos].posibDirections.west== ex_true){
+							if(!MazeData[xPos][yPos-1].exploredFlag){ /*has even been there?*/
+
+								/* it's an unexplored branch!*/
+								posState= turnRight;
+							}
+						}
+						break;
+				}
+			}
+			if(posState != turnLeft && posState != turnRight){
+				posState = deadEnd; /* drive back to last unexplored branch */
+			}
 			break;
 
+		case turnLeft:
+			/*turn left 90° */
+			switch(turn90(&segmentNumber, &currentTargetOrientation, left)){
+				case ERR_BUSY:
+					posState = turnLeft;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= explore;
+					break;
+			}
+			break;
+
+		case turnRight:
+			/*turn left 90° */
+			switch(turn90(&segmentNumber, &currentTargetOrientation, right)){
+				case ERR_BUSY:
+					posState = turnRight;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= explore;
+					break;
+			}
+			break;
+
+		case deadEnd:
+			/*turn 180° */
+			switch(turn180(&segmentNumber, &currentTargetOrientation, right)){
+				case ERR_BUSY:
+					posState = deadEnd;
+					break;
+				case ERR_FAILED:
+					posState =  initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					posState= returnToBranch;
+					break;
+			}
+			break;
+
+		case returnToBranch:
+			if(currentTargetOrientation == get_wallOrientation(wayHist,behind)){
+
+			}
+
+
+
+		/* old states */
 		case driveToFront:
 			/*Driving*/
 			switch(driveToFrontWall(&segmentNumber,&adc_data)){

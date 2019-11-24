@@ -19,7 +19,13 @@ typedef enum PosState{
 	initState,
 	explore,
 	calcNextStep,
-	turnleft,
+	turnLeft,
+	turnRight,
+	deadEnd,
+	turnAround,
+	returnToBranch,
+
+	/* test states */
 	driveToFront,
 	FrontWallDetected,
 	turnState,
@@ -64,8 +70,9 @@ typedef struct posibleDirections{
 }t_possibleDirections;
 
 typedef struct mazeFieldData{ // Field means one little square in built with four Säulen?
-	bool exploredFlag; // gets true when when field is explored
+	bool exploredFlag; // gets true when field is explored
 	t_possibleDirections posibDirections;
+	bool hasUnexploredBranchFlag; // gets true when when field has an unexplored branch
 
 }t_mazeFieldData;
 
