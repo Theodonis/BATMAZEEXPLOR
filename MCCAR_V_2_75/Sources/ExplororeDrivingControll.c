@@ -10,6 +10,7 @@
 #include "Driving.h"
 #include "DrivingExplore_Interface.h"
 #include "ExploreConfig.h"
+#include "TargetInField_Position.h"
 #include "stdbool.h"
 
 
@@ -81,6 +82,50 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 		case gen_ErrorState:/* not used in this case*/
 		default:
 			state_toWall = gen_initState;
+			break;
+	}
+	return ERR_BUSY;
+}
+
+byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions currentTargetOrientation, t_directions* wayHist, t_mazeFieldData currentMazeFieldData){
+	static t_genericState state_toUnexp = gen_initState;
+	static Maze_segments Maze_seg;
+//	ADC_data_t adc_data;
+
+
+
+	switch(state_toUnexp){
+		case gen_initState: /* Set up segments to drive */
+			Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
+			Maze_seg.numberOfSegments = ++(*segmentNumber);
+			state_toUnexp = gen_runnigState;
+			if(exploreDriving(Maze_seg, adc_data)){
+				return ERR_FAILED;
+			}
+			break;
+		case gen_runnigState: /*Drive till unexplored branch or wall -> error if segments driven without Walldetection*/
+			if(exploreDriving(Maze_seg, adc_data)){
+				state_toUnexp=gen_initState;
+				return ERR_FAILED;
+			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
+				state_toUnexp=gen_deinitState;
+				setStopFlag();
+			}else if(currentTargetOrientation != get_wallOrientation(*wayHist,behind)){
+				setStopFlag();
+			}else if(currentMazeFieldData.hasUnexploredBranchFlag){
+
+			}
+			break;
+		case gen_deinitState: /* Finish driving nd return Ok if finished*/
+			if(exploreDriving(Maze_seg, adc_data)){
+				state_toUnexp = gen_initState;
+				return ERR_OK;
+			}
+			break;
+		case gen_waitState:  /* not used in this case*/
+		case gen_ErrorState:/* not used in this case*/
+		default:
+			state_toUnexp = gen_initState;
 			break;
 	}
 	return ERR_BUSY;
