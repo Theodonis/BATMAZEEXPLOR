@@ -12,8 +12,10 @@
 void initMaze(t_mazeFieldData* MazePointer);
 
 byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
+byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
 
-byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen);
+
+byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t_exploreInformation wallIsOpen);
 
 byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTargetOrientation);
 

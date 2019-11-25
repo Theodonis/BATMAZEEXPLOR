@@ -60,65 +60,82 @@ void initMaze(t_mazeFieldData* MazePointer){
 **                           ERR_FAILED - not yet used
 */
 byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
-	switch(currentTargetOrientation){
-		case north:
-			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
-				currentField->posibDirections.east = ex_true;
-			}else{
-				currentField->posibDirections.east = ex_false;
-			}
-			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
-				currentField->posibDirections.west = ex_true;
-			}else{
-				currentField->posibDirections.west = ex_false;
-			}
-			break;
-		case east:
-			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
-				currentField->posibDirections.south = ex_true;
-			}else{
-				currentField->posibDirections.south = ex_false;
-			}
-			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
-				currentField->posibDirections.north = ex_true;
-			}else{
-				currentField->posibDirections.north = ex_false;
-			}
-			break;
-		case south:
-			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
-				currentField->posibDirections.west = ex_true;
-			}else{
-				currentField->posibDirections.west = ex_false;
-			}
-			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
-				currentField->posibDirections.east = ex_true;
-			}else{
-				currentField->posibDirections.east = ex_false;
-			}
-			break;
-		case west:
-			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
-				currentField->posibDirections.north = ex_true;
-			}else{
-				currentField->posibDirections.north = ex_false;
-			}
-			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
-				currentField->posibDirections.south = ex_true;
-			}else{
-				currentField->posibDirections.south = ex_false;
-			}
-			break;
-	}
-	currentField->exploredFlag = true;
-	return ERR_OK;
+
+		if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){
+			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,right),ex_true);
+		}else{
+			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,right),ex_false);
+		}
+
+		if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){
+			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,left),ex_true);
+		}else{
+			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,left),ex_false);
+		}
+
+
+		currentField->exploredFlag = true;
+		return ERR_OK;
+
+		/* Old implemetation: */
+//	switch(currentTargetOrientation){
+//		case north:
+//			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
+//				currentField->posibDirections.east = ex_true;
+//			}else{
+//				currentField->posibDirections.east = ex_false;
+//			}
+//			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
+//				currentField->posibDirections.west = ex_true;
+//			}else{
+//				currentField->posibDirections.west = ex_false;
+//			}
+//			break;
+//		case east:
+//			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
+//				currentField->posibDirections.south = ex_true;
+//			}else{
+//				currentField->posibDirections.south = ex_false;
+//			}
+//			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
+//				currentField->posibDirections.north = ex_true;
+//			}else{
+//				currentField->posibDirections.north = ex_false;
+//			}
+//			break;
+//		case south:
+//			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
+//				currentField->posibDirections.west = ex_true;
+//			}else{
+//				currentField->posibDirections.west = ex_false;
+//			}
+//			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
+//				currentField->posibDirections.east = ex_true;
+//			}else{
+//				currentField->posibDirections.east = ex_false;
+//			}
+//			break;
+//		case west:
+//			if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){/* no wall right */
+//				currentField->posibDirections.north = ex_true;
+//			}else{
+//				currentField->posibDirections.north = ex_false;
+//			}
+//			if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){/* no wall left */
+//				currentField->posibDirections.south = ex_true;
+//			}else{
+//				currentField->posibDirections.south = ex_false;
+//			}
+//			break;
+//	}
 }
 
 /*
 ** ===================================================================
 **     	Method      :  byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTargetOrientation)
 **
-**     	@brief	set Flag if current Field has an unexplored way after leaving
+**     	@brief	set Flag if over given Field has an unexplored way after leaving
+**     			(call only if setting for field is finished)
 **
 **     	@param	currentField: Pointer to currentField to write data in
 **     			currentTargetOrientation: current driving direction of MC-Car
@@ -139,7 +156,7 @@ byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTar
 			break;
 		case east:
 			if(currentField->posibDirections.east==ex_true){
-				if((currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
+				if((currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
 					currentField->hasUnexploredBranchFlag=true;
 				}
 			}
@@ -153,7 +170,7 @@ byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTar
 			break;
 		case west:
 			if(currentField->posibDirections.west==ex_true){
-				if((currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
+				if((currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag==false){
 					currentField->hasUnexploredBranchFlag=true;
 				}
 			}
@@ -169,7 +186,7 @@ byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTar
 				break;
 			case east:
 				if(currentField->posibDirections.east==ex_true){
-					if((currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
+					if((currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
 						currentField->hasUnexploredBranchFlag=true;
 					}
 				}
@@ -183,7 +200,7 @@ byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTar
 				break;
 			case west:
 				if(currentField->posibDirections.west==ex_true){
-					if((currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
+					if((currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag==false){
 						currentField->hasUnexploredBranchFlag=true;
 					}
 				}
@@ -192,12 +209,49 @@ byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTar
 	return ERR_OK;
 }
 
+/*
+** ===================================================================
+**     	Method      :  byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen){
+**
+**     	@brief	To set wall info of passed way (last and new filed) in maze
+**
+**     	@param	currentField: Pointer to currentField to write data in
+**     			currentTargetOrientation: current orientation of MC-Car
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - value set
+**                           ERR_FAILED - not yet used
+*/
+byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
+	switch(currentTargetOrientation){
+		case north:
+			(void) setWallInfo((currentField-1),north,ex_true);/*Front wall of old field */
+			(void) setWallInfo(currentField,south,ex_true);/*Back wall of new field*/
+			break;
+		case east:
+			(void) setWallInfo((currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION),east,ex_true);/*Front wall of old field */
+			(void) setWallInfo(currentField,west,ex_true);/*Back wall of new field*/
+			break;
+
+		case south:
+			(void) setWallInfo((currentField+1),south,ex_true);/*Front wall of old field */
+			(void) setWallInfo(currentField,north,ex_true);/*Back wall of new field*/
+			break;
+
+		case west:
+			(void) setWallInfo((currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION),west,ex_true);/*Front wall of old field */
+			(void) setWallInfo(currentField,east,ex_true);/*Back wall of new field*/
+			break;
+	}
+	return ERR_OK;
+}
+
 
 /*
 ** ===================================================================
-**     	Method      :  byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen){
+**     	Method      : byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t_exploreInformation wallIsOpen)
 **
-**     	@brief	To set front wall info of current filed in maze
+**     	@brief	To set wall info of an maze filed
 **
 **     	@param	currentField: Pointer to currentField to write data in
 **     			currentTargetOrientation: current orientation of MC-Car
@@ -208,19 +262,19 @@ byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions  currentTar
 **                           ERR_OK - value set
 **                           ERR_FAILED - not yet used
 */
-byte saveFrontWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen){
-	switch(currentTargetOrientation){
+byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t_exploreInformation wallIsOpen){
+	switch(wallOrientation){
 		case north:
-			currentField->posibDirections.north = frontIsOpen;
+			currentField->posibDirections.north = wallIsOpen;
 			break;
 		case east:
-			currentField->posibDirections.east = frontIsOpen;
+			currentField->posibDirections.east = wallIsOpen;
 			break;
 		case south:
-			currentField->posibDirections.south = frontIsOpen;
+			currentField->posibDirections.south = wallIsOpen;
 			break;
 		case west:
-			currentField->posibDirections.west = frontIsOpen;
+			currentField->posibDirections.west = wallIsOpen;
 			break;
 	}
 	return ERR_OK;
