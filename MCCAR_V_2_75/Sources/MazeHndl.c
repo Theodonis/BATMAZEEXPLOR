@@ -147,22 +147,22 @@ byte unexploredBranchSet(t_mazeFieldData* currentField){
 	currentField->hasUnexploredBranchFlag=false;
 
 	if(currentField->posibDirections.north==ex_true){
-		if((currentField+1)->exploredFlag==false){
+		if((currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
 	if(currentField->posibDirections.east==ex_true){
-		if((currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag==false){ /*ToDo: Check this!!*/
+		if((currentField+1)->exploredFlag==false){ /*ToDo: Check this!!*/
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
 	if(currentField->posibDirections.south==ex_true){
-		if((currentField-1)->exploredFlag==false){
+		if((currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
 	if(currentField->posibDirections.west==ex_true){
-		if((currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag==false){
+		if((currentField-1)->exploredFlag==false){
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
@@ -188,21 +188,21 @@ byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  curr
 	switch(currentTargetOrientation){
 		case north:
 			(void) setWallInfo((currentField),north,ex_true);/*Front wall of current field */
-			(void) setWallInfo(currentField+1,south,ex_true);/*Back wall of next field*/
+			(void) setWallInfo(currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION,south,ex_true);/*Back wall of next field*/
 			break;
 		case east:
 			(void) setWallInfo((currentField),east,ex_true);/*Front wall of current field */
-			(void) setWallInfo(currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION,west,ex_true);/*Back wall of next field*/
+			(void) setWallInfo(currentField+1,west,ex_true);/*Back wall of next field*/
 			break;
 
 		case south:
 			(void) setWallInfo((currentField),south,ex_true);/*Front wall of current field */
-			(void) setWallInfo(currentField-1,north,ex_true);/*Back wall of next field*/
+			(void) setWallInfo(currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION,north,ex_true);/*Back wall of next field*/
 			break;
 
 		case west:
 			(void) setWallInfo((currentField),west,ex_true);/*Front wall of current field */
-			(void) setWallInfo(currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION,east,ex_true);/*Back wall of next field*/
+			(void) setWallInfo(currentField-1,east,ex_true);/*Back wall of next field*/
 			break;
 	}
 	return ERR_OK;
@@ -247,28 +247,28 @@ bool get_isUnexploredBranch(t_mazeFieldData* currentField, t_directions currentT
 	switch(get_wallOrientation(currentTargetOrientation,infoDirection)){
 		case north:
 			if(currentField->posibDirections.north == ex_true){/*no wall in infoDirection*/
-				if(!(currentField+1)->exploredFlag){/*is an unexplored branch in infoDirection*/
+				if(!(currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag){/*is an unexplored branch in infoDirection*/
 					return true;
 				}
 			}
 			break;
 		case east:
 			if(currentField->posibDirections.east == ex_true){/*no wall in infoDirection*/
-				if(!(currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag){/*is an unexplored branch in infoDirection*/
+				if(!(currentField+1)->exploredFlag){/*is an unexplored branch in infoDirection*/
 					return true;
 				}
 			}
 			break;
 		case south:
 			if(currentField->posibDirections.south == ex_true){/*no wall in infoDirection*/
-				if(!(currentField-1)->exploredFlag){/*is an unexplored branch in infoDirection*/
+				if(!(currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag){/*is an unexplored branch in infoDirection*/
 					return true;
 				}
 			}
 			break;
 		case west:
 			if(currentField->posibDirections.west == ex_true){/*no wall in infoDirection*/
-				if(!(currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION)->exploredFlag){/*is an unexplored branch in infoDirection*/
+				if(!(currentField-1)->exploredFlag){/*is an unexplored branch in infoDirection*/
 					return true;
 				}
 			}
