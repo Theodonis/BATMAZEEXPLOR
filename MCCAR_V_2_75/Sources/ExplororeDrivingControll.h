@@ -23,9 +23,23 @@ typedef enum genericState{
 	gen_ErrorState
 }t_genericState;
 
+typedef enum returToBranchState{
+	retBra_initState,
+	retBra_runnigState,
+	retBra_curvState,
+	retBra_waitState,
+	retBra_unexploredBranchState,
+	retBra_turnLeft,
+	retBra_turnRight,
+	retBra_deinitState,
+	retBra_ErrorState
+}t_returToBranchState;
+
 
 
 #define  getLatestADC() (get_latest_ADC_data()) /* wrapper to us function in Explore.c*/
+
+byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_directions* wayHist, t_mazeFieldData currentMazeFieldData);
 
 byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data);
 byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data);
