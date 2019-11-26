@@ -60,13 +60,6 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 				fieldState = secondQuarterOfField;
 			}else if(fieldpos<0-MAZE_FIELD_LENGTH ){
 				fieldState = saveFrontwall;
-				if(targetOrientation==south){
-					(*xPos)--;
-					initpos = pos.xPos;
-				}else if(targetOrientation==west){
-					(*yPos)--;
-					initpos = -pos.yPos;
-				}
 			}
 			break;
 		case secondQuarterOfField:
@@ -100,13 +93,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 		case fourthQuarterOfField:
 			if(fieldpos>MAZE_FIELD_LENGTH){
 				fieldState = saveFrontwall;
-				if(targetOrientation==north){
-					(*xPos)++;
-					initpos = pos.xPos;
-				}else if(targetOrientation==east){
-					(*yPos)++;
-					initpos = -pos.yPos;
-				}
+
 			}else if(fieldpos<0-QUARTER_OF_MAZE_FIELD_LENGTH){
 				fieldState = thirdQuarterOfField;
 			}
@@ -118,11 +105,25 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 				case east:
 					/*is forwards running */
 					fieldState = firstQuarterOfField;
+					if(targetOrientation==north){
+						(*xPos)++;
+						initpos = pos.xPos;
+					}else if(targetOrientation==east){
+						(*yPos)++;
+						initpos = -pos.yPos;
+					}
 					break;
 				case south:
 				case west:
 					fieldState = fourthQuarterOfField;
 					/*is backwards running */
+					if(targetOrientation==south){
+						(*xPos)--;
+						initpos = pos.xPos;
+					}else if(targetOrientation==west){
+						(*yPos)--;
+						initpos = -pos.yPos;
+					}
 					break;
 			}
 
