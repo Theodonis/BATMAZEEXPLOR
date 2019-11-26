@@ -17,8 +17,9 @@
 #endif
 
 
-#define EXPLOR_DRIVE_TIME_AFTER_BRANCHDETECT 	(0.02) 	//time in s ~>additional driven m if velocity 1m/sS
-#define MAX_DIST_TO_WALL_MM						(75) 	// if side wards distance is bigger ,means no wall there
+#define EXPLOR_DRIVE_TIME_AFTER_BRANCHDETECT 				(0.03) 	//time in s ~>additional driven m if velocity 1m/s
+#define EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED 	(0.095) //time in s ~>additional driven m if velocity 1m/s
+#define MAX_DIST_TO_WALL_MM									(75) 	// if side wards distance is bigger ,means no wall there
 
 #define MAZE_FIELDS_WIDTH_NORTH_DIRECTION (9)
 #define MAZE_FIELDS_LENGTH_EAST_DIRECTION (9)
