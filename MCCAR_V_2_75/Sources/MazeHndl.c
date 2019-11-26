@@ -143,25 +143,25 @@ byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, 
 **                           ERR_OK - measurement done
 **                           ERR_FAILED - not yet used
 */
-byte unexploredBranchSet(t_mazeFieldData* currentField){
+byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions currentTargetOrientation){
 	currentField->hasUnexploredBranchFlag=false;
 
-	if(currentField->posibDirections.north==ex_true){
+	if(currentField->posibDirections.north==ex_true && currentTargetOrientation != north){
 		if((currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
-	if(currentField->posibDirections.east==ex_true){
+	if(currentField->posibDirections.east==ex_true && currentTargetOrientation != east){
 		if((currentField+1)->exploredFlag==false){ /*ToDo: Check this!!*/
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
-	if(currentField->posibDirections.south==ex_true){
+	if(currentField->posibDirections.south==ex_true && currentTargetOrientation != south){
 		if((currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag==false){
 			currentField->hasUnexploredBranchFlag=true;
 		}
 	}
-	if(currentField->posibDirections.west==ex_true){
+	if(currentField->posibDirections.west==ex_true && currentTargetOrientation != west){
 		if((currentField-1)->exploredFlag==false){
 			currentField->hasUnexploredBranchFlag=true;
 		}
@@ -274,4 +274,5 @@ bool get_isUnexploredBranch(t_mazeFieldData* currentField, t_directions currentT
 			}
 			break;
 	}
+	return false;
 }

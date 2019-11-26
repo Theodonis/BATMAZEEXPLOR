@@ -17,7 +17,7 @@ byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  curr
 
 byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t_exploreInformation wallIsOpen);
 
-byte unexploredBranchSet(t_mazeFieldData* currentField);
+byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions currentTargetOrientation);
 
 bool get_isUnexploredBranch(t_mazeFieldData* currentField,t_directions currentTargetOrientation, t_dir infoDirection);
 
