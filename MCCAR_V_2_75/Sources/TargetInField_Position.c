@@ -39,7 +39,7 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 	}
 
 	if(prevTargetOrientation!=targetOrientation){
-		fieldState = targetHasTurned; //turn flag to update direction
+		fieldState = targetHasTurned; //turn state to update direction
 	}
 
 	switch(fieldState){
