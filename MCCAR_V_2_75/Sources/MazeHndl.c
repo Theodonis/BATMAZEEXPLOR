@@ -7,9 +7,9 @@
 
 #include "Explore.h"
 #include "ExploreConfig.h"
-#include "MazeHndl.h"
 #include "stdbool.h"
 #include "TargetInField_Position.h"
+#include "MazeHndl.h"
 
 
 /*
@@ -175,7 +175,7 @@ byte unexploredBranchSet(t_mazeFieldData* currentField){
 ** ===================================================================
 **     	Method      :  byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation, t_exploreInformation frontIsOpen){
 **
-**     	@brief	To set wall info of passed way (last and new filed) in maze
+**     	@brief	To set wall info of passed way (current and next filed bevore leaving) in maze
 **
 **     	@param	currentField: Pointer to currentField to write data in
 **     			currentTargetOrientation: current orientation of MC-Car
@@ -187,22 +187,22 @@ byte unexploredBranchSet(t_mazeFieldData* currentField){
 byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
 	switch(currentTargetOrientation){
 		case north:
-			(void) setWallInfo((currentField-1),north,ex_true);/*Front wall of old field */
-			(void) setWallInfo(currentField,south,ex_true);/*Back wall of new field*/
+			(void) setWallInfo((currentField),north,ex_true);/*Front wall of current field */
+			(void) setWallInfo(currentField+1,south,ex_true);/*Back wall of next field*/
 			break;
 		case east:
-			(void) setWallInfo((currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION),east,ex_true);/*Front wall of old field */
-			(void) setWallInfo(currentField,west,ex_true);/*Back wall of new field*/
+			(void) setWallInfo((currentField),east,ex_true);/*Front wall of current field */
+			(void) setWallInfo(currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION,west,ex_true);/*Back wall of next field*/
 			break;
 
 		case south:
-			(void) setWallInfo((currentField+1),south,ex_true);/*Front wall of old field */
-			(void) setWallInfo(currentField,north,ex_true);/*Back wall of new field*/
+			(void) setWallInfo((currentField),south,ex_true);/*Front wall of current field */
+			(void) setWallInfo(currentField-1,north,ex_true);/*Back wall of next field*/
 			break;
 
 		case west:
-			(void) setWallInfo((currentField+MAZE_FIELDS_WIDTH_NORTH_DIRECTION),west,ex_true);/*Front wall of old field */
-			(void) setWallInfo(currentField,east,ex_true);/*Back wall of new field*/
+			(void) setWallInfo((currentField),west,ex_true);/*Front wall of current field */
+			(void) setWallInfo(currentField-MAZE_FIELDS_WIDTH_NORTH_DIRECTION,east,ex_true);/*Back wall of next field*/
 			break;
 	}
 	return ERR_OK;
@@ -243,7 +243,7 @@ byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t
 }
 
 
-bool get_isUnexploredBranch(t_mazeFieldData* currentField,t_directions currentTargetOrientation, t_dir infoDirection){
+bool get_isUnexploredBranch(t_mazeFieldData* currentField, t_directions currentTargetOrientation, t_dir infoDirection){
 	switch(get_wallOrientation(currentTargetOrientation,infoDirection)){
 		case north:
 			if(currentField->posibDirections.north == ex_true){/*no wall in infoDirection*/
@@ -273,7 +273,5 @@ bool get_isUnexploredBranch(t_mazeFieldData* currentField,t_directions currentTa
 				}
 			}
 			break;
-
-
 	}
 }
