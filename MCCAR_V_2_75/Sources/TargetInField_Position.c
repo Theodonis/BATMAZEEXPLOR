@@ -115,8 +115,8 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 					break;
 				case south:
 				case west:
-					fieldState = fourthQuarterOfField;
 					/*is backwards running */
+					fieldState = fourthQuarterOfField;
 					if(targetOrientation==south){
 						(*xPos)--;
 						initpos = pos.xPos;
@@ -222,6 +222,7 @@ t_directions get_wallOrientation(t_directions targetOrientation, t_dir dir){
 			wallOrientation = targetOrientation+2;
 		}
 	}
+	return wallOrientation;
 }
 
 
