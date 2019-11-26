@@ -96,7 +96,8 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);
+					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
+					unexploredBranchSet(&MazeData[xPos][yPos]); /*update if unexplored branch before change state*/
 					posState= calcNextStep;
 					break;
 			}
@@ -105,22 +106,20 @@ byte TargetPosStateMaschine(void){
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			switch(currentFieldState){
 				case detectSideWalls:
+					/*measure side walls in Middle of Field*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
 				case saveFrontwall:
-					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation);
-					unexploredBranchSet(&MazeData[xPos][yPos]); //will not work : call befor total field info ist set
-					switch(currentTargetOrientation){ /*Better way: do measurement bevore increment index...*/
-						case north:
-							/*log info of old Field */
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
-							 break;
-						 case east:
-							 break;
-					}
+					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
+					unexploredBranchSet(&MazeData[xPos][yPos]); /*update if unexplored branch before leaving*/
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
+					wayHist[wayHistPointer++]=currentTargetOrientation;
+					incrmentSaveLinePointer(); /*only log at enter of new field*/
+					break;
+
 			}
 
 
@@ -130,91 +129,13 @@ byte TargetPosStateMaschine(void){
 				if(get_isUnexploredBranch(&MazeData[xPos][yPos],currentTargetOrientation,left)){
 					/* it's an unexplored branch on the left!*/
 					posState= turnLeft;
-				}else if(get_isUnexploredBranch(&MazeData[xPos][yPos],currentTargetOrientation,left)){
-
+				}else if(get_isUnexploredBranch(&MazeData[xPos][yPos],currentTargetOrientation,right)){
+					/* it's an unexplored branch on the right!*/
+					posState= turnRight;
 				}
-			}
-			get_leftInfo(9)
-			switch(get_wallOrientation(currentTargetOrientation,left)){/*is left an branch?*/
-				case north:
-					if(MazeData[xPos][yPos].posibDirections.north== ex_true){
-						if(!MazeData[xPos+1][yPos].exploredFlag){/*has even been there?*/
-
-							/* it's an unexplored branch!*/
-							posState= turnLeft;
-						}
-					}
-					break;
-				case east:
-					if(MazeData[xPos][yPos].posibDirections.east== ex_true){
-						if(!MazeData[xPos][yPos+1].exploredFlag){ /*has even been there?*/
-
-							/* it's an unexplored branch!*/
-							posState= turnLeft;
-						}
-					}
-					break;
-				case south:
-					if(MazeData[xPos][yPos].posibDirections.south== ex_true){
-						if(!MazeData[xPos-1][yPos].exploredFlag){ /*has even been there?*/
-
-							/* it's an unexplored branch!*/
-							posState= turnLeft;
-						}
-					}
-					break;
-				case west:
-					if(MazeData[xPos][yPos].posibDirections.west== ex_true){
-						if(!MazeData[xPos][yPos-1].exploredFlag){ /*has even been there?*/
-
-							/* it's an unexplored branch!*/
-							posState= turnLeft;
-						}
-					}
-					break;
-			}
-			if(posState != turnLeft){
-				switch(get_wallOrientation(currentTargetOrientation,right)){/*is right an branch?*/
-					case north:
-						if(MazeData[xPos][yPos].posibDirections.north== ex_true){
-							if(!MazeData[xPos+1][yPos].exploredFlag){/*has even been there?*/
-
-								/* it's an unexplored branch!*/
-								posState= turnRight;
-							}
-						}
-						break;
-					case east:
-						if(MazeData[xPos][yPos].posibDirections.east== ex_true){
-							if(!MazeData[xPos][yPos+1].exploredFlag){ /*has even been there?*/
-
-								/* it's an unexplored branch!*/
-								posState= turnRight;
-							}
-						}
-						break;
-					case south:
-						if(MazeData[xPos][yPos].posibDirections.south== ex_true){
-							if(!MazeData[xPos-1][yPos].exploredFlag){ /*has even been there?*/
-
-								/* it's an unexplored branch!*/
-								posState= turnRight;
-							}
-						}
-						break;
-					case west:
-						if(MazeData[xPos][yPos].posibDirections.west== ex_true){
-							if(!MazeData[xPos][yPos-1].exploredFlag){ /*has even been there?*/
-
-								/* it's an unexplored branch!*/
-								posState= turnRight;
-							}
-						}
-						break;
-				}
-			}
-			if(posState != turnLeft && posState != turnRight){
-				posState = deadEnd; /* drive back to last unexplored branch */
+			}else{
+				/*it's a dead end*/
+				posState = deadEnd;
 			}
 			break;
 
@@ -284,13 +205,7 @@ byte TargetPosStateMaschine(void){
 					posState= turnState;
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation); /* do an extra sideMasurement before turn*/
 					(void) setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);/*set front wall false if detected frontwall */
-
-					saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
-					saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
-					saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
-					saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
-
-					incrmentSaveLinePointer(); /*save last fieldinfos*/
+					unexploredBranchSet(&MazeData[xPos][yPos]); /*update if field has unexplored branch before turn*/
 					break;
 			}
 
@@ -301,58 +216,69 @@ byte TargetPosStateMaschine(void){
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
 				 case saveFrontwall:
-					 switch(currentTargetOrientation){
-						 case north:
-							 (void) setWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
-							 (void) setWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+						setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
+						unexploredBranchSet(&MazeData[xPos][yPos]); /*update if field has unexplored branch before leaving*/
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
+						/*old Way used always previews field*/
+//					 switch(currentTargetOrientation){
+//						 case north:
+//							 (void) setWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
+//							 (void) setWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+//
+//
+//							 (void)unexploredBranchSet(&MazeData[xPos-1][yPos]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 break;
+//						 case east:
+//							 (void) setWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
+//							 (void) setWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
+//
+//							 (void)unexploredBranchSet(&MazeData[xPos][yPos-1]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.west,"Westwand", 13);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 break;
+//						 case south:
+//							 (void) setWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
+//							 (void) setWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
+//
+//							 (void)unexploredBranchSet(&MazeData[xPos+1][yPos]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.west,"Westwand", 13);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 break;
+//						 case west:
+//							 (void) setWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
+//							 (void) setWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
+//
+//							 (void)unexploredBranchSet(&MazeData[xPos][yPos+1]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 break;
+//					 }
 
-
-							 (void)unexploredBranchSet(&MazeData[xPos-1][yPos]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
-							 saveExplorationValue(MazeData[xPos-1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 break;
-						 case east:
-							 (void) setWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
-							 (void) setWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
-
-							 (void)unexploredBranchSet(&MazeData[xPos][yPos-1]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.west,"Westwand", 13);
-							 saveExplorationValue(MazeData[xPos][yPos-1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 break;
-						 case south:
-							 (void) setWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
-							 (void) setWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
-
-							 (void)unexploredBranchSet(&MazeData[xPos+1][yPos]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.west,"Westwand", 13);
-							 saveExplorationValue(MazeData[xPos+1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 break;
-						 case west:
-							 (void) setWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
-							 (void) setWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
-
-							 (void)unexploredBranchSet(&MazeData[xPos][yPos+1]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
-							 saveExplorationValue(MazeData[xPos][yPos+1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 break;
-					 }
 					 wayHist[wayHistPointer++]=currentTargetOrientation;
+					 saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
+					 saveExplorationValue(yPos,"y-Position (index)", 11);
+					 saveExplorationValue(xPos,"x-Position (index)", 6);
 					 incrmentSaveLinePointer(); /*only log at enter of new field*/
 					 break;
 			}
@@ -401,57 +327,64 @@ byte TargetPosStateMaschine(void){
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
 				 case saveFrontwall:
-					 setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation);
-					 switch(currentTargetOrientation){
-						 case north:
-//							 (void) setWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
-//							 (void) setWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
-							 (void)unexploredBranchSet(&MazeData[xPos-1][yPos]); /* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
-							 saveExplorationValue(MazeData[xPos-1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 break;
-						 case east:
-//							 (void) setWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
-//							 (void) setWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
-							 (void)unexploredBranchSet(&MazeData[xPos][yPos-1]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos][yPos-1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.west,"Westwand", 13);
-							 break;
-						 case south:
-//							 (void) setWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
-//							 (void) setWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
-							 (void)unexploredBranchSet(&MazeData[xPos+1][yPos]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos+1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.west,"Westwand", 13);
-							 break;
-						 case west:
-//							 (void) setWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
-//							 (void) setWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
-							 (void)unexploredBranchSet(&MazeData[xPos][yPos+1]);/* set if leaved field had en unexplored branch */
-							 /*log info of old Field */
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.north,"Nordwand", 2);
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.east,"Ostwand", 5);
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.south,"Südwand", 9);
-							 saveExplorationValue(MazeData[xPos][yPos+1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
-							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
-							 break;
-					 }
+					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
+					unexploredBranchSet(&MazeData[xPos][yPos]); /*update if field has unexplored branch before leaving*/
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
+					saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Westwand", 13);
+//					 switch(currentTargetOrientation){
+//						 case north:
+////							 (void) setWallInfo(&MazeData[xPos-1][yPos],north,ex_true);/*Front wall of old field */
+////							 (void) setWallInfo(&MazeData[xPos][yPos],south,ex_true);/*Back wall of new field*/
+//							 (void)unexploredBranchSet(&MazeData[xPos-1][yPos]); /* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].posibDirections.west,"Westwand", 13);
+//							 saveExplorationValue(MazeData[xPos-1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 break;
+//						 case east:
+////							 (void) setWallInfo(&MazeData[xPos][yPos-1],east,ex_true);/*Front wall of old field */
+////							 (void) setWallInfo(&MazeData[xPos][yPos],west,ex_true);/*Back wall of new field*/
+//							 (void)unexploredBranchSet(&MazeData[xPos][yPos-1]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 saveExplorationValue(MazeData[xPos][yPos-1].posibDirections.west,"Westwand", 13);
+//							 break;
+//						 case south:
+////							 (void) setWallInfo(&MazeData[xPos+1][yPos],south,ex_true);/*Front wall of old field */
+////							 (void) setWallInfo(&MazeData[xPos][yPos],north,ex_true);/*Back wall of new field*/
+//							 (void)unexploredBranchSet(&MazeData[xPos+1][yPos]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 saveExplorationValue(MazeData[xPos+1][yPos].posibDirections.west,"Westwand", 13);
+//							 break;
+//						 case west:
+////							 (void) setWallInfo(&MazeData[xPos][yPos+1],west,ex_true);/*Front wall of old field */
+////							 (void) setWallInfo(&MazeData[xPos][yPos],east,ex_true);/*Back wall of new field*/
+//							 (void)unexploredBranchSet(&MazeData[xPos][yPos+1]);/* set if leaved field had en unexplored branch */
+//							 /*log info of old Field */
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.north,"Nordwand", 2);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.east,"Ostwand", 5);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.south,"Südwand", 9);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].hasUnexploredBranchFlag,"Unexplored Branch", 10);
+//							 saveExplorationValue(MazeData[xPos][yPos+1].posibDirections.west,"Westwand", 13);
+//							 break;
+//					 }
 
 
 					 wayHist[wayHistPointer++]=currentTargetOrientation;
-					 saveExplorationValue(yPos,"y-Position (index)", 11);saveExplorationValue(driving_data.posEstimation.yPos,"yPos", 10);
+					 saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
+					 saveExplorationValue(yPos,"y-Position (index)", 11);
+					 saveExplorationValue(xPos,"x-Position (index)", 6);
 					 incrmentSaveLinePointer(); /*only log at enter of new field->means all other values are from one call before*/
 					 break;
 			}
@@ -533,7 +466,6 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue(driving_data.posEstimation.xPos,"xPos", 4);//logValCnt++);
 //		saveExplorationValue(driving_data.posEstimation.thetaAngle,"thetaAngle", 5);//logValCnt++);
 
-		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(currentTargetOrientation,"TargetOrintation", 8);
 
 //		saveExplorationValue(adc_data.voltage_Values.v_Bat,"battery voltage", 9);
