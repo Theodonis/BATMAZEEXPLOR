@@ -7,7 +7,7 @@
 **     Version     : Component 01.188, Driver 01.12, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2019-07-03, 09:33, # CodeGen: 101
+**     Date/Time   : 2019-11-26, 13:36, # CodeGen: 262
 **     Abstract    :
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -30,7 +30,7 @@
 **            Parity                                       : None
 **            Stop bits                                    : 1
 **            Loop mode                                    : Normal
-**            Baud rate                                    : 57600 baud
+**            Baud rate                                    : 230400 baud
 **            Wakeup condition                             : Idle line wakeup
 **            Stop in wait mode                            : no
 **            Idle line mode                               : Starts after start bit
@@ -218,8 +218,8 @@ LDD_TDeviceData* ASerialLdd1_Init(LDD_TUserData *UserDataPtr)
   UART3_S2 = 0x00U;                    /*  Set the S2 register */
   /* UART3_MODEM: ??=0,??=0,??=0,??=0,RXRTSE=0,TXRTSPOL=0,TXRTSE=0,TXCTSE=0 */
   UART3_MODEM = 0x00U;                 /*  Set the MODEM register */
-  UART_PDD_SetBaudRateFineAdjust(UART3_BASE_PTR, 3u); /* Set baud rate fine adjust */
-  UART_PDD_SetBaudRate(UART3_BASE_PTR, 65U); /* Set the baud rate register. */
+  UART_PDD_SetBaudRateFineAdjust(UART3_BASE_PTR, 9u); /* Set baud rate fine adjust */
+  UART_PDD_SetBaudRate(UART3_BASE_PTR, 16U); /* Set the baud rate register. */
   UART_PDD_EnableFifo(UART3_BASE_PTR, (UART_PDD_TX_FIFO_ENABLE | UART_PDD_RX_FIFO_ENABLE)); /* Enable RX and TX FIFO */
   UART_PDD_FlushFifo(UART3_BASE_PTR, (UART_PDD_TX_FIFO_FLUSH | UART_PDD_RX_FIFO_FLUSH)); /* Flush RX and TX FIFO */
   UART_PDD_EnableTransmitter(UART3_BASE_PTR, PDD_ENABLE); /* Enable transmitter */

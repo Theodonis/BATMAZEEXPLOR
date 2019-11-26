@@ -2934,7 +2934,7 @@
         <boolgroup name="Transmitter" v="Enabled">
           <TxD v="ADC1_SE15/PTB11/SPI1_SCK/UART3_TX/FB_AD18/FTM0_FLT2" />
         </boolgroup>
-        <Baud_rate v="57600 baud" />
+        <Baud_rate v="230400 baud" />
         <Break_signal v="Disabled" />
         <Wakeup_condition v="Idle line wakeup" />
         <Transmitter_output v="Not inverted" />
@@ -2971,7 +2971,7 @@
               <Parity v="None" />
               <Stop_bits v="1" />
               <Loop_mode v="Normal" />
-              <Baud_rate v="57600 baud" />
+              <Baud_rate v="230400 baud" />
               <Wakeup_condition v="Idle line wakeup" />
               <Stop_in_wait_mode v="no" />
               <Idle_line_mode v="Starts after start bit" />

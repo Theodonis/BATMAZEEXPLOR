@@ -7,7 +7,7 @@
 **     Version     : Component 02.611, Driver 01.01, CPU db: 3.00.000
 **     Repository  : Kinetis
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2019-07-03, 09:33, # CodeGen: 101
+**     Date/Time   : 2019-11-26, 13:36, # CodeGen: 262
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -38,7 +38,7 @@
 **              RxD                                        : ADC1_SE14/PTB10/SPI1_PCS0/UART3_RX/FB_AD19/FTM0_FLT1
 **            Transmitter                                  : Enabled
 **              TxD                                        : ADC1_SE15/PTB11/SPI1_SCK/UART3_TX/FB_AD18/FTM0_FLT2
-**            Baud rate                                    : 57600 baud
+**            Baud rate                                    : 230400 baud
 **            Break signal                                 : Disabled
 **            Wakeup condition                             : Idle line wakeup
 **            Transmitter output                           : Not inverted
