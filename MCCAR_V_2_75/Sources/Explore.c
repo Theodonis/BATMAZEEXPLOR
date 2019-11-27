@@ -200,7 +200,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= calcNextStep;
+					posState= stopped;
 					break;
 			}
 			/* do measurement */
@@ -517,14 +517,14 @@ byte TargetPosStateMaschine(void){
 
 		saveExplorationValue(driving_data.posEstimation.thetaAngle,"Theat", 2);
 		saveExplorationValue(driving_data.posEstimation.xPos,"X-Pos", 5);
-		saveExplorationValue(adc_data.mm_Values.mm_Left,"LeftDist", 9);
-		saveExplorationValue(adc_data.mm_Values.mm_Right,"RightDist", 13);
+		saveExplorationValue(adc_data.raw_Values.raw_Left,"LeftDist", 9);
+		saveExplorationValue(adc_data.raw_Values.raw_Right,"RightDist", 13);
 		saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
 		saveExplorationValue(yPos,"y-Position (index)", 11);
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(wayHist[wayHistPointer],"wayHist", 8);
 		saveExplorationValue(wayHistPointer,"wayHistPointer", 4);
-		saveExplorationValue(segmentNumber,"segnumber",3);
+		saveExplorationValue(driving_data.posEstimation.yPos,"Y-Pos",3);
 
 
 
@@ -533,12 +533,13 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-
-		if(saveDataCnt>=0){  //to set sample period (0 => 0,7ms)
-			incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
-			saveDataCnt=0;
-		}else{
-			saveDataCnt++;
+		if(xPos>3){/*start logging at the fourth field*/
+			if(saveDataCnt>=0){  //to set sample period (0 => 0,7ms)
+				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
+				saveDataCnt=0;
+			}else{
+				saveDataCnt++;
+			}
 		}
 	#endif
 
