@@ -31,6 +31,7 @@ void initMaze(t_mazeFieldData* MazePointer){
 	maze.posibDirections.east = ex_unknew;
 	maze.posibDirections.south = ex_unknew;
 	maze.posibDirections.west = ex_unknew;
+	maze.enterDirection = unknown;
 
 	/*init start Field */
 	MazePointer->exploredFlag=TRUE;
@@ -38,7 +39,8 @@ void initMaze(t_mazeFieldData* MazePointer){
 	MazePointer->posibDirections.east = ex_false;
 	MazePointer->posibDirections.south = ex_false;
 	MazePointer->posibDirections.west = ex_false;
-
+	MazePointer->hasUnexploredBranchFlag = FALSE;
+	MazePointer->enterDirection = north;
 	/*init other fields as unknew (start at secondffield)*/
 	for(uint8_t index = 1; index<MAZE_FIELDS_LENGTH_EAST_DIRECTION*MAZE_FIELDS_WIDTH_NORTH_DIRECTION; index++){
 		*(MazePointer+index) = maze;
@@ -189,20 +191,24 @@ byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  curr
 		case north:
 			(void) setWallInfo((currentField),north,ex_true);/*Front wall of current field */
 			(void) setWallInfo(currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION,south,ex_true);/*Back wall of next field*/
+			(currentField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->enterDirection = currentTargetOrientation; /*Set enterDirection  of next field*/
 			break;
 		case east:
 			(void) setWallInfo((currentField),east,ex_true);/*Front wall of current field */
 			(void) setWallInfo(currentField+1,west,ex_true);/*Back wall of next field*/
+			(currentField+1)->enterDirection = currentTargetOrientation; /*Set enterDirection  of next field*/
 			break;
 
 		case south:
 			(void) setWallInfo((currentField),south,ex_true);/*Front wall of current field */
 			(void) setWallInfo(currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION,north,ex_true);/*Back wall of next field*/
+			(currentField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->enterDirection = currentTargetOrientation; /*Set enterDirection  of next field*/
 			break;
 
 		case west:
 			(void) setWallInfo((currentField),west,ex_true);/*Front wall of current field */
 			(void) setWallInfo(currentField-1,east,ex_true);/*Back wall of next field*/
+			(currentField-1)->enterDirection = currentTargetOrientation; /*Set enterDirection  of next field*/
 			break;
 	}
 	return ERR_OK;
