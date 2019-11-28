@@ -79,6 +79,7 @@ byte TargetPosStateMaschine(void){
 			xPos =0 ,yPos =0;
 			#if ENABLE_EXPLORE_DATALOG
 				resetSaveLinePointer();
+				saveExplorationValue(0,"Returnstate", 10);
 			#endif
 			return ERR_BUSY;
 			break;
@@ -125,10 +126,10 @@ byte TargetPosStateMaschine(void){
 						saveExplorationValue(yPos,"y-Position (index)", 7);
 						saveExplorationValue(adc_data.raw_Values.raw_Left,"LeftDist", 8);
 						saveExplorationValue(adc_data.raw_Values.raw_Right,"RightDist", 9);
-						saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
-						saveExplorationValue(driving_data.posEstimation.thetaAngle,"Theat", 11);
-						saveExplorationValue(wayHistPointer,"wayHistPointer", 12);
-						saveExplorationValue(wayHist[wayHistPointer-1],"wayHist", 13);
+//						saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Feld Info Süd", 11);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 12);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 13);
 
 						incrmentSaveLinePointer(); /*only log at enter of new field*/
 					#endif
@@ -147,6 +148,7 @@ byte TargetPosStateMaschine(void){
 				}
 			}else{
 				/*it's a dead end*/
+				//wayHistPointer++; /* set way hist for deadEndfiled */
 				posState = deadEnd;
 			}
 			break;
@@ -198,7 +200,7 @@ byte TargetPosStateMaschine(void){
 
 		case returnToBranch:
 			/*turn left 90° */
-			switch(driveToUnexpBranch(&segmentNumber, &adc_data, &currentTargetOrientation, &wayHist[wayHistPointer-1], MazeData[xPos][yPos])){
+			switch(driveToUnexpBranch(&segmentNumber, &adc_data, &currentTargetOrientation, &wayHist[wayHistPointer], MazeData[xPos][yPos])){
 				case ERR_BUSY:
 					posState = returnToBranch;
 					break;
@@ -234,10 +236,10 @@ byte TargetPosStateMaschine(void){
 						saveExplorationValue(yPos,"y-Position (index)", 7);
 						saveExplorationValue(adc_data.raw_Values.raw_Left,"LeftDist", 8);
 						saveExplorationValue(adc_data.raw_Values.raw_Right,"RightDist", 9);
-						saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
-						saveExplorationValue(driving_data.posEstimation.thetaAngle,"Theat", 11);
-						saveExplorationValue(wayHistPointer,"wayHistPointer", 12);
-						saveExplorationValue(wayHist[wayHistPointer-1],"wayHist", 13);
+//						saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Feld Info Süd", 11);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 12);
+						saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 13);
 						incrmentSaveLinePointer(); /*only log at enter of new field*/
 					#endif
 					break;
@@ -527,11 +529,10 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue(yPos,"y-Position (index)", 7);
 		saveExplorationValue(adc_data.raw_Values.raw_Left,"LeftDist", 8);
 		saveExplorationValue(adc_data.raw_Values.raw_Right,"RightDist", 9);
-		saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
-		saveExplorationValue(driving_data.posEstimation.thetaAngle,"Theat", 11);
-		saveExplorationValue(wayHistPointer,"wayHistPointer", 12);
-		saveExplorationValue(wayHist[wayHistPointer-1],"wayHist", 13);
-
+//		saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Feld Info Süd", 11);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 12);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 13);
 
 
 	#if ENABLE_TIMING_CONROLL
@@ -539,7 +540,7 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if(xPos>3){/*start logging at the fourth field*/
+		if(xPos>4&&currentTargetOrientation==east){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
