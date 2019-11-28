@@ -30,11 +30,6 @@
 
 bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 	bool drivingFinishedFlag;
-//	#if ENABLE_TIMING_CONROLL
-//			uint16_t beforDriving;
-//			FC1_GetCounterValue(&beforDriving);
-//			saveExplorationValue((float)beforDriving, "beforDriving", (*logValCnt)++);
-//	#endif
 	drivingFinishedFlag = Driving(MazeSegmentsToBeDriven);
 	(*adc_data) =	*get_latest_ADC_data();/* get newest ADC after Driving*/
 	#if ENABLE_EXPLORE_DATALOG
@@ -105,15 +100,16 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			if(exploreDriving(Maze_seg, adc_data)){
 				state_toUnexp = retBra_initState;
 				return ERR_FAILED;
-			}else if(*currentTargetOrientation != get_wallOrientation(*wayHist,behind)){
-				setStopFlag();/*curve in wayHist*/
-				state_toUnexp = retBra_curvState;
 			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
-				setStopFlag();
-				state_toUnexp=retBra_ErrorState; /*Error: in wayHist was no wall!*/
+					state_toUnexp=retBra_ErrorState;
+					setStopFlag();
 			}else if(currentMazeFieldData.hasUnexploredBranchFlag){
-				setStopFlag();/* back at last Branch*/
+				//setStopFlag();/* back at last Branch*/
 				state_toUnexp = retBra_unexploredBranchState;
+			}else if(*currentTargetOrientation != get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
+				//setStopFlag();/*curve in wayHist*/
+				state_toUnexp = retBra_waitState;
+			 /*Error: in wayHist was no wall!*/
 			}
 			break;
 
@@ -137,9 +133,9 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			break;
 		case retBra_curvState: /* Finish driving nd return Ok if finished*/
 			if(exploreDriving(Maze_seg, adc_data)){
-				if(get_wallOrientation(*currentTargetOrientation,left)==get_wallOrientation(*wayHist,behind)){
+				if(get_wallOrientation(*currentTargetOrientation,left)==get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
 					state_toUnexp = retBra_turnLeft;
-				}else if(get_wallOrientation(*currentTargetOrientation,right)==get_wallOrientation(*wayHist,behind)){
+				}else if(get_wallOrientation(*currentTargetOrientation,right)==get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
 					state_toUnexp = retBra_turnRight;
 				}else{
 					state_toUnexp = retBra_initState;
@@ -159,6 +155,8 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					return ERR_FAILED;
 				case ERR_OK:
 					state_toUnexp= retBra_runnigState;
+					Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
+					Maze_seg.numberOfSegments = ++(*segmentNumber);
 					break;
 			}
 			break;
@@ -174,6 +172,8 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					return ERR_FAILED;
 				case ERR_OK:
 					state_toUnexp= retBra_runnigState;
+					Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
+					Maze_seg.numberOfSegments = ++(*segmentNumber);
 					break;
 			}
 			break;
@@ -215,6 +215,8 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			state_toUnexp = retBra_initState;
 			break;
 	}
+
+	saveExplorationValue(state_toUnexp,"Returnstate", 10);
 	return ERR_BUSY;
 }
 
