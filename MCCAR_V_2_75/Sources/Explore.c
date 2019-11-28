@@ -45,8 +45,6 @@ byte TargetPosStateMaschine(void){
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
-	static t_directions wayHist[SIZE_OF_WAY_HIST];
-	static uint8_t wayHistPointer = 0;
 	t_fieldState currentFieldState = 0;
 
 
@@ -97,7 +95,6 @@ byte TargetPosStateMaschine(void){
 					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
-					wayHist[wayHistPointer] = currentTargetOrientation; /*set wayHist before turn -> should always be the enter orientation of field */
 					posState= calcNextStep;
 					break;
 			}
@@ -106,16 +103,12 @@ byte TargetPosStateMaschine(void){
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			switch(currentFieldState){
 				case detectSideWalls:
-					if(!MazeData[xPos][yPos].exploredFlag){
-						wayHist[wayHistPointer] = currentTargetOrientation; /*set wayHist only if not done yet -> should always be the enter orientation of field */
-					}
 					/*measure side walls in Middle of Field and set Field to explored*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
 				case saveFrontwall:
 					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
 					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
-					wayHistPointer++; /*increment wayHistPointer at leaving of field*/
 					#if LOG_DEPENDING_MAZE_POS
 
 						saveExplorationValue(posState,"state", 2);
@@ -148,8 +141,7 @@ byte TargetPosStateMaschine(void){
 				}
 			}else{
 				/*it's a dead end*/
-				//wayHistPointer++; /* set way hist for deadEndfiled */
-				posState = deadEnd;
+				posState = returnToBranch;
 			}
 			break;
 
@@ -183,24 +175,10 @@ byte TargetPosStateMaschine(void){
 			}
 			break;
 
-		case deadEnd:
-			/*turn 180° */
-			switch(turn180(&segmentNumber, &currentTargetOrientation, right)){
-				case ERR_BUSY:
-					posState = deadEnd;
-					break;
-				case ERR_FAILED:
-					posState =  initState;
-					return ERR_FAILED;
-				case ERR_OK:
-					posState= returnToBranch;
-					break;
-			}
-			break;
 
 		case returnToBranch:
-			/*turn left 90° */
-			switch(driveToUnexpBranch(&segmentNumber, &adc_data, &currentTargetOrientation, &wayHist[wayHistPointer], MazeData[xPos][yPos])){
+			/*call second level FSM to return to last unexplored branch */
+			switch(driveToUnexpBranch(&segmentNumber, &adc_data, &currentTargetOrientation, &MazeData[xPos][yPos])){
 				case ERR_BUSY:
 					posState = returnToBranch;
 					break;
@@ -219,12 +197,10 @@ byte TargetPosStateMaschine(void){
 //					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
 				case saveFrontwall:
-					wayHistPointer--; /*decrement wayHistPointer at leaving of Filed while returning*/
 
 					/*measurement not used while returning on explored path*/
 //					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
 //					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
-//					wayHist[wayHistPointer++] = currentTargetOrientation;
 
 					#if LOG_DEPENDING_MAZE_POS
 
@@ -334,8 +310,6 @@ byte TargetPosStateMaschine(void){
 //							 break;
 //					 }
 
-					 wayHist[wayHistPointer++]=currentTargetOrientation;
-					 saveExplorationValue(wayHist[wayHistPointer-1],"WayHist", 10);
 					 saveExplorationValue(yPos,"y-Position (index)", 11);
 					 saveExplorationValue(xPos,"x-Position (index)", 6);
 					 incrmentSaveLinePointer(); /*only log at enter of new field*/
@@ -363,23 +337,23 @@ byte TargetPosStateMaschine(void){
 			}
 			break;
 		case driveToLeftBranch:
-			switch(driveToBranch(&segmentNumber,right,&adc_data)){
-				case ERR_BUSY:
-					posState = driveToLeftBranch;
-					break;
-				case ERR_FAILED:
-					posState =  initState;
-					return ERR_FAILED;
-				case ERR_OK:
-					posState= turn90State;
-					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation); /* do an extra sideMasurement before turn*/
-					if(adc_data.mm_Values.mm_MiddleL < 110){/*Set front wall before turn */
-						 (void) setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);
-					}else{
-						 (void) setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_true);/*Front wall of old field */
-					}
-					break;
-			}
+//			switch(driveToBranch(&segmentNumber,right,&adc_data)){
+//				case ERR_BUSY:
+//					posState = driveToLeftBranch;
+//					break;
+//				case ERR_FAILED:
+//					posState =  initState;
+//					return ERR_FAILED;
+//				case ERR_OK:
+//					posState= turn90State;
+//					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation); /* do an extra sideMasurement before turn*/
+//					if(adc_data.mm_Values.mm_MiddleL < 110){/*Set front wall before turn */
+//						 (void) setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);
+//					}else{
+//						 (void) setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_true);/*Front wall of old field */
+//					}
+//					break;
+//			}
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			switch(currentFieldState){
 			 	 case detectSideWalls:
@@ -440,8 +414,6 @@ byte TargetPosStateMaschine(void){
 //					 }
 
 
-					 wayHist[wayHistPointer++]=currentTargetOrientation;
-					 saveExplorationValue(wayHist[wayHistPointer-1],"WayHist", 10);
 					 saveExplorationValue(yPos,"y-Position (index)", 11);
 					 saveExplorationValue(xPos,"x-Position (index)", 6);
 					 incrmentSaveLinePointer(); /*only log at enter of new field->means all other values are from one call before*/

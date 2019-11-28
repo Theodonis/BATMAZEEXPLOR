@@ -21,7 +21,6 @@ typedef enum PosState{
 	calcNextStep,
 	turnLeft,
 	turnRight,
-	deadEnd,
 	turnAround,
 	returnToBranch,
 
