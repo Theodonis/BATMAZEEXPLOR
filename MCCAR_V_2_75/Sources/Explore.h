@@ -50,7 +50,8 @@ typedef enum directons{
 	north,
 	east,
 	south,
-	west
+	west,
+	unknown
 
 }t_directions;
 
@@ -73,6 +74,7 @@ typedef struct mazeFieldData{ // Field means one little square in built with fou
 	bool exploredFlag; // gets true when field is explored
 	t_possibleDirections posibDirections;
 	bool hasUnexploredBranchFlag; // gets true when when field has an unexplored branch
+	t_directions enterDirection;
 
 }t_mazeFieldData;
 
