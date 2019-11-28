@@ -278,7 +278,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 
 /*
 ** ===================================================================
-**     	byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data)
+**     	byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData* p_currentField, t_directions* p_currentOrientation)
 **
 **
 **     	@brief	Drive back until the last unexplored field or back to start
@@ -289,7 +289,8 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 **     	@param	segmentNumber: 	Pointer to segmentNumber counter. Used to set always the
 **     							correct Maze_seg.numberOfSegments to drive
 **     			adc_data: 		Pointer to adc_data element to write newest adc data in it
-**     			currentField: 	Pointer to currentField decide if its branch or turn in hist
+**     			p_currentField: Pointer to currentField to decide if its a branch or a turn in history
+**     			p_currentOrientation: pointer to current target orientation
 **
 **		@return Error code, possible codes:
 **                           ERR_OK - 		stopped at unexplored Branch or curv
@@ -300,7 +301,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 **
 ** ===================================================================
 */
-byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data){
+byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData* p_currentField, t_directions* p_currentOrientation){
 	static t_genericState state_toBranch = gen_initState;
 	static Maze_segments Maze_seg;
 	static uint16_t waitTicksCnt = 1;
@@ -315,18 +316,11 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data){
 
 			waitTicksCnt = 1;
 
-			/*put on I_LED's to measure distance correct at frist ADC_Cal in Driving*/
-			//I_LED_R_SetVal();I_LED_L_SetVal();I_LED_ML_SetVal();
-			//->should be done from Application
-
-			//don't call yet to because of I_LED's not read -> no more problem because use of newest adc in function
 			if(exploreDriving(Maze_seg, adc_data)){
 				return ERR_FAILED;
 			}
 			break;
-		case gen_runnigState: /*Drive till branch
-		 -> error if segments finished driven without branch detected
-		 -> error if front wall bevore branch*/
+		case gen_runnigState: /*Drive till branch*/
 			if(exploreDriving(Maze_seg, adc_data)){
 				state_toBranch=gen_initState;
 				return ERR_FAILED;
@@ -334,27 +328,27 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data){
 				/*Error but Driving must be finished */
 				state_toBranch=gen_ErrorState;
 				setStopFlag();
-			}else if(dir==left&&(adc_data->mm_Values.mm_Left>90)){
+
+			}else if(p_currentField->hasUnexploredBranchFlag){
 				/* Branch detected Finish Driving */
-				state_toBranch = gen_waitState;//gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
-//				setStopFlag();
-			}else if(dir==right&&(adc_data->mm_Values.mm_Right>90)){
-				/* Branch detected Finish Driving */
-				state_toBranch = gen_waitState;//gen_deinitState; // ev. go to wait state for some cycles to be in midle of branch
-//				setStopFlag();
+				state_toBranch = gen_waitState; //driving till middle of field
+
+			}else if(p_currentOrientation != get_wallOrientation(p_currentField->enterDirection, behind)){
+				/* no more driving against way history */
+				state_toBranch = gen_waitState; //driving till middle of field
 			}
 
 			break;
-		case gen_waitState:  /* drive some more steps to stop in middle of Branch*/
+		case gen_waitState:  /* drive some more steps to stop in middle of field*/
 			if(exploreDriving(Maze_seg, adc_data)){
-				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitstait */
+				waitTicksCnt = 1;
 				state_toBranch = gen_initState;
 				return ERR_FAILED;
-			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_AFTER_BRANCHDETECT){
+			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED){
 				state_toBranch 	= gen_deinitState;
-				waitTicksCnt 	= 1;
+				waitTicksCnt 	= 1;/*set to 1 because Driving was even called since set to waitState */
 				setStopFlag();
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontWall to don't crash */
 				state_toBranch 	= gen_deinitState;
 				waitTicksCnt 	= 1;
 				setStopFlag();

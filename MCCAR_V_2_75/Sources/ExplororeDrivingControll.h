@@ -42,7 +42,7 @@ typedef enum returToBranchState{
 byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_directions* wayHist, t_mazeFieldData currentMazeFieldData);
 
 byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data);
-byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data);
+byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData* p_currentField, t_directions* p_currentOrientation);
 byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
 byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir);
 
