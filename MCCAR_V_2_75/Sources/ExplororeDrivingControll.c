@@ -28,6 +28,22 @@
 #endif
 
 
+
+/*
+** ===================================================================
+**     	Method      : bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data)
+**
+**     	@brief	wrapper for Driving(). Add timing log and returns the newest adc values
+**
+**     	@param	MazeSegmentsToBeDriven: Segment to drive (turn or strait or ...)
+**     			adc_data: Pointer to adc_data element to write newest adc data in it
+**
+**		@return True: 	if driving segments is finished or stop after stop flag
+**				False: 	if driving is still on work
+**
+**
+** ===================================================================
+*/
 bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 	bool drivingFinishedFlag;
 	drivingFinishedFlag = Driving(MazeSegmentsToBeDriven);
@@ -43,7 +59,25 @@ bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* adc_data){
 }
 
 
-
+/*
+** ===================================================================
+**     	byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data)
+**
+**
+**     	@brief	Driving till a front wall is detected. Stop before the wall.
+**
+**     	@param	segmentNumber: 	Pointer to segmentNumber counter. Used to set always the
+**     							correct Maze_seg.numberOfSegments to drive
+**     			adc_data: 		Pointer to adc_data element to write newest adc data in it
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - stopped before wall
+**                           ERR_FAILED - no wall reached while Driving 10 Fields
+**                           ERR_BUSY - still driving -> call again in next cycle
+**
+**
+** ===================================================================
+*/
 byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 	static t_genericState state_toWall = gen_initState;
 	static Maze_segments Maze_seg;
@@ -82,6 +116,27 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 	return ERR_BUSY;
 }
 
+
+/*
+** ===================================================================
+**     	byte driveToUnexpBranch
+**
+**
+**     	@brief	Drive back until the last unexplored field or to start
+**
+**
+**     	@param	segmentNumber: 	Pointer to segmentNumber counter. Used to set always the
+**     							correct Maze_seg.numberOfSegments to drive
+**     			adc_data: 		Pointer to adc_data element to write newest adc data in it
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - stopped before wall
+**                           ERR_FAILED - no wall reached while Driving 10 Fields
+**                           ERR_BUSY - still driving -> call again in next cycle
+**
+**
+** ===================================================================
+*/
 byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_directions* wayHist, t_mazeFieldData currentMazeFieldData){
 	static t_returToBranchState state_toUnexp = retBra_initState;
 	static Maze_segments Maze_seg;
@@ -220,6 +275,31 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 	return ERR_BUSY;
 }
 
+
+/*
+** ===================================================================
+**     	byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data)
+**
+**
+**     	@brief	Drive back until the last unexplored field or back to start
+**     			For returning in way history
+**     			Driving strait till a curve in way history,
+**     			a front wall is detected or a unexplored branch is reached
+**
+**     	@param	segmentNumber: 	Pointer to segmentNumber counter. Used to set always the
+**     							correct Maze_seg.numberOfSegments to drive
+**     			adc_data: 		Pointer to adc_data element to write newest adc data in it
+**     			currentField: 	Pointer to currentField decide if its branch or turn in hist
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - 		stopped at unexplored Branch or curv
+**                           ERR_FAILED - 	unexpected wall in front,
+										 	no wall branch or curve reached while Driving 10 Fields
+**                           ERR_BUSY - 	still driving -> call again in next cycle
+**
+**
+** ===================================================================
+*/
 byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data){
 	static t_genericState state_toBranch = gen_initState;
 	static Maze_segments Maze_seg;
@@ -304,6 +384,30 @@ byte driveToBranch(uint8_t* segmentNumber, t_dir dir,ADC_data_t* adc_data){
 }
 
 
+/*
+** ===================================================================
+**     	byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir, bool reinit)
+**
+**
+**     	@brief	turn on spot 90 degree with decision if driving should be reinit at beginning
+**     			(only for internal use in ExploreDriving.c)
+**
+**     	@param	segmentNumber: 				Pointer to segmentNumber counter. Used to set always the
+**     										correct Maze_seg.numberOfSegments to drive
+**     			currentOrientation: 		Pointer to current target orientation to update after finished
+**     			dir:					 	turn direction
+**     			reinit:						reinit driving at begining if ture
+**
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - 		finished turning
+**                           ERR_FAILED - 	unexpected dir value, driving finished before satrter
+										 	no wall branch or curve reached while Driving 10 Fields
+**                           ERR_BUSY - 	still driving -> call again in next cycle
+**
+**
+** ===================================================================
+*/
 //ToDo: is an internal Wrapper function-> used to deside if reinit or not... -> should be fixed
 byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir, bool reinit){
 	static t_genericState state_turn90 = gen_initState;
@@ -381,11 +485,55 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 
 }
 
+/*
+** ===================================================================
+**     	byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir)
+**
+**
+**     	@brief	turn on spot 90 degree with and reinit driving at begin
+**
+**     	@param	segmentNumber: 				Pointer to segmentNumber counter. Used to set always the
+**     										correct Maze_seg.numberOfSegments to drive
+**     			currentOrientation: 		Pointer to current target orientation to update after finished
+**     			dir:					 	turn direction
+**
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - 		finished turning
+**                           ERR_FAILED - 	unexpected dir value, driving finished before satrter
+										 	no wall branch or curve reached while Driving 10 Fields
+**                           ERR_BUSY - 	still driving -> call again in next cycle
+**
+**
+** ===================================================================
+*/
 byte turn90(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir){
 	return turn90Intern(segmentNumber, currentOrientation, dir, true);
 }
 
 
+/*
+** ===================================================================
+**     	byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir)
+**
+**
+**     	@brief	turn on spot 180 degree with and reinit driving at begin
+**
+**     	@param	segmentNumber: 				Pointer to segmentNumber counter. Used to set always the
+**     										correct Maze_seg.numberOfSegments to drive
+**     			currentOrientation: 		Pointer to current target orientation to update after finished
+**     			dir:					 	turn direction
+**
+**
+**		@return Error code, possible codes:
+**                           ERR_OK - 		finished turning
+**                           ERR_FAILED - 	unexpected dir value, driving finished before satrter
+										 	no wall branch or curve reached while Driving 10 Fields
+**                           ERR_BUSY - 	still driving -> call again in next cycle
+**
+**
+** ===================================================================
+*/
 byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir){
 	static t_genericState state_turn180 = gen_initState;
 	static Maze_segments Maze_seg;

@@ -229,6 +229,9 @@ byte setDriveDirectionWallInfo(t_mazeFieldData* currentField, t_directions  curr
 **		@return Error code, possible codes:
 **                           ERR_OK - value set
 **                           ERR_FAILED - not yet used
+**
+**
+** ===================================================================
 */
 byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t_exploreInformation wallIsOpen){
 	switch(wallOrientation){
@@ -248,7 +251,23 @@ byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t
 	return ERR_OK;
 }
 
-
+/*
+** ===================================================================
+**     	Method      : bool get_isUnexploredBranch(t_mazeFieldData* currentField, t_directions currentTargetOrientation, t_dir infoDirection)
+**
+**     	@brief	decide if in relative direction to MC-Car orientation is an
+**     			an unexplored branch
+**
+**     	@param	currentField: Pointer to currentField
+**     			currentTargetOrientation: current orientation of MC-Car
+**     			infoDirection: direction relative to MC-Car orientation to get information about
+**
+**		@return True: 	if in infoDirection is an unexplored branch
+**				False: 	else
+**
+**
+** ===================================================================
+*/
 bool get_isUnexploredBranch(t_mazeFieldData* currentField, t_directions currentTargetOrientation, t_dir infoDirection){
 	switch(get_wallOrientation(currentTargetOrientation,infoDirection)){
 		case north:
