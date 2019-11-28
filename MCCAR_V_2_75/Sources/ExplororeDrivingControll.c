@@ -119,7 +119,7 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 
 /*
 ** ===================================================================
-**     	byte driveToUnexpBranch
+**     	byte byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_mazeFieldData* p_currentMazeFieldData)
 **
 **
 **     	@brief	Drive back until the last unexplored field or to start
@@ -137,68 +137,42 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 **
 ** ===================================================================
 */
-byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_directions* wayHist, t_mazeFieldData currentMazeFieldData){
+byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_mazeFieldData* p_currentMazeFieldData){
 	static t_returToBranchState state_toUnexp = retBra_initState;
-	static Maze_segments Maze_seg;
 	static uint16_t waitTicksCnt = 1;
 
 	switch(state_toUnexp){
-		case retBra_initState: /* Set up segments to drive */
-			Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
-			Maze_seg.numberOfSegments = ++(*segmentNumber);
-			state_toUnexp = retBra_runnigState;
-			if(exploreDriving(Maze_seg, adc_data)){
-				return ERR_FAILED;
-			}
-			break;
-		case retBra_runnigState: /*Drive till unexplored branch or wall -> error if segments driven without Walldetection*/
-			if(exploreDriving(Maze_seg, adc_data)){
-				state_toUnexp = retBra_initState;
-				return ERR_FAILED;
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
-					state_toUnexp=retBra_ErrorState;
-					setStopFlag();
-			}else if(currentMazeFieldData.hasUnexploredBranchFlag){
-				//setStopFlag();/* back at last Branch*/
-				state_toUnexp = retBra_unexploredBranchState;
-			}else if(*currentTargetOrientation != get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
-				//setStopFlag();/*curve in wayHist*/
-				state_toUnexp = retBra_waitState;
-			 /*Error: in wayHist was no wall!*/
-			}
-			break;
 
-		case retBra_waitState:  /* drive some more time to start curve in middle of field*/
-			if(exploreDriving(Maze_seg, adc_data)){
-				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitState */
-				state_toUnexp = retBra_initState;
-				return ERR_FAILED;
-			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED){
-				state_toUnexp 	= retBra_curvState;
-				waitTicksCnt 	= 1;
-				setStopFlag();
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
-				state_toUnexp 	= retBra_curvState;
-				waitTicksCnt 	= 1;
-				setStopFlag();
-			}else{
-				state_toUnexp 	= retBra_waitState;
-				waitTicksCnt++;
-			}
+		case retBra_initState:
+			state_toUnexp = retBra_calcNextStep;
+			static uint16_t waitTicksCnt = 1;
 			break;
-		case retBra_curvState: /* Finish driving nd return Ok if finished*/
-			if(exploreDriving(Maze_seg, adc_data)){
-				if(get_wallOrientation(*currentTargetOrientation,left)==get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
-					state_toUnexp = retBra_turnLeft;
-				}else if(get_wallOrientation(*currentTargetOrientation,right)==get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
-					state_toUnexp = retBra_turnRight;
-				}else{
+		case retBra_calcNextStep:
+			if(p_currentMazeFieldData->hasUnexploredBranchFlag){
+				return ERR_OK;
+			}
+			if(*currentTargetOrientation == get_wallOrientation(p_currentMazeFieldData->enterDirection,left)){
+					/*to return must driving against wayHist */
+				state_toUnexp = retBra_turnRight;
+
+			}else if(*currentTargetOrientation == get_wallOrientation(p_currentMazeFieldData->enterDirection,right)){
+					/*to return must driving against wayHist */
+				state_toUnexp = retBra_turnLeft;
+
+			}else if(*currentTargetOrientation == get_wallOrientation(p_currentMazeFieldData->enterDirection,behind)){
+						/*to return must driving against wayHist */
+					state_toUnexp = retBra_runnigState;
+
+			}else if(*currentTargetOrientation == p_currentMazeFieldData->enterDirection){
+						/*to return must driving against wayHist */
+					state_toUnexp = retBra_turnAround;
+
+			}else{
 					state_toUnexp = retBra_initState;
 					return ERR_FAILED;
-				}
 			}
-
 			break;
+
 		case retBra_turnLeft:
 			/*turn left 90° */
 			switch(turn90(segmentNumber, currentTargetOrientation, left)){
@@ -210,8 +184,6 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					return ERR_FAILED;
 				case ERR_OK:
 					state_toUnexp= retBra_runnigState;
-					Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
-					Maze_seg.numberOfSegments = ++(*segmentNumber);
 					break;
 			}
 			break;
@@ -227,45 +199,126 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					return ERR_FAILED;
 				case ERR_OK:
 					state_toUnexp= retBra_runnigState;
-					Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
-					Maze_seg.numberOfSegments = ++(*segmentNumber);
 					break;
 			}
 			break;
 
-		case retBra_unexploredBranchState:
-			  /* drive some more time to start curve in middle of field*/
-			if(exploreDriving(Maze_seg, adc_data)){
-				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitState */
-				state_toUnexp = retBra_initState;
-				return ERR_FAILED;
-			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED){
-				state_toUnexp 	= retBra_deinitState;
-				waitTicksCnt 	= 1;
-				setStopFlag();
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
-				state_toUnexp 	= retBra_deinitState;
-				waitTicksCnt 	= 1;
-				setStopFlag();
-			}else{
-				state_toUnexp 	= retBra_unexploredBranchState;
-				waitTicksCnt++;
+
+		case retBra_turnAround:
+			/*turn left 180° */
+			switch(turn180(segmentNumber, currentTargetOrientation, left)){
+				case ERR_BUSY:
+					state_toUnexp = retBra_turnAround;
+					break;
+				case ERR_FAILED:
+					state_toUnexp =  retBra_initState;
+					return ERR_FAILED;
+				case ERR_OK:
+					state_toUnexp= retBra_runnigState;
+					break;
 			}
 			break;
 
+		case retBra_runnigState: /*Drive till unexplored branch or wall -> error if segments driven without Walldetection*/
+			switch(driveToBranch(segmentNumber,adc_data,p_currentMazeFieldData,currentTargetOrientation)){
+				case ERR_OK:
+					state_toUnexp = retBra_calcNextStep;
+					break;
+				case ERR_FAILED:
+					state_toUnexp = retBra_initState;
+					return ERR_FAILED;
+				case ERR_BUSY:
+					state_toUnexp = retBra_runnigState;
+					break;
+			}
 
-		case retBra_deinitState: /* stop in driving return ok -> Back on a field with unexplored branch */
-			if(exploreDriving(Maze_seg, adc_data)){
-				state_toUnexp = retBra_initState;
-				return ERR_OK;
-			}
+//			if(exploreDriving(Maze_seg, adc_data)){
+//				state_toUnexp = retBra_initState;
+//				return ERR_FAILED;
+//			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
+//					state_toUnexp=retBra_ErrorState;
+//					setStopFlag();
+//			}else if(currentMazeFieldData.hasUnexploredBranchFlag){
+//				//setStopFlag();/* back at last Branch*/
+//				state_toUnexp = retBra_unexploredBranchState;
+//			}else if(*currentTargetOrientation != get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
+//				//setStopFlag();/*curve in wayHist*/
+//				state_toUnexp = retBra_waitState;
+//			 /*Error: in wayHist was no wall!*/
+//			}
 			break;
-		case retBra_ErrorState: /* finish driving and return error*/
-			if(exploreDriving(Maze_seg, adc_data)){
-				state_toUnexp = retBra_initState;
-				return ERR_FAILED;
-			}
-			break;
+
+		  /* drive some more time to start curve in middle of field*/
+//			if(exploreDriving(Maze_seg, adc_data)){
+//				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitState */
+//				state_toUnexp = retBra_initState;
+//				return ERR_FAILED;
+//			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED){
+//				state_toUnexp 	= retBra_curvState;
+//				waitTicksCnt 	= 1;
+//				setStopFlag();
+//			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+//				state_toUnexp 	= retBra_curvState;
+//				waitTicksCnt 	= 1;
+//				setStopFlag();
+//			}else{
+//				state_toUnexp 	= retBra_waitState;
+//				waitTicksCnt++;
+//			}
+//			break;
+//		case retBra_curvState: /* Finish driving nd return Ok if finished*/
+//			if(exploreDriving(Maze_seg, adc_data)){
+//				if(get_wallOrientation(*currentTargetOrientation,left)==get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
+//					state_toUnexp = retBra_turnLeft;
+//				}else if(get_wallOrientation(*currentTargetOrientation,right)==get_wallOrientation(currentMazeFieldData.enterDirection,behind)){
+//					state_toUnexp = retBra_turnRight;
+//				}else{
+//					state_toUnexp = retBra_initState;
+//					return ERR_FAILED;
+//				}
+//			}
+//
+//			break;
+//
+//		case retBra_unexploredBranchState:
+//			  /* drive some more time to start curve in middle of field*/
+//			if(exploreDriving(Maze_seg, adc_data)){
+//				waitTicksCnt = 1; /*set to 1 because Driving was even called since set to waitState */
+//				state_toUnexp = retBra_initState;
+//				return ERR_FAILED;
+//			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED){
+//				state_toUnexp 	= retBra_deinitState;
+//				waitTicksCnt 	= 1;
+//				setStopFlag();
+//			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+//				state_toUnexp 	= retBra_deinitState;
+//				waitTicksCnt 	= 1;
+//				setStopFlag();
+//			}else{
+//				state_toUnexp 	= retBra_unexploredBranchState;
+//				waitTicksCnt++;
+//			}
+//			break;
+//
+//
+//		case retBra_deinitState: /* stop in driving return ok -> Back on a field with unexplored branch */
+//			if(exploreDriving(Maze_seg, adc_data)){
+//				state_toUnexp = retBra_initState;
+//				return ERR_OK;
+//			}
+//			break;
+//		case retBra_ErrorState: /* finish driving and return error*/
+//			if(exploreDriving(Maze_seg, adc_data)){
+//				state_toUnexp = retBra_initState;
+//				return ERR_FAILED;
+//			}
+//			break;
+
+		case retBra_ErrorState: /*not used till now*/
+			state_toUnexp = retBra_initState;
+			return ERR_FAILED;
+		case retBra_waitState: /*not used till now*/
+		case retBra_deinitState: /*not used till now*/
 		default:
 			state_toUnexp = retBra_initState;
 			break;
