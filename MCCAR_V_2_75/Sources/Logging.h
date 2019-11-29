@@ -46,7 +46,7 @@ void FloatOverBLE(float pData);
 void NewLine(void);
 void saveADC(ADC_data_t *adcData);
 void saveIMU(IMU_data_t *imuData);
-void IntOverBLE(int pData);
+void IntOverBLE(uint8_t pData);
 void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r[2],  float v_est[2], float q_r[3], float q[3],
 		Distance_sensors_HP_filtered *distance_HP, float x_IMU_dot_test, float x_enc_test, float I_mot_ist[2],
 		Distance_sensors_LP_filtered *distanceLP, float d_hp_filtered, bool SegmentFinished, float gyroXY[2],

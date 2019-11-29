@@ -366,14 +366,15 @@ void FloatOverBLE(float pData)
 	putStream((uint8_t*)a_xbuf);
 }
 
-void IntOverBLE(int pData)
+void IntOverBLE(uint8_t pData)
 {
-	uint8_t a_xbuf[30];
-	a_xbuf[0] = '\0';
-	UTIL1_Num32uToStr(a_xbuf, sizeof(a_xbuf),(pData));
-	UTIL1_strcat(a_xbuf, sizeof(a_xbuf)," ");
-	UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\t');
-	putStream((uint8_t*)a_xbuf);
+    uint8_t a_xbuf[5];
+    a_xbuf[0] = '\0';
+    UTIL1_Num8uToStr(a_xbuf, sizeof(a_xbuf),(pData));
+    UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\r');
+    UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\n');
+    putStream((uint8_t*)a_xbuf);
+
 }
 
 void NewLine(void)
