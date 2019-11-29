@@ -549,14 +549,14 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if(xPos>4&&currentTargetOrientation==east){/*start logging at the fourth field*/
+//		if(xPos>4&&currentTargetOrientation==east){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
 			}else{
 				saveDataCnt++;
 			}
-		}
+//		}
 	#endif
 
 	return ERR_BUSY;
