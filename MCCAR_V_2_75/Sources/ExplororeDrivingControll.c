@@ -130,8 +130,8 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 **     			adc_data: 		Pointer to adc_data element to write newest adc data in it
 **
 **		@return Error code, possible codes:
-**                           ERR_OK - stopped before wall
-**                           ERR_FAILED - no wall reached while Driving 10 Fields
+**                           ERR_OK - stopped at unexplored Branch or at startfield
+**                           ERR_FAILED - Failed in here or in lower Function
 **                           ERR_BUSY - still driving -> call again in next cycle
 **
 **
@@ -183,7 +183,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					state_toUnexp= retBra_runnigState;
+					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
 			break;
@@ -198,7 +198,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					state_toUnexp= retBra_runnigState;
+					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
 			break;
@@ -214,7 +214,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					state_toUnexp= retBra_runnigState;
+					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
 			break;
@@ -334,8 +334,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 **     	byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData* p_currentField, t_directions* p_currentOrientation)
 **
 **
-**     	@brief	Drive back until the last unexplored field or back to start
-**     			For returning in way history
+**     	@brief	For returning in way history
 **     			Driving strait till a curve in way history,
 **     			a front wall is detected or a unexplored branch is reached
 **
@@ -386,7 +385,7 @@ byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData
 				/* Branch detected Finish Driving */
 				state_toBranch = gen_waitState; //driving till middle of field
 
-			}else if(p_currentOrientation != get_wallOrientation(p_currentField->enterDirection, behind)){
+			}else if(*p_currentOrientation != get_wallOrientation(p_currentField->enterDirection, behind)){
 				/* no more driving against way history */
 				state_toBranch = gen_waitState; //driving till middle of field
 			}
