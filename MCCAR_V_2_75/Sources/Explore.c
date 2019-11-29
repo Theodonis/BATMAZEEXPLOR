@@ -11,6 +11,7 @@
 #include "TargetInField_Position.h"
 #include "ExplororeDrivingControll.h"
 #include "MazeHndl.h"
+#include "UTIL1.h"
 
 
 #if ENABLE_EXPLORE_DATALOG
@@ -45,6 +46,9 @@ byte TargetPosStateMaschine(void){
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
+	#if LOG_BLE_ENABLE
+		static t_genericState ble_Log_State = gen_initState;
+	#endif
 	t_fieldState currentFieldState = 0;
 
 
@@ -109,6 +113,9 @@ byte TargetPosStateMaschine(void){
 				case saveFrontwall:
 					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
 					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
+					#if LOG_BLE_ENABLE
+						ble_Log_State = gen_initState; //start bluetooth send
+					#endif
 					#if LOG_DEPENDING_MAZE_POS
 
 						saveExplorationValue(posState,"state", 2);
@@ -202,8 +209,11 @@ byte TargetPosStateMaschine(void){
 //					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
 //					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
 
-					#if LOG_DEPENDING_MAZE_POS
+					#if LOG_BLE_ENABLE
+						ble_Log_State = gen_initState; //start bluetooth send
+					#endif
 
+					#if LOG_DEPENDING_MAZE_POS
 						saveExplorationValue(posState,"state", 2);
 						saveExplorationValue(adc_data.raw_Values.raw_MiddleL,"DistanzFrontL",3);
 						saveExplorationValue(driving_data.posEstimation.xPos,"X-Pos", 4);
@@ -488,7 +498,34 @@ byte TargetPosStateMaschine(void){
 
 	}
 
+	#if LOG_BLE_ENABLE
+		switch(ble_Log_State){
+			case gen_initState:
+				IntOverBLE(xPos);
+				ble_Log_State =gen_runnigState;
+				break;
+			case gen_runnigState:
+				IntOverBLE(yPos);
+				ble_Log_State =gen_deinitState;
+				break;
+			case gen_deinitState:
+				IntOverBLE((MazeData[xPos][yPos].posibDirections.north<<6)&&(MazeData[xPos][yPos].posibDirections.east<<4)&&(MazeData[xPos][yPos].posibDirections.south<<2)&&MazeData[xPos][yPos].posibDirections.west);
+				ble_Log_State =gen_ErrorState;
+				break;
+			case gen_ErrorState:
+				IntOverBLE(0xFF);
+				ble_Log_State =gen_waitState;
+				break;
+			case gen_waitState:
+				/*it an Idle state*/
+				ble_Log_State =gen_waitState;
+				break;
+		}
 
+	#endif
+	#if LOG_BLE_ENABLE
+
+	#endif
 
 
 	#if LOG_DEPENDING_ON_CYCLE
@@ -523,6 +560,7 @@ byte TargetPosStateMaschine(void){
 	#endif
 
 	return ERR_BUSY;
+
 
 }
 
