@@ -223,6 +223,8 @@ t_directions get_wallOrientation(t_directions targetOrientation, t_dir dir){
 		}else{
 			wallOrientation = targetOrientation+2;
 		}
+	}else if(dir==front){
+		wallOrientation = targetOrientation;
 	}
 	return wallOrientation;
 }

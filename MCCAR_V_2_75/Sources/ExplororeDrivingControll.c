@@ -139,6 +139,7 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 */
 byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_directions* currentTargetOrientation, t_mazeFieldData* p_currentMazeFieldData){
 	static t_returToBranchState state_toUnexp = retBra_initState;
+	static t_dir dir_toggel = left;
 	static uint16_t waitTicksCnt = 1;
 
 	switch(state_toUnexp){
@@ -151,15 +152,15 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			if(p_currentMazeFieldData->hasUnexploredBranchFlag){
 				return ERR_OK;
 			}
-			if(*currentTargetOrientation == get_wallOrientation(p_currentMazeFieldData->enterDirection,left)){
+			if(p_currentMazeFieldData->enterDirection == get_wallOrientation(*currentTargetOrientation,left)){
 					/*to return must driving against wayHist */
 				state_toUnexp = retBra_turnRight;
 
-			}else if(*currentTargetOrientation == get_wallOrientation(p_currentMazeFieldData->enterDirection,right)){
+			}else if(p_currentMazeFieldData->enterDirection == get_wallOrientation(*currentTargetOrientation,right)){
 					/*to return must driving against wayHist */
 				state_toUnexp = retBra_turnLeft;
 
-			}else if(*currentTargetOrientation == get_wallOrientation(p_currentMazeFieldData->enterDirection,behind)){
+			}else if(p_currentMazeFieldData->enterDirection == get_wallOrientation(*currentTargetOrientation,behind)){
 						/*to return must driving against wayHist */
 					state_toUnexp = retBra_runnigState;
 
@@ -205,8 +206,9 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 
 
 		case retBra_turnAround:
+
 			/*turn left 180° */
-			switch(turn180(segmentNumber, currentTargetOrientation, left)){
+			switch(turn180(segmentNumber, currentTargetOrientation, dir_toggel)){
 				case ERR_BUSY:
 					state_toUnexp = retBra_turnAround;
 					break;
@@ -215,6 +217,10 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					return ERR_FAILED;
 				case ERR_OK:
 					state_toUnexp= retBra_calcNextStep;
+					dir_toggel++;
+					if(dir_toggel>1){
+						dir_toggel = left;
+					}
 					break;
 			}
 			break;
@@ -584,6 +590,7 @@ byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir
 	static t_genericState state_turn180 = gen_initState;
 	static Maze_segments Maze_seg;
 	ADC_data_t adc_data;
+	static uint16_t waitTicksCnt = 1;
 
 	bool reinit = true;
 	switch (state_turn180) {
@@ -637,6 +644,14 @@ byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir
 			return ERR_OK;
 			break;
 		case gen_waitState:  /* not used in this case*/
+			if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED){
+				state_turn180 	= gen_deinitState;
+				waitTicksCnt 	= 1;/*set to 1 because Driving was even called since set to waitState */
+			}else{
+				state_turn180 	= gen_waitState;
+				waitTicksCnt++;
+			}
+			break;
 		case gen_ErrorState: /* not used in this case*/
 		default:
 			state_turn180 = gen_initState;
