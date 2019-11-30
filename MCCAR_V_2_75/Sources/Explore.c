@@ -46,8 +46,10 @@ byte TargetPosStateMaschine(void){
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
+	static uint8_t numberofTurns = 0;
+
 	#if LOG_BLE_ENABLE
-		static t_genericState ble_Log_State = gen_initState;
+		static t_genericState ble_Log_State = gen_waitState;
 	#endif
 	t_fieldState currentFieldState = 0;
 
@@ -75,7 +77,7 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = explore;//initTurnAngleCalibration;//
+			posState = explore;//initTurnAngleCalibration;//turnAngleCalibration;//
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
@@ -102,20 +104,22 @@ byte TargetPosStateMaschine(void){
 					posState= calcNextStep;
 					break;
 			}
-
+//			IntOverBLE(xPos);
 			/* do measurement */
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			switch(currentFieldState){
 				case detectSideWalls:
 					/*measure side walls in Middle of Field and set Field to explored*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
+
+					#if LOG_BLE_ENABLE
+						ble_Log_State = gen_initState; //start bluetooth send
+					#endif
 					break;
 				case saveFrontwall:
 					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
 					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
-					#if LOG_BLE_ENABLE
-						ble_Log_State = gen_initState; //start bluetooth send
-					#endif
+
 					#if LOG_DEPENDING_MAZE_POS
 
 						saveExplorationValue(posState,"state", 2);
@@ -145,6 +149,9 @@ byte TargetPosStateMaschine(void){
 				}else if(get_isUnexploredBranch(&MazeData[xPos][yPos],currentTargetOrientation,right)){
 					/* it's an unexplored branch on the right!*/
 					posState= turnRight;
+				}else if(get_isUnexploredBranch(&MazeData[xPos][yPos],currentTargetOrientation,front)){
+					/* it's an unexplored branch in front!*/
+					posState= explore;
 				}
 			}else{
 				/*it's a dead end*/
@@ -200,6 +207,9 @@ byte TargetPosStateMaschine(void){
 			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
 			switch(currentFieldState){
 				case detectSideWalls:
+					#if LOG_BLE_ENABLE
+						ble_Log_State = gen_initState; //start bluetooth send
+					#endif
 					/*measurement not used while returning on explored path*/
 //					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					break;
@@ -209,9 +219,7 @@ byte TargetPosStateMaschine(void){
 //					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
 //					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
 
-					#if LOG_BLE_ENABLE
-						ble_Log_State = gen_initState; //start bluetooth send
-					#endif
+
 
 					#if LOG_DEPENDING_MAZE_POS
 						saveExplorationValue(posState,"state", 2);
@@ -457,7 +465,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= driveToFront;
+					posState= stopped;
 					break;
 			}
 			break;
@@ -480,12 +488,26 @@ byte TargetPosStateMaschine(void){
 //				MazeSegmentsToBeDriven.segments[numOfTurns].SingleSegment = 	900;
 //				MazeSegmentsToBeDriven.numberOfSegments=numOfTurns+1;
 //			}
-			return ERR_BUSY;
+//			return ERR_BUSY;
 		case turnAngleCalibration:
-//			if(exploreDriving(MazeSegmentsToBeDriven,&logValCnt)){//Driving(MazeSegmentsToBeDriven)){//
-//				posState=stopped;
-//			}
-//			break;
+			switch(turn180(&segmentNumber,&currentTargetOrientation,left)){//Driving(MazeSegmentsToBeDriven)){//
+			case ERR_OK:
+				if(numberofTurns>3){
+					posState=stopped;
+					numberofTurns = 0;
+				}else{
+					posState=turnAngleCalibration;
+					numberofTurns++;
+				}
+				break;
+			case ERR_FAILED:
+				posState = initState;
+				return ERR_FAILED;
+			case ERR_BUSY:
+				posState=turnAngleCalibration;
+				break;
+			}
+			break;
 		case errorStop:
 			posState=stopped;
 			return ERR_FAILED;
@@ -509,8 +531,10 @@ byte TargetPosStateMaschine(void){
 				ble_Log_State =gen_deinitState;
 				break;
 			case gen_deinitState:
-				IntOverBLE((MazeData[xPos][yPos].posibDirections.north<<6)&&(MazeData[xPos][yPos].posibDirections.east<<4)&&(MazeData[xPos][yPos].posibDirections.south<<2)&&MazeData[xPos][yPos].posibDirections.west);
-				ble_Log_State =gen_ErrorState;
+				if(currentFieldState==saveFrontwall){
+					IntOverBLE((MazeData[xPos][yPos].posibDirections.north<<6)&&(MazeData[xPos][yPos].posibDirections.east<<4)&&(MazeData[xPos][yPos].posibDirections.south<<2)&&MazeData[xPos][yPos].posibDirections.west);
+					ble_Log_State =gen_ErrorState;
+				}
 				break;
 			case gen_ErrorState:
 				IntOverBLE(0xFF);

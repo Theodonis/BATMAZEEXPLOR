@@ -42,7 +42,8 @@ typedef enum PosState{
 typedef enum dir{
 	left,
 	right,
-	behind
+	behind,
+	front
 } t_dir;
 
 typedef enum directons{
