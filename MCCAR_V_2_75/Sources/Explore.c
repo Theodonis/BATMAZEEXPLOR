@@ -101,7 +101,7 @@ byte TargetPosStateMaschine(void){
 					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
-					posState= calcNextStep;
+					posState= stopped;//calcNextStep;
 					break;
 			}
 //			IntOverBLE(xPos);
@@ -532,7 +532,8 @@ byte TargetPosStateMaschine(void){
 				break;
 			case gen_deinitState:
 				if(currentFieldState==saveFrontwall){
-					IntOverBLE((MazeData[xPos][yPos].posibDirections.north<<6)&&(MazeData[xPos][yPos].posibDirections.east<<4)&&(MazeData[xPos][yPos].posibDirections.south<<2)&&MazeData[xPos][yPos].posibDirections.west);
+					uint8_t wallMerge = (MazeData[xPos][yPos].posibDirections.north<<6)|(MazeData[xPos][yPos].posibDirections.east<<4)|(MazeData[xPos][yPos].posibDirections.south<<2)|MazeData[xPos][yPos].posibDirections.west;
+					IntOverBLE(wallMerge);
 					ble_Log_State =gen_ErrorState;
 				}
 				break;
