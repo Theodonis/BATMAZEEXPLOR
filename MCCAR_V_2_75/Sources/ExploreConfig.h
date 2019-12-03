@@ -19,7 +19,7 @@
 #define LOG_DEPENDING_ON_CYCLE 				(1&&ENABLE_EXPLORE_DATALOG)
 #define LOG_DEPENDING_MAZE_POS 				(1&&ENABLE_EXPLORE_DATALOG&&!LOG_DEPENDING_ON_CYCLE)
 
-#define LOG_BLE_ENABLE 						(1) // enable send data over bluetooth wille explore
+#define LOG_BLE_ENABLE 						(0) // enable send data over bluetooth wille explore
 
 #define EXPLOR_DRIVE_TIME_AFTER_BRANCHDETECT 				(0.03) 	//time in s ~>additional driven m if velocity 1m/s
 #define EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED 	(0.085)//(0.095) //time in s ~>additional driven m if velocity 1m/s
