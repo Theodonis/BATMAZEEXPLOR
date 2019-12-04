@@ -145,11 +145,14 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 	switch(state_toUnexp){
 
 		case retBra_initState:
+			IntOverBLE(state_toUnexp);
 			state_toUnexp = retBra_calcNextStep;
 			static uint16_t waitTicksCnt = 1;
 			break;
 		case retBra_calcNextStep:
+			IntOverBLE(state_toUnexp);
 			if(p_currentMazeFieldData->hasUnexploredBranchFlag){
+				state_toUnexp=retBra_initState;
 				return ERR_OK;
 			}
 			if(p_currentMazeFieldData->enterDirection == get_wallOrientation(*currentTargetOrientation,left)){
@@ -184,6 +187,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
+					IntOverBLE(state_toUnexp);
 					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
@@ -199,6 +203,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
+					IntOverBLE(state_toUnexp);
 					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
@@ -216,6 +221,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
+					IntOverBLE(state_toUnexp);
 					state_toUnexp= retBra_calcNextStep;
 					dir_toggel++;
 					if(dir_toggel>1){
@@ -225,9 +231,10 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			}
 			break;
 
-		case retBra_runnigState: /*Drive till unexplored branch or wall -> error if segments driven without Walldetection*/
+		case retBra_runnigState: /*Drive till unexplored branch or wall -> error if segments driven without Frontwalldetection*/
 			switch(driveToBranch(segmentNumber,adc_data,p_currentMazeFieldData,currentTargetOrientation)){
 				case ERR_OK:
+					IntOverBLE(state_toUnexp);
 					state_toUnexp = retBra_calcNextStep;
 					break;
 				case ERR_FAILED:
@@ -330,7 +337,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			break;
 	}
 
-	saveExplorationValue(state_toUnexp,"Returnstate", 10);
+//	saveExplorationValue(state_toUnexp,"Returnstate", 10);
 	return ERR_BUSY;
 }
 
