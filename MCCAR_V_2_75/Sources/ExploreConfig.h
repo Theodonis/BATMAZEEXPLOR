@@ -30,7 +30,7 @@
 
 #define MAX_FRONTDIST_TO_WALL_RAW							(62000) 	// if front distance is smaler ->stop driving
 
-#define MAX_FRONTDIST_TO_WALL_MM							(82) 	// if front distance is smaler ->stop driving
+#define MAX_FRONTDIST_TO_WALL_MM							(84) 	// if front distance is smaler ->stop driving
 
 #define MAZE_FIELDS_WIDTH_NORTH_DIRECTION (9)
 #define MAZE_FIELDS_LENGTH_EAST_DIRECTION (9)

@@ -100,7 +100,7 @@ byte TargetPosStateMaschine(void){
 					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
-					posState= turnRight;//calcNextStep;//stopped;//
+					posState= calcNextStep;//stopped;//turnRight;//
 					break;
 			}
 //			IntOverBLE(xPos);
@@ -168,7 +168,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= explore;
+					posState= explore;//stopped;//
 					break;
 			}
 			break;
@@ -183,7 +183,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= stopped;//explore;
+					posState= explore;//stopped;//
 					break;
 			}
 			break;
@@ -555,13 +555,13 @@ byte TargetPosStateMaschine(void){
 	#if LOG_DEPENDING_ON_CYCLE
 
 		saveExplorationValue(currentFieldState,"Fieldstate", 2);
-		saveExplorationValue(adc_data.raw_Values.raw_MiddleL,"DistanzFrontL",3);
+		saveExplorationValue(adc_data.mm_Values.mm_MiddleL,"DistanzFrontL",3);
 		saveExplorationValue(driving_data.posEstimation.xPos,"X-Pos", 4);
 		saveExplorationValue(driving_data.posEstimation.yPos,"Y-Pos",5);
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(yPos,"y-Position (index)", 7);
-		saveExplorationValue(adc_data.raw_Values.raw_Left,"LeftDist", 8);
-		saveExplorationValue(adc_data.raw_Values.raw_Right,"RightDist", 9);
+		saveExplorationValue(adc_data.mm_Values.mm_Left,"LeftDist", 8);
+		saveExplorationValue(adc_data.mm_Values.mm_Right,"RightDist", 9);
 		saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 10);
 		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 11);
 		saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Feld Info Süd", 12);
@@ -573,7 +573,7 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if((xPos<2||xPos>6)&&currentTargetOrientation==north){/*start logging at the fourth field*/
+		if((xPos<2||xPos>6)&&currentTargetOrientation==south){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;

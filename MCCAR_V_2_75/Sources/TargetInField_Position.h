@@ -19,7 +19,7 @@
 
 /*FieldPos inite*/
 #define INIT_POS_INFIELD 				(0.081) //(0.078)		//(0.074)
-#define POS_INFIELD_AFTER_TURN_180 		(0.0777)//onely in one measure	//(0.075)//e...		//(0.075)
+#define POS_INFIELD_AFTER_TURN_180 		(0.1) 	//(0.0777)//onely in one measure	//(0.075)//e...		//(0.075)
 #define POS_INFIELD_AFTER_TURN_90 		(0.0725)//not yet done...
 
 typedef enum fieldstate{
