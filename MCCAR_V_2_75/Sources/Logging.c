@@ -12,6 +12,7 @@
 #include "ADC.h"
 #include "I_LED_L.h"
 #include "I_LED_R.h"
+#include "JOY_DOWN.h"
 
 #include "Driving.h"
 #include "Explore.h"
@@ -329,6 +330,9 @@ void printSaveData(void)
 //		  			  		  UTIL1_chcat(testt, sizeof(testt), '\t');
 		  putStream((uint8_t*)testt);
 		  memset(&testt[0], 0, sizeof(testt));
+		  if(JOY_DOWN_GetVal() == 0){
+			  break;
+		  }
 		  WAIT1_Waitms(50); //20, 40
 	  }
 }
