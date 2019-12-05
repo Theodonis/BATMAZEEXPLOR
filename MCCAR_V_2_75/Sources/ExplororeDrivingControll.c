@@ -96,7 +96,7 @@ byte driveToFrontWall(uint8_t* segmentNumber,ADC_data_t* adc_data){
 			if(exploreDriving(Maze_seg, adc_data)){
 				state_toWall=gen_initState;
 				return ERR_FAILED;
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
+			}else if(adc_data->mm_Values.mm_MiddleL < MAX_FRONTDIST_TO_WALL_MM){
 				state_toWall=gen_deinitState;
 				setStopFlag();
 			}
@@ -144,13 +144,19 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 
 	switch(state_toUnexp){
 
-		case retBra_initState:
+	case retBra_initState:
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
 			IntOverBLE(state_toUnexp);
+#endif
 			state_toUnexp = retBra_calcNextStep;
 			static uint16_t waitTicksCnt = 1;
 			break;
+
 		case retBra_calcNextStep:
+
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
 			IntOverBLE(state_toUnexp);
+#endif
 			if(p_currentMazeFieldData->hasUnexploredBranchFlag){
 				state_toUnexp=retBra_initState;
 				return ERR_OK;
@@ -166,10 +172,17 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 			}else if(p_currentMazeFieldData->enterDirection == get_wallOrientation(*currentTargetOrientation,behind)){
 						/*to return must driving against wayHist */
 					state_toUnexp = retBra_runnigState;
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
+					IntOverBLE(state_toUnexp);
+#endif
 
 			}else if(*currentTargetOrientation == p_currentMazeFieldData->enterDirection){
 						/*to return must driving against wayHist */
 					state_toUnexp = retBra_turnAround;
+
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
+					IntOverBLE(state_toUnexp);
+#endif
 
 			}else{
 					state_toUnexp = retBra_initState;
@@ -187,7 +200,10 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
+
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
 					IntOverBLE(state_toUnexp);
+#endif
 					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
@@ -203,7 +219,10 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
+
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
 					IntOverBLE(state_toUnexp);
+# endif
 					state_toUnexp= retBra_calcNextStep;
 					break;
 			}
@@ -218,10 +237,16 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 					state_toUnexp = retBra_turnAround;
 					break;
 				case ERR_FAILED:
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
+					IntOverBLE(state_toUnexp);
+					IntOverBLE(0xFF);
+#endif
 					state_toUnexp =  retBra_initState;
 					return ERR_FAILED;
 				case ERR_OK:
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
 					IntOverBLE(state_toUnexp);
+#endif
 					state_toUnexp= retBra_calcNextStep;
 					dir_toggel++;
 					if(dir_toggel>1){
@@ -234,13 +259,18 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 		case retBra_runnigState: /*Drive till unexplored branch or wall -> error if segments driven without Frontwalldetection*/
 			switch(driveToBranch(segmentNumber,adc_data,p_currentMazeFieldData,currentTargetOrientation)){
 				case ERR_OK:
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
 					IntOverBLE(state_toUnexp);
+#endif
 					state_toUnexp = retBra_calcNextStep;
 					break;
 				case ERR_FAILED:
 					state_toUnexp = retBra_initState;
 					return ERR_FAILED;
 				case ERR_BUSY:
+#if BLE_DRIVETOUNEXPLOREDBRANCH_LOG
+					IntOverBLE(20);
+#endif
 					state_toUnexp = retBra_runnigState;
 					break;
 			}
@@ -248,7 +278,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 //			if(exploreDriving(Maze_seg, adc_data)){
 //				state_toUnexp = retBra_initState;
 //				return ERR_FAILED;
-//			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
+//			}else if(adc_data->raw_Values.raw_MiddleL < MAX_FRONTDIST_TO_WALL_RAW){
 //					state_toUnexp=retBra_ErrorState;
 //					setStopFlag();
 //			}else if(currentMazeFieldData.hasUnexploredBranchFlag){
@@ -270,7 +300,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 //				state_toUnexp 	= retBra_curvState;
 //				waitTicksCnt 	= 1;
 //				setStopFlag();
-//			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+//			}else if(adc_data->raw_Values.raw_MiddleL < MAX_FRONTDIST_TO_WALL_RAW){ /*still watch out for e frontwall to don't crash */
 //				state_toUnexp 	= retBra_curvState;
 //				waitTicksCnt 	= 1;
 //				setStopFlag();
@@ -303,7 +333,7 @@ byte driveToUnexpBranch(uint8_t* segmentNumber,ADC_data_t* adc_data, t_direction
 //				state_toUnexp 	= retBra_deinitState;
 //				waitTicksCnt 	= 1;
 //				setStopFlag();
-//			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontwall to don't crash */
+//			}else if(adc_data->raw_Values.raw_MiddleL < MAX_FRONTDIST_TO_WALL_RAW){ /*still watch out for e frontwall to don't crash */
 //				state_toUnexp 	= retBra_deinitState;
 //				waitTicksCnt 	= 1;
 //				setStopFlag();
@@ -377,11 +407,15 @@ byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData
 		case gen_initState: /* Set up segments to drive */
 			Maze_seg.segments[(*segmentNumber)].SingleSegment = 10;
 			Maze_seg.numberOfSegments = ++(*segmentNumber);
+#if BLE_DRIVETOBRANCH_LOG
+					IntOverBLE(state_toBranch);
+#endif
 			state_toBranch = gen_runnigState;
 
 			waitTicksCnt = 1;
 
 			if(exploreDriving(Maze_seg, adc_data)){
+				setStopFlag();
 				return ERR_FAILED;
 			}
 			break;
@@ -389,10 +423,14 @@ byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData
 			if(exploreDriving(Maze_seg, adc_data)){
 				state_toBranch=gen_initState;
 				return ERR_FAILED;
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){
+			}else if(adc_data->mm_Values.mm_MiddleL < MAX_FRONTDIST_TO_WALL_MM){
 				/*Error but Driving must be finished */
-				state_toBranch=gen_ErrorState;
+				#if BLE_DRIVETOBRANCH_LOG
+					IntOverBLE(state_toBranch);
+				#endif
+
 				setStopFlag();
+				state_toBranch=gen_ErrorState;
 
 			}else if(p_currentField->hasUnexploredBranchFlag){
 				/* Branch detected Finish Driving */
@@ -402,6 +440,11 @@ byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData
 				/* no more driving against way history */
 				state_toBranch = gen_waitState; //driving till middle of field
 			}
+#if BLE_DRIVETOBRANCH_LOG
+//					IntOverBLE(state_toBranch);
+//			IntOverBLE(*segmentNumber);
+//			IntOverBLE(Maze_seg.segments[(*segmentNumber)-1].SingleSegment);
+#endif
 
 			break;
 		case gen_waitState:  /* drive some more steps to stop in middle of field*/
@@ -413,7 +456,7 @@ byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData
 				state_toBranch 	= gen_deinitState;
 				waitTicksCnt 	= 1;/*set to 1 because Driving was even called since set to waitState */
 				setStopFlag();
-			}else if(adc_data->raw_Values.raw_MiddleL < 55000){ /*still watch out for e frontWall to don't crash */
+			}else if(adc_data->mm_Values.mm_MiddleL < MAX_FRONTDIST_TO_WALL_MM){ /*still watch out for e frontWall to don't crash */
 				state_toBranch 	= gen_deinitState;
 				waitTicksCnt 	= 1;
 				setStopFlag();
@@ -421,12 +464,17 @@ byte driveToBranch(uint8_t* segmentNumber, ADC_data_t* adc_data, t_mazeFieldData
 				state_toBranch 	= gen_waitState;
 				waitTicksCnt++;
 			}
+
 			break;
 		case gen_deinitState: /* Finish driving nd return Ok if finished*/
 			if(exploreDriving(Maze_seg, adc_data)){
 				state_toBranch = gen_initState;
 				return ERR_OK;
 			}
+#if BLE_DRIVETOBRANCH_LOG
+//					IntOverBLE(state_toBranch);
+#endif
+
 			break;
 		case gen_ErrorState: /* finish driving and return Error*/
 			if(exploreDriving(Maze_seg, adc_data)){
@@ -478,8 +526,8 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 			if(reinit){
 				reinit_Drving(true);
 
-				Maze_seg.numberOfSegments = 1;
-				(*segmentNumber) = 1;
+				Maze_seg.numberOfSegments = 2;
+				(*segmentNumber) = 2;
 				if(dir == left){
 					Maze_seg.segments[0].SingleSegment = 900;
 				}else if(dir == right){
@@ -488,7 +536,7 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 					state_turn90 = gen_initState;
 					return ERR_FAILED;
 				}
-				Maze_seg.segments[1].SingleSegment = 0; /* stop after this */
+				Maze_seg.segments[1].SingleSegment = 10; /* stop after this */
 			}else{
 				if(dir == left){
 					Maze_seg.segments[*segmentNumber].SingleSegment = 900;
@@ -504,6 +552,8 @@ byte turn90Intern(uint8_t* segmentNumber, t_directions* currentOrientation, t_di
 				state_turn90 = gen_initState;
 				return ERR_FAILED;
 			}
+			Maze_seg.numberOfSegments = 1;
+			(*segmentNumber) = 1;
 
 			state_turn90 = gen_runnigState;
 			break;
@@ -605,8 +655,8 @@ byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir
 			if(reinit){
 				reinit_Drving(true);
 
-				Maze_seg.numberOfSegments = 2;
-				(*segmentNumber) = 2;
+				Maze_seg.numberOfSegments = 3;
+				(*segmentNumber) = 3;
 				if(dir == left){
 					Maze_seg.segments[0].SingleSegment = 900;
 					Maze_seg.segments[1].SingleSegment = 900;
@@ -617,7 +667,7 @@ byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir
 					state_turn180 = gen_initState;
 					return ERR_FAILED;
 				}
-				Maze_seg.segments[2].SingleSegment = 0; /* stop after this */
+				Maze_seg.segments[2].SingleSegment = 10; /* stop after this */
 			}else{
 				if(dir == left){
 					Maze_seg.segments[*segmentNumber].SingleSegment = 900;
@@ -631,11 +681,13 @@ byte turn180(uint8_t* segmentNumber, t_directions* currentOrientation, t_dir dir
 				}
 				Maze_seg.numberOfSegments = ++(*segmentNumber);
 			}
+
 			if(exploreDriving(Maze_seg, &adc_data)){
 				state_turn180 = gen_initState;
 				return ERR_FAILED;
 			}
-
+			Maze_seg.numberOfSegments = 2;
+			(*segmentNumber) = 2;
 			state_turn180 = gen_runnigState;
 			break;
 

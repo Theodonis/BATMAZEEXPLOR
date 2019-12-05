@@ -63,13 +63,13 @@ void initMaze(t_mazeFieldData* MazePointer){
 */
 byte sideBranchMeasurement(ADC_data_t* adc_data, t_mazeFieldData* currentField, t_directions  currentTargetOrientation){
 
-		if(adc_data->mm_Values.mm_Right>MAX_DIST_TO_WALL_MM){
+		if(adc_data->mm_Values.mm_Right>MAX_SIDEDIST_TO_WALL_MM){
 			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,right),ex_true);
 		}else{
 			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,right),ex_false);
 		}
 
-		if(adc_data->mm_Values.mm_Left>MAX_DIST_TO_WALL_MM){
+		if(adc_data->mm_Values.mm_Left>MAX_SIDEDIST_TO_WALL_MM){
 			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,left),ex_true);
 		}else{
 			setWallInfo(currentField,get_wallOrientation(currentTargetOrientation,left),ex_false);
