@@ -100,7 +100,7 @@ byte TargetPosStateMaschine(void){
 					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
-					posState= calcNextStep;//stopped;//
+					posState= turnRight;//calcNextStep;//stopped;//
 					break;
 			}
 //			IntOverBLE(xPos);
@@ -183,7 +183,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= explore;
+					posState= stopped;//explore;
 					break;
 			}
 			break;
