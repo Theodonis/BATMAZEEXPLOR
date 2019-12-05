@@ -83,7 +83,6 @@ byte TargetPosStateMaschine(void){
 			xPos =0 ,yPos =0;
 			#if ENABLE_EXPLORE_DATALOG
 				resetSaveLinePointer();
-				saveExplorationValue(0,"Returnstate", 10);
 			#endif
 			return ERR_BUSY;
 			break;
@@ -101,7 +100,7 @@ byte TargetPosStateMaschine(void){
 					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
-					posState= stopped;//calcNextStep;
+					posState= calcNextStep;//stopped;//
 					break;
 			}
 //			IntOverBLE(xPos);
@@ -555,7 +554,7 @@ byte TargetPosStateMaschine(void){
 
 	#if LOG_DEPENDING_ON_CYCLE
 
-		saveExplorationValue(posState,"state", 2);
+		saveExplorationValue(currentFieldState,"Fieldstate", 2);
 		saveExplorationValue(adc_data.raw_Values.raw_MiddleL,"DistanzFrontL",3);
 		saveExplorationValue(driving_data.posEstimation.xPos,"X-Pos", 4);
 		saveExplorationValue(driving_data.posEstimation.yPos,"Y-Pos",5);
@@ -563,10 +562,10 @@ byte TargetPosStateMaschine(void){
 		saveExplorationValue(yPos,"y-Position (index)", 7);
 		saveExplorationValue(adc_data.raw_Values.raw_Left,"LeftDist", 8);
 		saveExplorationValue(adc_data.raw_Values.raw_Right,"RightDist", 9);
-//		saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"BranchFlag", 10);
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Feld Info Süd", 11);
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 12);
-		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 13);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 10);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 11);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Feld Info Süd", 12);
+		saveExplorationValue(MazeData[xPos][yPos].posibDirections.west,"Feld Info West", 13);
 
 
 	#if ENABLE_TIMING_CONROLL
@@ -574,14 +573,14 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-//		if(xPos>4&&currentTargetOrientation==east){/*start logging at the fourth field*/
+		if((xPos<2||xPos>6)&&currentTargetOrientation==north){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
 			}else{
 				saveDataCnt++;
 			}
-//		}
+		}
 	#endif
 
 	return ERR_BUSY;
