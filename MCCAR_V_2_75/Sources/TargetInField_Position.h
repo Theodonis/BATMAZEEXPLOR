@@ -18,9 +18,9 @@
 #define QUARTER_OF_MAZE_FIELD_LENGTH 	(0.0475)//(0.0425)
 
 /*FieldPos inite*/
-#define INIT_POS_INFIELD 				(0.081) //(0.078)		//(0.074)
-#define POS_INFIELD_AFTER_TURN_180 		(0.1) 	//(0.0777)//onely in one measure	//(0.075)//e...		//(0.075)
-#define POS_INFIELD_AFTER_TURN_90 		(0.0725)//not yet done...
+#define POS_INFIELD_AFTER_START			(0.081)  //Init Position in filed -> MC-Car must be pressed at Backwall
+#define POS_INFIELD_AFTER_TURN_180 		(0.1) 	 //Init Position in filed after a 180 turn
+#define POS_INFIELD_AFTER_TURN_90 		(0.0725) //Init Position in filed after a 90 turn.
 
 typedef enum fieldstate{
 	fieldinitState,

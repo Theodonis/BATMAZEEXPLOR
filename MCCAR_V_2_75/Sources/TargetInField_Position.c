@@ -45,10 +45,10 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 	switch(fieldState){
 		case fieldinitState:
 			if(pos.xPos>1.4){ //value after init of Driving
-				fieldpos = INIT_POS_INFIELD;
+				fieldpos = POS_INFIELD_AFTER_START;
 				fieldState = firstQuarterOfField;
 				if(targetOrientation==north || targetOrientation==south){
-					initpos = pos.xPos + INIT_POS_INFIELD;
+					initpos = pos.xPos + POS_INFIELD_AFTER_START;
 				}else{
 					initpos = -pos.yPos; //error?
 				}
