@@ -24,7 +24,7 @@
 #define BLE_DRIVETOBRANCH_LOG				(0&&!LOG_BLE_ENABLE&&!BLE_DRIVETOUNEXPLOREDBRANCH_LOG)
 
 #define EXPLOR_DRIVE_TIME_AFTER_BRANCHDETECT 				(0.03) 	//time in s ~>additional driven m if velocity 1m/s
-#define EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED 	(0.085)//(0.095) //time in s ~>additional driven m if velocity 1m/s
+#define EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED 	(0.071)//(0.095) //time in s ~>additional driven m if velocity 1m/s
 #define MAX_SIDEDIST_TO_WALL_MM								(75) 	// if side wards distance is bigger ,means no wall there
 
 
