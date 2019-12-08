@@ -366,7 +366,7 @@ void FloatOverBLE(float pData)
 	a_xbuf[0] = '\0';
 	UTIL1_strcatNumFloat(a_xbuf, sizeof(a_xbuf),(pData),6);
 	UTIL1_strcat(a_xbuf, sizeof(a_xbuf)," ");
-	UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\t');
+	UTIL1_chcat(a_xbuf, sizeof(a_xbuf), '\n');
 	putStream((uint8_t*)a_xbuf);
 }
 

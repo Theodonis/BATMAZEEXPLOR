@@ -12,7 +12,7 @@
 #include "ADC.h"
 #include <stdbool.h>
 
-/*Field Size*/										//calib //Physmeasured
+/*Field Size*/							//calib //Physmeasured
 #define MAZE_FIELD_LENGTH 				(0.19)	//(0.17)
 #define HALF_OF_MAZE_FIELD_LENGTH 		(0.095)	//(0.085)
 #define QUARTER_OF_MAZE_FIELD_LENGTH 	(0.0475)//(0.0425)
@@ -20,7 +20,7 @@
 /*FieldPos inite*/
 #define POS_INFIELD_AFTER_START			(0.081)  //Init Position in filed -> MC-Car must be pressed at Backwall
 #define POS_INFIELD_AFTER_TURN_180 		(0.1) 	 //Init Position in filed after a 180 turn
-#define POS_INFIELD_AFTER_TURN_90 		(0.0725) //Init Position in filed after a 90 turn.
+#define POS_INFIELD_AFTER_TURN_90 		(0.113) //Init Position in filed after a 90 turn.
 
 typedef enum fieldstate{
 	fieldinitState,
