@@ -44,6 +44,9 @@
 byte TargetPosStateMaschine(void){
 	static t_PosState posState;
 	static t_mazeFieldData MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION][MAZE_FIELDS_LENGTH_EAST_DIRECTION];
+	//Todo: deside if north or south is bigger..
+	static t_mazeFieldData init_MazeData[MAZE_FIELDS_WIDTH_NORTH_DIRECTION];/* save the date till startorientation is clear -> start north or east warts*/
+
 	static uint8_t xPos =0 ,yPos =0;
 	static t_directions  currentTargetOrientation = north;
 	static uint8_t numberofTurns = 0;
@@ -77,7 +80,7 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = explore;//initTurnAngleCalibration;//turnAngleCalibration;//
+			posState = initTurnAngleCalibration;//turnAngleCalibration;//explore;//
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
@@ -199,7 +202,7 @@ byte TargetPosStateMaschine(void){
 					posState =  initState;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= calcNextStep;
+					posState= calcNextStep;//stopped;//
 					break;
 			}
 			/* do measurement */
@@ -491,7 +494,7 @@ byte TargetPosStateMaschine(void){
 		case turnAngleCalibration:
 			switch(turn180(&segmentNumber,&currentTargetOrientation,left)){//Driving(MazeSegmentsToBeDriven)){//
 			case ERR_OK:
-				if(numberofTurns>3){
+				if(numberofTurns>=0){
 					posState=stopped;
 					numberofTurns = 0;
 				}else{
@@ -506,6 +509,7 @@ byte TargetPosStateMaschine(void){
 				posState=turnAngleCalibration;
 				break;
 			}
+//			FloatOverBLE(driving_data.posEstimation.thetaAngle);
 			break;
 		case errorStop:
 			posState=stopped;
@@ -573,7 +577,7 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if((xPos<2||xPos>6)&&currentTargetOrientation==south){/*start logging at the fourth field*/
+		if(currentTargetOrientation==east){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
