@@ -26,6 +26,8 @@
 #define EXPLOR_DRIVE_TIME_IN_KNOWN_FIELD_TO_STOPP_MIDDLED 	(0.071)//(0.095) //time in s ~>additional driven m if velocity 1m/s
 #define MAX_SIDEDIST_TO_WALL_MM								(100) 	//Not yet calibed// if side wards distance is bigger ,means no wall there
 
+#define REINIT_DRIVING_BEFORE_TURN							(1)
+
 
 #define MAX_FRONTDIST_TO_WALL_RAW							(62000) // if front distance is smaler ->stop driving
 
