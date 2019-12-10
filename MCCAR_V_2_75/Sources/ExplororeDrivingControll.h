@@ -43,7 +43,7 @@ typedef enum returToBranchState{
 
 #define  getLatestADC() (get_latest_ADC_data()) /* wrapper to us function in Explore.c*/
 
-byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data);
+byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data, t_directions curOrient, t_mazeFieldData* p_currField, uint8_t xPos, uint8_t yPos);
 byte turn90(uint8_t* p_segNumb, t_directions* p_curOrient, t_dir dir);
 byte turn180(uint8_t* p_segNumb, t_directions* p_curOrient, t_dir dir);
 byte driveToBranch(uint8_t* p_segNumb, ADC_data_t* p_adc_data, t_directions* p_curOrient, t_mazeFieldData* p_currField);

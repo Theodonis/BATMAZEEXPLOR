@@ -301,3 +301,52 @@ bool get_isUnexploredBranch(t_mazeFieldData* currentField, t_directions currentT
 	}
 	return false;
 }
+
+
+
+/*
+** ===================================================================
+**     	bool get_isExploredFieldInFront(t_mazeFieldData* p_currField, t_directions curOrient, t_dir infoDirection, uint8_t xPos, uint8_t yPos)
+**
+**     	@brief	decide if next field in driving direction was even explored
+**
+**     	@param	p_currField:	Pointer to currentField
+**     			curOrient: 		current orientation of MC-Car
+**				xPos: 			current X-Index in MazaData-Matrix
+**				yPos: 			current Y-Index in MazaData-Matrix
+**
+**		@return True: 	if in front is an explored field
+**				False: 	else
+**
+**
+** ===================================================================
+*/
+bool get_isExploredFieldInFront(t_mazeFieldData* p_currField, t_directions curOrient, uint8_t xPos, uint8_t yPos){
+	switch(curOrient){
+		case north:
+			if(xPos<MAZE_FIELDS_WIDTH_NORTH_DIRECTION-1){
+				/* not in last field of Matrix*/
+				return (p_currField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag;
+			}
+			break;
+		case east:
+			if(yPos<MAZE_FIELDS_LENGTH_EAST_DIRECTION-1){
+				/* not in last field of Matrix*/
+				return (p_currField+1)->exploredFlag;
+			}
+			break;
+		case south:
+			if(xPos>0){
+				/* not in first field of Matrix*/
+				return (p_currField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag;
+			}
+			break;
+		case west:
+			if(yPos>0){
+				/* not in last field of Matrix*/
+				return (p_currField-1)->exploredFlag;
+			}
+			break;
+	}
+	return false;
+}

@@ -61,27 +61,31 @@ bool exploreDriving(Maze_segments MazeSegmentsToBeDriven, ADC_data_t* p_adc_data
 
 /*
 ** ===================================================================
-**     	byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data)
+**     	byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data, t_directions curOrient, t_mazeFieldData* p_currField, uint8_t xPos, uint8_t yPos)
 **
 **
-**     	@brief	Driving till a front wall is detected. Stop before the wall.
+**     	@brief	Driving till a front wall is detected or the next Field was even explored. Stop before the wall.
 **
 **     	@param	p_segNumb: 		Pointer to segmentNumber counter. Used to set always the
 **     							correct Maze_seg.numberOfSegments to drive
 **     			adc_data: 		Pointer to adc_data element to write newest adc data in it
+**     			curOrient: 		current orientation of MC-Car
+**     			p_currField: 	Pointer to currentField to decide if its a branch or a turn in history
+**				xPos: 			current X-Index in MazaData-Matrix
+**				yPos: 			current Y-Index in MazaData-Matrix
 **
 **		@return Error code, possible codes:
-**                           ERR_OK - stopped before wall
+**                           ERR_OK - stopped before wall or explored Field
 **                           ERR_FAILED - no wall reached while Driving 10 Fields
 **                           ERR_BUSY - still driving -> call again in next cycle
 **
 **
 ** ===================================================================
 */
-byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data){
+byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data, t_directions curOrient, t_mazeFieldData* p_currField, uint8_t xPos, uint8_t yPos){
 	static t_genericState state_toWall = gen_initState;
 	static Maze_segments Maze_seg;
-//	ADC_data_t adc_data;
+	static uint16_t waitTicksCnt = 1;
 
 	switch(state_toWall){
 		case gen_initState: /* Set up segments to drive */
@@ -99,7 +103,11 @@ byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data){
 			}else if(p_adc_data->mm_Values.mm_MiddleL < MAX_FRONTDIST_TO_WALL_MM){
 				state_toWall=gen_deinitState;
 				setStopFlag();
+			}else if(get_isExploredFieldInFront(p_currField, curOrient, xPos, yPos)){
+				/* next Field was even explored*/
+				state_toWall=gen_waitState; // continue driving till front of wall
 			}
+
 			break;
 		case gen_deinitState: /* Finish driving nd return Ok if finished*/
 			if(exploreDriving(Maze_seg, p_adc_data)){
@@ -107,7 +115,25 @@ byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data){
 				return ERR_OK;
 			}
 			break;
-		case gen_waitState:  /* not used in this case*/
+		case gen_waitState:  /* drive some more steps to stop in front of wall (if exist or not)*/
+			if(exploreDriving(Maze_seg, p_adc_data)){
+				waitTicksCnt = 1;
+				state_toWall = gen_initState;
+				return ERR_FAILED;
+			}else if(waitTicksCnt*DT>=EXPLOR_DRIVE_TIME_TO_STOPP_BEFORE_EXPLORED_FIELD){
+				state_toWall 	= gen_deinitState;
+				waitTicksCnt 	= 1;/*set to 1 because Driving was even called since set to waitState */
+				setStopFlag();
+			}else if(p_adc_data->mm_Values.mm_MiddleL < MAX_FRONTDIST_TO_WALL_MM){ /*still watch out for e frontWall to don't crash */
+				state_toWall 	= gen_deinitState;
+				waitTicksCnt 	= 1;
+				setStopFlag();
+			}else{
+				state_toWall 	= gen_waitState;
+				waitTicksCnt++;
+			}
+
+			break;
 		case gen_ErrorState:/* not used in this case*/
 		default:
 			state_toWall = gen_initState;
@@ -128,8 +154,8 @@ byte driveToFrontWall(uint8_t* p_segNumb,ADC_data_t* p_adc_data){
 **     	@param	p_segNumb: 		Pointer to segmentNumber counter. Used to set always the
 **     							correct Maze_seg.numberOfSegments to drive
 **     			p_adc_data:		Pointer to adc_data element to write newest adc data in it
-**     			p_currField: 	Pointer to currentField to decide if its a branch or a turn in history
 **     			p_curOrient: 	Pointer to current target orientation
+**     			p_currField: 	Pointer to currentField to decide if its a branch or a turn in history
 **
 **		@return Error code, possible codes:
 **                           ERR_OK - stopped at unexplored Branch or at startfield

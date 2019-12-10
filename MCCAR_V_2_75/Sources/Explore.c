@@ -51,9 +51,12 @@ byte TargetPosStateMaschine(void){
 	static t_directions  currentTargetOrientation = north;
 	static uint8_t numberofTurns = 0;
 
+	static bool drivenStraitWihtStopp =false;
+
 	#if LOG_BLE_ENABLE
-		static t_genericState ble_Log_State = gen_waitState;
+		static t_bleLogState ble_Log_State = BLE_idleState;
 		static uint8_t ble_wait_cycle_cnt = 0;
+		static t_mazeFieldData lastField;
 	#endif
 	t_fieldState currentFieldState = 0;
 
@@ -93,9 +96,14 @@ byte TargetPosStateMaschine(void){
 
 		case explore:
 			/*drive strait until e wall and detect all field info */
-			switch(driveToFrontWall(&segmentNumber,&adc_data)){
+			switch(driveToFrontWall(&segmentNumber,&adc_data,currentTargetOrientation,&MazeData[xPos][yPos],xPos,yPos)){
 				case ERR_BUSY:
 					posState = explore;
+					if(drivenStraitWihtStopp){ /* its a strait way after a strait way -> there are steps in posdata...*/
+						getDataForExplore(&driving_data);
+						currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,true);
+						drivenStraitWihtStopp = false;
+					}
 					break;
 				case ERR_FAILED:
 					posState =  initState;
@@ -109,14 +117,14 @@ byte TargetPosStateMaschine(void){
 			}
 //			IntOverBLE(xPos);
 			/* do measurement */
-			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
+			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,false);
 			switch(currentFieldState){
 				case detectSideWalls:
 					/*measure side walls in Middle of Field and set Field to explored*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
 
 					#if LOG_BLE_ENABLE
-						ble_Log_State = gen_initState; //start bluetooth send
+						ble_Log_State = sendXIndex; //start bluetooth send
 					#endif
 					break;
 				case saveFrontwall:
@@ -155,6 +163,8 @@ byte TargetPosStateMaschine(void){
 				}else if(get_isUnexploredBranch(&MazeData[xPos][yPos],currentTargetOrientation,front)){
 					/* it's an unexplored branch in front!*/
 					posState= explore;
+					/*need to reinit fieldpositioner*/
+					drivenStraitWihtStopp = true;
 				}
 			}else{
 				/*it's a dead end*/
@@ -196,22 +206,44 @@ byte TargetPosStateMaschine(void){
 		case returnToBranch:
 			/*call second level FSM to return to last unexplored branch */
 			switch(driveToUnexpBranch(&segmentNumber, &adc_data, &currentTargetOrientation, &MazeData[xPos][yPos])){
+				static bool isFirstCall = true;
 				case ERR_BUSY:
+					if(drivenStraitWihtStopp&&!isFirstCall){ /* its a strait way after a strait way -> there are steps in posdata...*/
+						getDataForExplore(&driving_data);
+						currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,true);
+						drivenStraitWihtStopp = false;
+					}
+					isFirstCall =false;
 					posState = returnToBranch;
 					break;
 				case ERR_FAILED:
 					posState =  initState;
+					isFirstCall = true;
 					return ERR_FAILED;
 				case ERR_OK:
-					posState= calcNextStep;//stopped;//
+					if(MazeData[xPos][yPos].hasUnexploredBranchFlag){
+						/*check if branch is still unexplored */
+						(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
+						if(MazeData[xPos][yPos].hasUnexploredBranchFlag){
+							posState = calcNextStep;
+						}else{
+							if(MazeData[xPos][yPos].enterDirection==get_wallOrientation(currentTargetOrientation,behind)){
+								drivenStraitWihtStopp = true;
+								IntOverBLE(0XFF);
+							}
+							posState = calcNextStep;
+
+						}
+					}
+					isFirstCall = true;
 					break;
 			}
 			/* do measurement */
-			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
+			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,false);
 			switch(currentFieldState){
 				case detectSideWalls:
 					#if LOG_BLE_ENABLE
-						ble_Log_State = gen_initState; //start bluetooth send
+						ble_Log_State = sendXIndex; //start bluetooth send
 					#endif
 					/*measurement not used while returning on explored path*/
 //					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
@@ -250,7 +282,7 @@ byte TargetPosStateMaschine(void){
 		/* old states */
 		case driveToFront:
 			/*Driving*/
-			switch(driveToFrontWall(&segmentNumber,&adc_data)){
+			switch(driveToFrontWall(&segmentNumber,&adc_data,currentTargetOrientation,&MazeData[xPos][yPos],xPos,yPos)){
 				case ERR_BUSY:
 					posState = driveToFront;
 					break;
@@ -266,7 +298,7 @@ byte TargetPosStateMaschine(void){
 			}
 
 			/*Field info -> measure and log...*/
-			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
+			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,false);
 			switch(currentFieldState){
 				 case detectSideWalls:
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
@@ -375,7 +407,7 @@ byte TargetPosStateMaschine(void){
 //					}
 //					break;
 //			}
-			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation);
+			currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,false);
 			switch(currentFieldState){
 			 	 case detectSideWalls:
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
@@ -526,28 +558,38 @@ byte TargetPosStateMaschine(void){
 
 	#if LOG_BLE_ENABLE
 		switch(ble_Log_State){
-			case gen_initState:
+			case sendXIndex:
 					ExploreDataOverBLE(0, xPos);
-					ble_Log_State = gen_runnigState;
+					ble_Log_State = sendYIndex;
 				break;
-			case gen_runnigState:
+			case sendYIndex:
 				ExploreDataOverBLE(1, yPos);
-				ble_Log_State =gen_deinitState;
+				ble_Log_State =sendWallinfo;
 				break;
-			case gen_deinitState:
+			case sendWallinfo:
 				if(currentFieldState==saveFrontwall){
 					uint8_t wallMerge = (MazeData[xPos][yPos].posibDirections.north<<6)|(MazeData[xPos][yPos].posibDirections.east<<4)|(MazeData[xPos][yPos].posibDirections.south<<2)|MazeData[xPos][yPos].posibDirections.west;
 					ExploreDataOverBLE(2, wallMerge);
-					ble_Log_State =gen_ErrorState;
+					lastField = MazeData[xPos][yPos];
+					ble_Log_State =SendFieldend;
 				}
 				break;
-			case gen_ErrorState:
-				ExploreDataOverBLE(9,99);
-				ble_Log_State =gen_waitState;
+
+			case sendFieldInfo:
+				{
+					uint8_t fieldinfoMerge = (lastField.hasUnexploredBranchFlag<<4)|(lastField.exploredFlag<<3)|lastField.enterDirection;
+					ExploreDataOverBLE(3, fieldinfoMerge);
+					ble_Log_State =SendFieldend;
+				}
+
 				break;
-			case gen_waitState:
-				/*it an Idle state*/
-				ble_Log_State =gen_waitState;
+			case SendFieldend:
+				ExploreDataOverBLE(9,99);
+				ble_Log_State =BLE_idleState;
+				break;
+			case BLE_idleState:
+				/*its an Idle state*/
+				ble_Log_State =BLE_idleState;
 				break;
 		}
 
@@ -578,7 +620,7 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if(currentTargetOrientation==east){/*start logging at the fourth field*/
+		if(xPos>-1&&yPos==1&&currentTargetOrientation==south){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
@@ -594,8 +636,8 @@ byte TargetPosStateMaschine(void){
 }
 
 
-byte exploreLog(){
-
-}
+//byte exploreLog(){
+//
+//}
 
 

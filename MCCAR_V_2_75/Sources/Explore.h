@@ -39,6 +39,18 @@ typedef enum PosState{
 	stateNumbers /*must be last one*/
 }t_PosState;
 
+
+typedef enum bleLogState{
+	BLE_idleState,
+	sendXIndex,
+	sendYIndex,
+	sendWallinfo,
+	sendFieldInfo,
+
+	SendFieldend
+}t_bleLogState;
+
+
 typedef enum dir{
 	left,
 	right,
