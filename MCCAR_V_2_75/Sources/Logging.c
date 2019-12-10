@@ -381,6 +381,42 @@ void IntOverBLE(uint8_t pData)
 
 }
 
+void BLEBufferOverBLE(void){
+	uint8_t Databuf[4];
+	Databuf[0] ='\0';
+	UTIL1_strcpy(Databuf,sizeof(Databuf),"\t\t\t\0");
+	putStream((uint8_t*)Databuf);
+}
+
+void ExploreDataOverBLE(uint8_t dataNumb, uint8_t pData){
+	uint8_t Numbbuf[2];
+	uint8_t Databuf[4];
+	uint8_t Sendbuf[16];
+	Numbbuf[0] = '\0';
+	Databuf[0] = '\0';
+	Sendbuf[0] = '\0';
+	// Writing dataNumber
+    UTIL1_Num8uToStr(Numbbuf, sizeof(Numbbuf),(dataNumb));
+	if(dataNumb<10){
+		UTIL1_chcat(Sendbuf, sizeof(Sendbuf), '0');
+	}
+    UTIL1_strcat(Sendbuf,sizeof(Sendbuf),Numbbuf);
+    UTIL1_chcat(Sendbuf, sizeof(Sendbuf), '_');
+
+    //Writing Data
+    UTIL1_Num8uToStr(Databuf, sizeof(Databuf),(pData));
+    if(pData<100){
+    	UTIL1_chcat(Sendbuf, sizeof(Sendbuf), '0');
+	}
+	if(pData<10){
+	    UTIL1_chcat(Sendbuf, sizeof(Sendbuf), '0');
+	}
+    UTIL1_strcat(Sendbuf,sizeof(Sendbuf),Databuf);
+    UTIL1_strcat(Sendbuf, sizeof(Sendbuf),"x\0");
+    putStream((uint8_t*)Sendbuf);
+}
+
+
 void NewLine(void)
 {
 	uint8_t a_xbuf[5];

@@ -55,7 +55,8 @@ void saveData(float *wallCenterDivergence, float weightDistanceSensor, float v_r
 void saveControllerData(float v_ref[2],float v_est[2],float U_mot[2],float M[2]);
 void printSaveControllerData(void);
 void ENCoverBLE(Encoder_data_t *pData);
-
+void ExploreDataOverBLE(uint8_t dataNumb, uint8_t pData);
+void BLEBufferOverBLE(void);
 
 //void setExplorationDataHeader(uint8_t varName, uint8_t savepos);
 void saveExplorationValue(float value, uint8_t varName[], uint8_t savepos);

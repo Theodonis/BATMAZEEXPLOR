@@ -53,6 +53,7 @@ byte TargetPosStateMaschine(void){
 
 	#if LOG_BLE_ENABLE
 		static t_genericState ble_Log_State = gen_waitState;
+		static uint8_t ble_wait_cycle_cnt = 0;
 	#endif
 	t_fieldState currentFieldState = 0;
 
@@ -80,7 +81,7 @@ byte TargetPosStateMaschine(void){
 
 	switch(posState){
 		case initState:
-			posState = initTurnAngleCalibration;//turnAngleCalibration;//explore;//
+			posState = explore;//initTurnAngleCalibration;//turnAngleCalibration;//
 			initMaze(&MazeData[0][0]);
 			calcADC_data(&adc_data); /* if driving() isn't called, also the adc isn't called...*/
 			xPos =0 ,yPos =0;
@@ -526,22 +527,22 @@ byte TargetPosStateMaschine(void){
 	#if LOG_BLE_ENABLE
 		switch(ble_Log_State){
 			case gen_initState:
-				IntOverBLE(xPos);
-				ble_Log_State =gen_runnigState;
+					ExploreDataOverBLE(0, xPos);
+					ble_Log_State = gen_runnigState;
 				break;
 			case gen_runnigState:
-				IntOverBLE(yPos);
+				ExploreDataOverBLE(1, yPos);
 				ble_Log_State =gen_deinitState;
 				break;
 			case gen_deinitState:
 				if(currentFieldState==saveFrontwall){
 					uint8_t wallMerge = (MazeData[xPos][yPos].posibDirections.north<<6)|(MazeData[xPos][yPos].posibDirections.east<<4)|(MazeData[xPos][yPos].posibDirections.south<<2)|MazeData[xPos][yPos].posibDirections.west;
-					IntOverBLE(wallMerge);
+					ExploreDataOverBLE(2, wallMerge);
 					ble_Log_State =gen_ErrorState;
 				}
 				break;
 			case gen_ErrorState:
-				IntOverBLE(0xFF);
+				ExploreDataOverBLE(9,99);
 				ble_Log_State =gen_waitState;
 				break;
 			case gen_waitState:
