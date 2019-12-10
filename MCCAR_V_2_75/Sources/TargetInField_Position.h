@@ -21,6 +21,7 @@
 #define POS_INFIELD_AFTER_START			(0.081)  //Init Position in filed -> MC-Car must be pressed at Backwall
 #define POS_INFIELD_AFTER_TURN_180 		(0.1) 	 //Init Position in filed after a 180 turn
 #define POS_INFIELD_AFTER_TURN_90 		(0.113) //Init Position in filed after a 90 turn.
+#define POS_INFIELD_AFTER_STRAIGHT_STOP 		(0.1)		//Init Position in fild after a stop in straight way
 
 typedef enum fieldstate{
 	fieldinitState,
@@ -30,7 +31,8 @@ typedef enum fieldstate{
 	fourthQuarterOfField,
 	detectSideWalls,
 	saveFrontwall,
-	targetHasTurned
+	targetHasTurned,
+	reinitState
 
 }t_fieldState;
 
@@ -43,7 +45,7 @@ typedef enum fieldstate{
 
 
 
-t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation);
+t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation, bool reinit);
 
 
 t_directions  get_wallOrientation(t_directions targetOrientation, t_dir dir);

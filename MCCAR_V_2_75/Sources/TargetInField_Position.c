@@ -10,7 +10,7 @@
 
 /*
 ** ===================================================================
-**     Method      :  t_fieldState fieldPositioner(t_PosEstimation pos, uint8_t* xPos,uint8_t* yPos,t_mazeFieldData* maze)
+**     Method      :  t_fieldState fieldPositioner(t_PosEstimation pos, uint8_t* xPos,uint8_t* yPos,t_mazeFieldData* maze,bool reinit)
 **
 **
 **     @brief
@@ -25,7 +25,7 @@
 **         		- fieldState: the current state in field -> allows to do measurement in midle of the field
 **
 */
-t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation){
+t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_directions targetOrientation, bool reinit){
 	static float fieldpos 	= 0; /*pos in curent field */
 	static float initpos 	= 0;
 	static t_fieldState fieldState = fieldinitState;
@@ -40,6 +40,9 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 
 	if(prevTargetOrientation!=targetOrientation){
 		fieldState = targetHasTurned; //turn state to update direction
+	}
+	if(reinit){
+		fieldState = reinitState; //driving strait after a strait driving
 	}
 
 	switch(fieldState){
@@ -178,6 +181,31 @@ t_fieldState fieldPositioner(t_PosEstimation pos,uint8_t* xPos,uint8_t* yPos, t_
 			}
 
 			break;
+		case reinitState:
+			switch(targetOrientation){
+				case north:
+					initpos 	= pos.xPos + POS_INFIELD_AFTER_STRAIGHT_STOP;
+					fieldpos 	= initpos - pos.xPos;
+					fieldState 	= firstQuarterOfField;
+					break;
+				case east:
+					initpos 	= POS_INFIELD_AFTER_STRAIGHT_STOP - pos.yPos  ;
+					fieldpos 	= initpos + pos.yPos;
+					fieldState 	= firstQuarterOfField;
+					break;
+				case south:
+					initpos 	= pos.xPos - POS_INFIELD_AFTER_STRAIGHT_STOP;
+					fieldpos 	= initpos - pos.xPos;
+					fieldState 	= fourthQuarterOfField;
+					break;
+				case west:
+					initpos	 	= -pos.yPos - POS_INFIELD_AFTER_STRAIGHT_STOP;
+					fieldpos	= initpos + pos.yPos;
+					fieldState 	= fourthQuarterOfField;
+					break;
+			}
+			break;
+
 	}
 
 	prevTargetOrientation = targetOrientation;
