@@ -20,5 +20,7 @@ byte setWallInfo(t_mazeFieldData* currentField, t_directions  wallOrientation, t
 byte unexploredBranchSet(t_mazeFieldData* currentField, t_directions currentTargetOrientation);
 
 bool get_isUnexploredBranch(t_mazeFieldData* currentField,t_directions currentTargetOrientation, t_dir infoDirection);
+bool get_isExploredFieldInFront(t_mazeFieldData* p_currField, t_directions curOrient, uint8_t xPos, uint8_t yPos);
+
 
 #endif /* SOURCES_MAZEHNDL_H_ */

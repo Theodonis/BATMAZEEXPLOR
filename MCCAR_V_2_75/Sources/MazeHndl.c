@@ -338,7 +338,7 @@ bool get_isExploredFieldInFront(t_mazeFieldData* p_currField, t_directions curOr
 		case south:
 			if(xPos>0){
 				/* not in first field of Matrix*/
-				return (p_currField+MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag;
+				return (p_currField-MAZE_FIELDS_LENGTH_EAST_DIRECTION)->exploredFlag;
 			}
 			break;
 		case west:
