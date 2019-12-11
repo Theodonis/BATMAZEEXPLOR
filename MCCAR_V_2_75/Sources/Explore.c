@@ -111,7 +111,7 @@ byte TargetPosStateMaschine(void){
 				case ERR_OK:
 					setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false); /*set wall info of wall in front*/
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation);
-					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
+					(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation,true); /*update if unexplored branch before change state*/
 					posState= calcNextStep;//stopped;//turnRight;//
 					break;
 			}
@@ -129,7 +129,7 @@ byte TargetPosStateMaschine(void){
 					break;
 				case saveFrontwall:
 					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
-					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before leaving*/
+					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation,true); /*update if unexplored branch before leaving*/
 
 					#if LOG_DEPENDING_MAZE_POS
 
@@ -206,24 +206,26 @@ byte TargetPosStateMaschine(void){
 		case returnToBranch:
 			/*call second level FSM to return to last unexplored branch */
 			switch(driveToUnexpBranch(&segmentNumber, &adc_data, &currentTargetOrientation, &MazeData[xPos][yPos])){
-				static bool isFirstCall = true;
+				static uint8_t callCNT = 0;
 				case ERR_BUSY:
-					if(drivenStraitWihtStopp&&!isFirstCall){ /* its a strait way after a strait way -> there are steps in posdata...*/
+					if(callCNT<4){
+						callCNT++;
+					}
+					if(drivenStraitWihtStopp&&callCNT>=3){ /* its a strait way after a strait way -> there are steps in posdata...*/
 						getDataForExplore(&driving_data);
 						currentFieldState = fieldPositioner(driving_data.posEstimation,&xPos,&yPos,currentTargetOrientation,true);
 						drivenStraitWihtStopp = false;
 					}
-					isFirstCall =false;
 					posState = returnToBranch;
 					break;
 				case ERR_FAILED:
 					posState =  initState;
-					isFirstCall = true;
+					callCNT = 0;
 					return ERR_FAILED;
 				case ERR_OK:
 					if(MazeData[xPos][yPos].hasUnexploredBranchFlag){
 						/*check if branch is still unexplored */
-						(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if unexplored branch before change state*/
+						(void) unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation,false); /*update if unexplored branch before change state*/
 						if(MazeData[xPos][yPos].hasUnexploredBranchFlag){
 							posState = calcNextStep;
 						}else{
@@ -235,7 +237,7 @@ byte TargetPosStateMaschine(void){
 
 						}
 					}
-					isFirstCall = true;
+					callCNT = 0;
 					break;
 			}
 			/* do measurement */
@@ -293,7 +295,7 @@ byte TargetPosStateMaschine(void){
 					posState= turnState;
 					(void) sideBranchMeasurement(&adc_data, &MazeData[xPos][yPos],currentTargetOrientation); /* do an extra sideMasurement before turn*/
 					(void) setWallInfo(&MazeData[xPos][yPos],currentTargetOrientation,ex_false);/*set front wall false if detected frontwall */
-					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if field has unexplored branch before turn*/
+					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation,true); /*update if field has unexplored branch before turn*/
 					break;
 			}
 
@@ -305,7 +307,7 @@ byte TargetPosStateMaschine(void){
 					break;
 				 case saveFrontwall:
 						setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
-						unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if field has unexplored branch before leaving*/
+						unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation,true); /*update if field has unexplored branch before leaving*/
 						saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
 						saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
 						saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
@@ -414,7 +416,7 @@ byte TargetPosStateMaschine(void){
 					break;
 				 case saveFrontwall:
 					setDriveDirectionWallInfo(&MazeData[xPos][yPos],currentTargetOrientation); /* update Wall info in leaving direction before leaving*/
-					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation); /*update if field has unexplored branch before leaving*/
+					unexploredBranchSet(&MazeData[xPos][yPos],currentTargetOrientation,true); /*update if field has unexplored branch before leaving*/
 					saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Nordwand", 2);
 					saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Ostwand", 5);
 					saveExplorationValue(MazeData[xPos][yPos].posibDirections.south,"Südwand", 9);
@@ -602,12 +604,14 @@ byte TargetPosStateMaschine(void){
 	#if LOG_DEPENDING_ON_CYCLE
 
 		saveExplorationValue(currentFieldState,"Fieldstate", 2);
-		saveExplorationValue(adc_data.mm_Values.mm_MiddleL,"DistanzFrontL",3);
+		saveExplorationValue(driving_data.posEstimation.thetaAngle,"Theta",3);
+//		saveExplorationValue(posState,"State",3);
 		saveExplorationValue(driving_data.posEstimation.xPos,"X-Pos", 4);
 		saveExplorationValue(driving_data.posEstimation.yPos,"Y-Pos",5);
 		saveExplorationValue(xPos,"x-Position (index)", 6);
 		saveExplorationValue(yPos,"y-Position (index)", 7);
 		saveExplorationValue(adc_data.mm_Values.mm_Left,"LeftDist", 8);
+//		saveExplorationValue(MazeData[xPos][yPos].hasUnexploredBranchFlag,"unexpFlag", 8);
 		saveExplorationValue(adc_data.mm_Values.mm_Right,"RightDist", 9);
 		saveExplorationValue(MazeData[xPos][yPos].posibDirections.north,"Feld Info Nord", 10);
 		saveExplorationValue(MazeData[xPos][yPos].posibDirections.east,"Feld Info Ost", 11);
@@ -620,7 +624,7 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if(xPos>-1&&yPos==1&&currentTargetOrientation==south){/*start logging at the fourth field*/
+		if((xPos>0&&yPos==8&&currentTargetOrientation==north)||(xPos<3&&yPos==1&&currentTargetOrientation==south)){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
