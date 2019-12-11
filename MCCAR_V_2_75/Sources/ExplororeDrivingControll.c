@@ -12,6 +12,7 @@
 #include "ExploreConfig.h"
 #include "TargetInField_Position.h"
 #include "stdbool.h"
+#include "MazeHndl.h"
 
 
 #include "I_LED_R.h"
@@ -460,8 +461,8 @@ byte turn90(uint8_t* p_segNumb, t_directions* p_curOrient, t_dir dir){
 			#if REINIT_DRIVING_BEFORE_TURN
 				reinit_Drving(true);
 
-				Maze_seg.numberOfSegments = 2;
-				(*p_segNumb) = 2;
+				Maze_seg.numberOfSegments = 6;
+				(*p_segNumb) = 6;
 				if(dir == left){
 					Maze_seg.segments[0].SingleSegment = 900;
 				}else if(dir == right){
@@ -472,6 +473,10 @@ byte turn90(uint8_t* p_segNumb, t_directions* p_curOrient, t_dir dir){
 				}
 				/*to init Driving() for strait drive after turn*/
 				Maze_seg.segments[1].SingleSegment = 10;
+				Maze_seg.segments[2].SingleSegment = 10;
+				Maze_seg.segments[3].SingleSegment = 10;
+				Maze_seg.segments[4].SingleSegment = 10;
+				Maze_seg.segments[5].SingleSegment = 10;
 			#else
 				if(dir == left){
 					Maze_seg.segments[*segmentNumber].SingleSegment = 900;
@@ -549,8 +554,8 @@ byte turn180(uint8_t* p_segNumb, t_directions* p_curOrient, t_dir dir){
 			#if REINIT_DRIVING_BEFORE_TURN
 				reinit_Drving(true);
 
-				Maze_seg.numberOfSegments = 3;
-				(*p_segNumb) = 3;
+				Maze_seg.numberOfSegments = 7;
+				(*p_segNumb) = 7;
 				if(dir == left){
 					Maze_seg.segments[0].SingleSegment = 900;
 					Maze_seg.segments[1].SingleSegment = 900;
@@ -564,6 +569,10 @@ byte turn180(uint8_t* p_segNumb, t_directions* p_curOrient, t_dir dir){
 				}
 				/*to init Driving() for strait segment after turn*/
 				Maze_seg.segments[2].SingleSegment = 10;
+				Maze_seg.segments[3].SingleSegment = 10;
+				Maze_seg.segments[4].SingleSegment = 10;
+				Maze_seg.segments[5].SingleSegment = 10;
+				Maze_seg.segments[6].SingleSegment = 10;
 			#else
 				if(dir == left){
 					Maze_seg.segments[*p_segNumb].SingleSegment = 900;
