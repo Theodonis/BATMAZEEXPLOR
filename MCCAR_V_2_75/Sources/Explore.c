@@ -624,7 +624,7 @@ byte TargetPosStateMaschine(void){
 //		FC1_GetCounterValue(&ticksAfterExplore);
 //		saveExplorationValue((float)ticksAfterExplore, varNameToString(ticksAfterExplore), 2);//logValCnt++);
 	#endif
-		if((xPos>0&&yPos==8&&currentTargetOrientation==north)||(xPos<3&&yPos==1&&currentTargetOrientation==south)){/*start logging at the fourth field*/
+		if((xPos>0&&xPos<5&&yPos==8&&currentTargetOrientation==north)){//||(xPos<3&&yPos==1&&currentTargetOrientation==south)){/*start logging at the fourth field*/
 			if(saveDataCnt>=0){  //to set sample period (0 => DT)
 				incrmentSaveLinePointer(); //all sample values are overwritten until its incremented
 				saveDataCnt=0;
